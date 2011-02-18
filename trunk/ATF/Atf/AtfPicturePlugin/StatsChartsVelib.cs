@@ -9,9 +9,10 @@ namespace Ming.Atf.Pictures {
     /*
      * Constructeur
      */
-    public StatsChartsVelib() {
+    public StatsChartsVelib() 
+    {
 
-      //KIKOOOLLLLL BBBBBBB++++++++BBBB
+      //Arretes d'ecrire des cochonneries
     }
 
 
