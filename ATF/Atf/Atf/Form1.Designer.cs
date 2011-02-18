@@ -46,7 +46,7 @@
             this.actionList = new Psl.Actions.ActionList(this.components);
             this.acQuit = new Psl.Actions.Action(this.components);
             this.acShowTools = new Psl.Actions.Action(this.components);
-            this.pages = new System.Windows.Forms.TableLayoutPanel();
+            this.pages = new Psl.Controls.TabDocker();
             this.menu.SuspendLayout();
             this.tools.SuspendLayout();
             this.toolBar.SuspendLayout();
@@ -116,7 +116,7 @@
             this.barreDoutilsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem3});
             this.barreDoutilsToolStripMenuItem.Name = "barreDoutilsToolStripMenuItem";
-            this.barreDoutilsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.barreDoutilsToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.barreDoutilsToolStripMenuItem.Text = "&Barres d\'outils";
             // 
             // toolStripMenuItem3
@@ -233,19 +233,14 @@
             // 
             // pages
             // 
-            this.pages.AutoScroll = true;
-            this.pages.AutoSize = true;
-            this.pages.ColumnCount = 1;
-            this.pages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.pages.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.pages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pages.ItemSize = new System.Drawing.Size(50, 21);
             this.pages.Location = new System.Drawing.Point(0, 49);
             this.pages.Name = "pages";
-            this.pages.RowCount = 1;
-            this.pages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.pages.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.pages.Padding = new System.Drawing.Point(4, 4);
+            this.pages.ShowToolTips = true;
             this.pages.Size = new System.Drawing.Size(1046, 581);
-            this.pages.TabIndex = 5;
+            this.pages.TabIndex = 7;
             // 
             // Form1
             // 
@@ -291,7 +286,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.TableLayoutPanel pages;
+        private Psl.Controls.TabDocker pages;
     }
 }
 

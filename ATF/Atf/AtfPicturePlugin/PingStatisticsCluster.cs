@@ -23,7 +23,7 @@ namespace Ming.Atf.Pictures
 
         #region Champs
         /* Acces au TabDocker de la fenetre principale */
-        System.Windows.Forms.TableLayoutPanel pages = Registry.Get("MainPages") as System.Windows.Forms.TableLayoutPanel;
+        Psl.Controls.TabDocker pages = Registry.MainPages;
 
         /* Acces au StatusReporter de la fenetre principale */
         Psl.Controls.StatusReporter status = Registry.MainStatus as Psl.Controls.StatusReporter;
@@ -115,8 +115,8 @@ namespace Ming.Atf.Pictures
             PicBox.Image = new Bitmap(name);
             PicBox.Tag = System.IO.Path.GetFileName(name);
             PicBox.Dock = DockStyle.Fill;
-            pages.Controls.Add(PicBox);
-            //pages.ClientAdd(PicBox, PicBox.Tag.ToString(), null, true);
+            //pages.Controls.Add(PicBox);
+            pages.ClientAdd(PicBox, PicBox.Tag.ToString(), null, true);
         }
 
         /* Fermer tous les onglets */
