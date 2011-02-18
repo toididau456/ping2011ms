@@ -21,7 +21,7 @@ namespace Ming.Atf
             Registry.Add(Psl.Applications.MainKeys.KeyMainStatus, status);
             Registry.Add(Psl.Applications.MainKeys.KeyMainTools, tools);
             Registry.Add(Psl.Applications.MainKeys.KeyMainContent, this);
-            Registry.Add("MainPages", pages);
+            Registry.Add(Psl.Applications.MainKeys.KeyMainPages, pages);
 
             // Installation du plugin d’archivage
             ArchiverPlugin.Install(true);
