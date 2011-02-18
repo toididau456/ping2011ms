@@ -10,6 +10,8 @@ namespace Ming.Atf.Pictures {
      * Constructeur
      */
     public StatsChartsVelib() {
+
+      //KIKOOOLLLLL BBBBBBB++++++++BBBB
     }
 
 
