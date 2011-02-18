@@ -17,6 +17,7 @@ namespace Ming.Atf.Pictures
         {
             // ici : code d'installation du plugin
             PingStatisticsCluster cluster = new PingStatisticsCluster();
+          /// CACA PROUT TEST
         }
     }
 }
