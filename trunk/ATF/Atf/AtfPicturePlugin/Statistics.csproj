@@ -59,6 +59,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ScrollableMaps.cs" />
+    <Compile Include="StatsChartsVelib.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PingStatisticsCluster.resx">
