@@ -115,7 +115,6 @@ namespace Ming.Atf.Pictures
             PicBox.Image = new Bitmap(name);
             PicBox.Tag = System.IO.Path.GetFileName(name);
             PicBox.Dock = DockStyle.Fill;
-            pages.RowCount++;
             pages.Controls.Add(PicBox);
             //pages.ClientAdd(PicBox, PicBox.Tag.ToString(), null, true);
         }
