@@ -10,9 +10,9 @@ using Psl.Applications;
 
 namespace Ming.Atf.Pictures
 {
-    public partial class AtfPicturesCluster : UserControl
+    public partial class PingStatisticsCluster : UserControl
     {
-        public AtfPicturesCluster()
+        public PingStatisticsCluster()
         {
             InitializeComponent();
             Registry.MergeInMainMenu(this.menuStrip);

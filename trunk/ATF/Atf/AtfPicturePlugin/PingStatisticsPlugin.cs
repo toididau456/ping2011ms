@@ -9,14 +9,14 @@ namespace Ming.Atf.Pictures
 
     // Germe statique d'installation du plugin Xxx
     [PslPluginInstaller]
-    class AtfPicturesPlugin
+    class PingStatisticsPlugin
     {
 
         // Installation du plugin Xxx 
         public static void Install()
         {
             // ici : code d'installation du plugin
-            AtfPicturesCluster cluster = new AtfPicturesCluster();
+            PingStatisticsCluster cluster = new PingStatisticsCluster();
         }
     }
 }

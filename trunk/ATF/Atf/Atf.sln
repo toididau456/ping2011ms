@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf", "Atf\Atf.csproj", "{5F6C80E2-0056-4B70-96AD-E02EBCBE85D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PING", "Atf\PING.csproj", "{5F6C80E2-0056-4B70-96AD-E02EBCBE85D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AtfPicturePlugin", "AtfPicturePlugin\AtfPicturePlugin.csproj", "{127C1E80-ABF8-4218-ABEF-BF1D0060CF77}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Statistics", "AtfPicturePlugin\Statistics.csproj", "{127C1E80-ABF8-4218-ABEF-BF1D0060CF77}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
