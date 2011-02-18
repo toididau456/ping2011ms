@@ -46,13 +46,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AtfPicturesCluster.cs">
+    <Compile Include="PingStatisticsCluster.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="AtfPicturesCluster.Designer.cs">
-      <DependentUpon>AtfPicturesCluster.cs</DependentUpon>
+    <Compile Include="PingStatisticsCluster.Designer.cs">
+      <DependentUpon>PingStatisticsCluster.cs</DependentUpon>
     </Compile>
-    <Compile Include="AtfPicturesPlugin.cs" />
+    <Compile Include="PingStatisticsPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -61,8 +61,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AtfPicturesCluster.resx">
-      <DependentUpon>AtfPicturesCluster.cs</DependentUpon>
+    <EmbeddedResource Include="PingStatisticsCluster.resx">
+      <DependentUpon>PingStatisticsCluster.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
