@@ -5,5 +5,6 @@ using System.Text;
 
 namespace Ming.Atf.Pictures {
   class StatsChartsVelib {
+
   }
 }
