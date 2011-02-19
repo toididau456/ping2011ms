@@ -42,8 +42,12 @@ namespace Ming.Atf
                 OdbcConnection MyConnection = new OdbcConnection(MyConString);
                 MyConnection.Open();
 
-                OdbcCommand MyCommand = new OdbcCommand(query, MyConnection);
+                OdbcCommand MyCommand = new OdbcCommand("desc donnees;", MyConnection);
                 OdbcDataReader MyDataReader;
+                MyDataReader = MyCommand.ExecuteReader();
+
+
+                MyCommand.CommandText = query;
                 MyDataReader = MyCommand.ExecuteReader();
                 Console.WriteLine("Executed : " + MyDataReader.RecordsAffected);
                 while (MyDataReader.Read())
