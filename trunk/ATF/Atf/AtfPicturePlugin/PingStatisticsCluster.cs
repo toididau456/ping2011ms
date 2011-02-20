@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Psl.Applications;
+using System.Collections;
 
 namespace Ming.Atf.Pictures
 {
@@ -115,7 +116,7 @@ namespace Ming.Atf.Pictures
             PicBox.Image = new Bitmap(name);
             PicBox.Tag = System.IO.Path.GetFileName(name);
             PicBox.Dock = DockStyle.Fill;
-            //pages.Controls.Add(PicBox);
+            ArrayList result = LocalDataBase.getAll();
             pages.ClientAdd(PicBox, PicBox.Tag.ToString(), null, true);
         }
 
