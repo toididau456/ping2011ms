@@ -61,6 +61,63 @@ namespace Ming.Atf
                 return sendRequest("select * from donnees" + City + " where valid='1' and station = '" + numStation + "'and date >= '" + convertToTimestamp(start) + "' and date <= '" + convertToTimestamp(end) + "';");
         }
 
+        // Renvoie le details des stations
+        public static ArrayList getStationsDetails()
+        {
+            ArrayList result = new ArrayList();
+            try
+            {
+                //Connect to MySQL using MyODBC
+                OdbcConnection MyConnection = new OdbcConnection(MyConString);
+                MyConnection.Open();
+
+                //Desc de la table donnees
+                OdbcCommand MyCommand = new OdbcCommand("desc stations;", MyConnection);
+                OdbcDataReader MyDataReader;
+                MyDataReader = MyCommand.ExecuteReader();
+                ArrayList header = new ArrayList();
+
+                while (MyDataReader.Read())
+                    if (string.Compare(MyConnection.Driver, "myodbc3.dll") == 0)
+                        header.Add(MyDataReader.GetString(0)); //Supported only by MyODBC 3.5
+
+                //Fetch
+                MyCommand.CommandText = "select * from stations;";
+
+                MyDataReader.Close();
+                MyDataReader = MyCommand.ExecuteReader();
+
+                Console.WriteLine("Executed : " + MyDataReader.RecordsAffected);
+                
+                while (MyDataReader.Read())
+                {
+                    Dictionary<string, string> temp = new Dictionary<string, string>();
+                    if (string.Compare(MyConnection.Driver, "myodbc3.dll") == 0)
+                        for (int i = 0; i < header.Count; i++)
+                            if (MyDataReader.GetString(i) != "")
+                                temp.Add(header[i] as string, MyDataReader.GetString(i));
+                    result.Add(temp);
+                }
+
+                //Close all resources
+                MyDataReader.Close();
+                MyConnection.Close();
+            }
+            catch (OdbcException MyOdbcException)//Catch any ODBC exception ..
+            {
+                for (int i = 0; i < MyOdbcException.Errors.Count; i++)
+                {
+                    Console.Write("ERROR #" + i + "\n" +
+                      "Message: " + MyOdbcException.Errors[i].Message + "\n" +
+                      "Native: " + MyOdbcException.Errors[i].NativeError.ToString() + "\n" +
+                      "Source: " + MyOdbcException.Errors[i].Source + "\n" +
+                      "SQL: " + MyOdbcException.Errors[i].SQLState + "\n");
+                }
+            }
+
+            return result;
+        }
+
         // Effectue les requetes
         private static ArrayList sendRequest(String query)
         {
@@ -105,6 +162,8 @@ namespace Ming.Atf
                         for (int i = 0; i < header.Count; i++)
                             if (MyDataReader.GetString(i) != "")
                                 temp.Add(header[i] as string, int.Parse(MyDataReader.GetString(i)));
+
+                    result.Add(temp);
                 }
 
                 //Close all resources

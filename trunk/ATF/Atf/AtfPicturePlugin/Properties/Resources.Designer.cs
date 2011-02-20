@@ -59,5 +59,19 @@ namespace Ming.Atf.Pictures.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static System.Drawing.Bitmap google_maps_icon {
+            get {
+                object obj = ResourceManager.GetObject("google_maps_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap maps {
+            get {
+                object obj = ResourceManager.GetObject("maps", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
