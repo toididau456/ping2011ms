@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using Psl.Applications;
 using System.Collections;
+using System.Globalization;
 
 namespace Ming.Atf.Pictures
 {
@@ -56,17 +57,26 @@ namespace Ming.Atf.Pictures
 
             PictureBox PicBox = new PictureBox();
             URLtoImage toimage = new URLtoImage();
-            String url = "http://maps.google.com/maps/api/staticmap?center=Paris,France&zoom=12&size=1900x1080";
+            String url = "http://maps.google.com/maps/api/staticmap?center=48.857035,2.350988&zoom=12&size=1900x1080&sensor=false";
             ArrayList res = LocalDataBase.getStationsDetails();
+            Image img = toimage.getImageFromURL(url);
+            Bitmap imgRes = new Bitmap(img.Size.Width,img.Size.Height);
+            Graphics g = Graphics.FromImage(imgRes);
             
-            for (int i = 0; i < 25; i++)
+            g.DrawImage(img, 0, 0);
+
+            for (int i = 0; i < res.Count; i++)
             {
                 Dictionary<string, string> temp = res[i] as Dictionary<string, string>;
-                url += "&markers=color:purple|label:V|" + temp["lat"] + "," + temp["lng"];
+                float lat = ((float.Parse(temp["lat"].Trim(), CultureInfo.InvariantCulture) * 1000000) * (img.Size.Width / 2)) / 48857035;
+                float lng = ((float.Parse(temp["lng"].Trim(), CultureInfo.InvariantCulture) * 1000000) * (img.Size.Height / 2)) / 2350988;
+                Console.WriteLine(lat + " " + temp["lat"]);
+                Console.WriteLine(lng + " " + temp["lng"]);
+                g.DrawString(i + "", new Font(this.Font, FontStyle.Bold), new SolidBrush(Color.Black), new PointF(lat, lng));
             }
-            url += "&sensor=false";
-            Image img = toimage.getImageFromURL(url);
-            PicBox.Image = img;
+            g.Dispose();
+
+            PicBox.Image = imgRes;
             PicBox.SizeMode = PictureBoxSizeMode.Zoom;
             PicBox.Size = img.Size;
             //PicBox.Region.IsVisible();
