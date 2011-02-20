@@ -61,6 +61,7 @@
     </Compile>
     <Compile Include="ScrollableMaps.cs" />
     <Compile Include="StatsChartsVelib.cs" />
+    <Compile Include="URLtoImage.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PingStatisticsCluster.resx">
@@ -69,6 +70,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +78,12 @@
       <Project>{5F6C80E2-0056-4B70-96AD-E02EBCBE85D5}</Project>
       <Name>PING</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\maps.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\google_maps_icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -13,6 +13,19 @@ namespace Ming.Atf.Pictures
 {
     public partial class PingStatisticsCluster : UserControl
     {
+
+        #region Champs
+        /* Acces au TabDocker de la fenetre principale */
+        Psl.Controls.TabDocker pages = Registry.MainPages;
+
+        /* Acces au StatusReporter de la fenetre principale */
+        Psl.Controls.StatusReporter status = Registry.MainStatus as Psl.Controls.StatusReporter;
+
+        /**/
+        TableLayoutPanel panel;
+        #endregion
+
+        // Constructeur
         public PingStatisticsCluster()
         {
             InitializeComponent();
@@ -22,137 +35,45 @@ namespace Ming.Atf.Pictures
             Registry.MainPages.SelectedIndexChanged += changeStatus;
         }
 
-        #region Champs
-        /* Acces au TabDocker de la fenetre principale */
-        Psl.Controls.TabDocker pages = Registry.MainPages;
-
-        /* Acces au StatusReporter de la fenetre principale */
-        Psl.Controls.StatusReporter status = Registry.MainStatus as Psl.Controls.StatusReporter;
-        #endregion
-
         #region Actions
-        private void chargerImage_Execute(object sender, EventArgs e)
+        // Ouvrir la carte
+        private void acOpenMap_Execute(object sender, EventArgs e)
         {
-                chargerImages();
-        }
-
-        private void detruireOngletCourant_Execute(object sender, EventArgs e)
-        {
-            fermerOngletCourant();
-        }
-
-        private void acChangerImage_Execute(object sender, EventArgs e)
-        {
-            changerImage();
-        }
-
-        private void fermerSaufCourant_Execute(object sender, EventArgs e)
-        {
-            this.fermerTousSaufCourant();
-        }
-
-        private void closeAllTabs_Execute(object sender, EventArgs e)
-        {
-            fermerTous();
-        }
-
-        private void tournerSensHoraire_Execute(object sender, EventArgs e)
-        {
-            tournerImageCourante(1);
-        }
-
-        private void tournerSensAntiHoraire_Execute(object sender, EventArgs e)
-        {
-            tournerImageCourante(-1);
+            ouvrirMap();
         }
         #endregion
 
         #region Methodes
-        /* Changer l'image de l'onglet courant*/
-        private void changerImage()
+        // Cree le panel et ouvre la carte
+        private void ouvrirMap()
         {
-            this.openFileDialog.Multiselect = false;
+            if (pages.Contains(panel))
+                return;
 
-            if (this.openFileDialog.ShowDialog() != DialogResult.OK)
-                throw new ECancelled();
+            panel = new TableLayoutPanel();
+            panel.Dock = DockStyle.Fill;
+            panel.AutoSize = true;
 
-            /*PictureBox picture = pages.SelectedDockerClient as PictureBox;
-            picture.Image = new Bitmap(this.openFileDialog.FileName);
-            picture.Tag = System.IO.Path.GetFileName(this.openFileDialog.FileName);
-
-            pages.SelectedDockerTab.Text = picture.Tag as string;
-            this.openFileDialog.Multiselect = true;
-            */
-        }
-
-        /* Ferme l'onglet courant */
-        private void fermerOngletCourant()
-        {
-            /*PictureBox picture = pages.SelectedDockerClient as PictureBox;
-            if (picture != null)
-            {
-                picture.Image.Dispose();
-                picture.Dispose();
-            }*/
-        }
-
-        /* Charge une ou plusieurs nouvelles images */
-        private void chargerImages()
-        {
-            if (this.openFileDialog.ShowDialog() != DialogResult.OK)
-                throw new ECancelled();
-
-            for (int i = 0; i < this.openFileDialog.FileNames.Length; i++)
-            {
-                ajouterImage(this.openFileDialog.FileNames[i]);
-            }
-        }
-
-        /* Ajoute une image a pages*/
-        private void ajouterImage(string name)
-        {
             PictureBox PicBox = new PictureBox();
-            PicBox.SizeMode = PictureBoxSizeMode.Zoom;
-            PicBox.Image = new Bitmap(name);
-            PicBox.Tag = System.IO.Path.GetFileName(name);
-            PicBox.Dock = DockStyle.Fill;
-            ArrayList result = LocalDataBase.getAll();
-            pages.ClientAdd(PicBox, PicBox.Tag.ToString(), null, true);
-        }
-
-        /* Fermer tous les onglets */
-        private void fermerTous()
-        {
-            /*for (int i = pages.TabCount - 1; i >= 0; i--)
-                fermerOngletCourant();
-             */
-        }
-
-        /* Fermer tous sauf courant */
-        private void fermerTousSaufCourant()
-        {
-            /*int position = pages.SelectedIndex;
-            for (int i = pages.TabCount - 1; i >= 0; i--)
-                if (i != position)
-                {
-                    pages.SelectTab(i);
-                    fermerOngletCourant();
-                }*/
-        }
-
-        /* Rotation de l'image*/
-        private void tournerImageCourante(int sens)
-        {
-            /*PictureBox picture = pages.SelectedDockerClient as PictureBox;
-
-            if (sens > 0)
+            URLtoImage toimage = new URLtoImage();
+            String url = "http://maps.google.com/maps/api/staticmap?center=Paris,France&zoom=12&size=1900x1080";
+            ArrayList res = LocalDataBase.getStationsDetails();
+            
+            for (int i = 0; i < 25; i++)
             {
-                picture.Image.RotateFlip(RotateFlipType.Rotate90FlipNone);
+                Dictionary<string, string> temp = res[i] as Dictionary<string, string>;
+                url += "&markers=color:purple|label:V|" + temp["lat"] + "," + temp["lng"];
             }
-            else
-                picture.Image.RotateFlip(RotateFlipType.Rotate270FlipNone);
+            url += "&sensor=false";
+            Image img = toimage.getImageFromURL(url);
+            PicBox.Image = img;
+            PicBox.SizeMode = PictureBoxSizeMode.Zoom;
+            PicBox.Size = img.Size;
+            //PicBox.Region.IsVisible();
+            PicBox.Tag = System.IO.Path.GetFileName("Map");
+            panel.Controls.Add(PicBox);
 
-            pages.SelectedDockerClient.Refresh();*/
+            pages.ClientAdd(panel, "Map", null, true);
         }
         #endregion
 
@@ -173,9 +94,6 @@ namespace Ming.Atf.Pictures
         /* Propose a l'utilisateur de confirmer la fermeture en cas d'onglet encore ouverts*/
         private void applicationEvents_ApplicationClosing(object sender, FormClosingEventArgs e)
         {
-            /*if (pages.TabCount == 0) return;
-            DialogResult result = MessageBox.Show(null, "Voulez vous réellement fermer l'application", "", MessageBoxButtons.YesNo);
-            e.Cancel = result != DialogResult.Yes;*/
         }
 
         /* Mise a jour de divers elements */
@@ -198,6 +116,5 @@ namespace Ming.Atf.Pictures
             }*/
         }
         #endregion
-
     }
 }
