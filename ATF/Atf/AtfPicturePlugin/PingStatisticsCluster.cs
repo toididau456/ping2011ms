@@ -9,9 +9,14 @@ using System.Windows.Forms;
 using Psl.Applications;
 using System.Collections;
 using System.Globalization;
+using System.Security.Permissions;
+
+
 
 namespace Ming.Atf.Pictures
 {
+    [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
+    [System.Runtime.InteropServices.ComVisibleAttribute(true)]
     public partial class PingStatisticsCluster : UserControl
     {
 
@@ -55,23 +60,26 @@ namespace Ming.Atf.Pictures
             panel.Dock = DockStyle.Fill;
             panel.AutoSize = true;
 
-            PictureBox PicBox = new PictureBox();
+            /*PictureBox PicBox = new PictureBox();
             URLtoImage toimage = new URLtoImage();
-            String url = "http://maps.google.com/maps/api/staticmap?center=48.857035,2.350988&zoom=12&size=1900x1080&sensor=false";
+            String url = "http://maps.google.com/maps/api/staticmap?center=48.857035,2.350988&zoom=12&size=650x650&sensor=false";
             ArrayList res = LocalDataBase.getStationsDetails();
             Image img = toimage.getImageFromURL(url);
             Bitmap imgRes = new Bitmap(img.Size.Width,img.Size.Height);
             Graphics g = Graphics.FromImage(imgRes);
+
+            float facteurX = (float)img.Size.Width / (float)2;
+            float facteurY = (float)img.Size.Height / (float)2;
+            facteurX = (float)(48.857035) / facteurX;
+            facteurY = (float)(2.350988) / facteurY;
             
             g.DrawImage(img, 0, 0);
 
             for (int i = 0; i < res.Count; i++)
             {
                 Dictionary<string, string> temp = res[i] as Dictionary<string, string>;
-                float lat = ((float.Parse(temp["lat"].Trim(), CultureInfo.InvariantCulture) * 1000000) * (img.Size.Width / 2)) / 48857035;
-                float lng = ((float.Parse(temp["lng"].Trim(), CultureInfo.InvariantCulture) * 1000000) * (img.Size.Height / 2)) / 2350988;
-                Console.WriteLine(lat + " " + temp["lat"]);
-                Console.WriteLine(lng + " " + temp["lng"]);
+                float lat = float.Parse(temp["lat"].Trim(), CultureInfo.InvariantCulture) / facteurX;
+                float lng = float.Parse(temp["lng"].Trim(), CultureInfo.InvariantCulture) / facteurY;
                 g.DrawString(i + "", new Font(this.Font, FontStyle.Bold), new SolidBrush(Color.Black), new PointF(lat, lng));
             }
             g.Dispose();
@@ -81,9 +89,24 @@ namespace Ming.Atf.Pictures
             PicBox.Size = img.Size;
             //PicBox.Region.IsVisible();
             PicBox.Tag = System.IO.Path.GetFileName("Map");
-            panel.Controls.Add(PicBox);
+            */
+            WebBrowser web = new WebBrowser();
+            // La page doit contenir des morceaux propre a C# ^^
+            web.Url = new Uri("http://undergroundprod1.free.fr/googlemap-velib/prototype/");
+
+            // Fucking Important
+            web.ObjectForScripting = this;
+            //web.Size = new Size(650,650);
+            web.Dock = DockStyle.Fill;
+            panel.Controls.Add(web);
 
             pages.ClientAdd(panel, "Map", null, true);
+        }
+
+        // Test
+        public void Test(string numStation)
+        {
+            MessageBox.Show(this, numStation);
         }
         #endregion
 
