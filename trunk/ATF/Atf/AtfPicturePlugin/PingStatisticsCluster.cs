@@ -60,43 +60,12 @@ namespace Ming.Atf.Pictures
             panel.Dock = DockStyle.Fill;
             panel.AutoSize = true;
 
-            /*PictureBox PicBox = new PictureBox();
-            URLtoImage toimage = new URLtoImage();
-            String url = "http://maps.google.com/maps/api/staticmap?center=48.857035,2.350988&zoom=12&size=650x650&sensor=false";
-            ArrayList res = LocalDataBase.getStationsDetails();
-            Image img = toimage.getImageFromURL(url);
-            Bitmap imgRes = new Bitmap(img.Size.Width,img.Size.Height);
-            Graphics g = Graphics.FromImage(imgRes);
-
-            float facteurX = (float)img.Size.Width / (float)2;
-            float facteurY = (float)img.Size.Height / (float)2;
-            facteurX = (float)(48.857035) / facteurX;
-            facteurY = (float)(2.350988) / facteurY;
-            
-            g.DrawImage(img, 0, 0);
-
-            for (int i = 0; i < res.Count; i++)
-            {
-                Dictionary<string, string> temp = res[i] as Dictionary<string, string>;
-                float lat = float.Parse(temp["lat"].Trim(), CultureInfo.InvariantCulture) / facteurX;
-                float lng = float.Parse(temp["lng"].Trim(), CultureInfo.InvariantCulture) / facteurY;
-                g.DrawString(i + "", new Font(this.Font, FontStyle.Bold), new SolidBrush(Color.Black), new PointF(lat, lng));
-            }
-            g.Dispose();
-
-            PicBox.Image = imgRes;
-            PicBox.SizeMode = PictureBoxSizeMode.Zoom;
-            PicBox.Size = img.Size;
-            //PicBox.Region.IsVisible();
-            PicBox.Tag = System.IO.Path.GetFileName("Map");
-            */
             WebBrowser web = new WebBrowser();
             // La page doit contenir des morceaux propre a C# ^^
             web.Url = new Uri("http://undergroundprod1.free.fr/googlemap-velib/prototype/");
 
-            // Fucking Important
+            // Very Important
             web.ObjectForScripting = this;
-            //web.Size = new Size(650,650);
             web.Dock = DockStyle.Fill;
             panel.Controls.Add(web);
 
@@ -106,7 +75,7 @@ namespace Ming.Atf.Pictures
         // Test
         public void Test(string numStation)
         {
-            MessageBox.Show(this, numStation);
+            MessageBox.Show(this, "J'ai recu la station : " + numStation);
         }
         #endregion
 
