@@ -12,6 +12,7 @@ namespace Ming.Atf.Pictures {
     private ArrayList dataVelib;
     private Dictionary<String, int> dayToInt;
     private Dictionary<int, Dictionary<DateTime, KeyValuePair<int, double>>> memberDataMap;
+    private Dictionary<int, String> intToEchelle;
     #endregion
 
     #region Constructeur
@@ -19,7 +20,11 @@ namespace Ming.Atf.Pictures {
      * Constructeur
      */
     public StatsChartsVelib() {
-      Dictionary<String, int> dayToInt = new Dictionary<String, int>();
+      dayToInt = new Dictionary<String, int>();
+      intToEchelle = new Dictionary<int, String>();
+      intToEchelle.Add( 0, "Par Heures" );
+      intToEchelle.Add( 1, "Par jour de la semaine" );
+      intToEchelle.Add( 2, "Par semaines" );
       dayToInt.Add( "Monday", 0 );
       dayToInt.Add( "Tuesday", 1 );
       dayToInt.Add( "Wednesday", 2 );
@@ -200,14 +205,19 @@ namespace Ming.Atf.Pictures {
       return res;
     }
     
-    public Chart createChart(int station){
-      Dictionary<int, double> statsTab =  StatistiquesStation(memberDataMap,20020,0);
-      
+    public Chart createChartStation(int station,int echelle ){
+      Dictionary<int, double> statsTab =  StatistiquesStation(memberDataMap,20020,echelle);
       Chart chartStat;
       ChartArea statArea = new ChartArea();
-      statArea.Name = "TestArea";
+      statArea.AxisY.Title = "Moyenne disponibilité";
+      statArea.AxisX.Title = this.intToEchelle[ echelle ];
+      statArea.AxisX.TitleFont = new System.Drawing.Font( "Helvetica", 10, System.Drawing.FontStyle.Bold );
+      statArea.AxisY.TitleFont = new System.Drawing.Font( "Helvetica", 10, System.Drawing.FontStyle.Bold );
+      statArea.Name = "StatArea";
       Legend legendStat = new Legend();
-      Series seriesStat = new Series("Station");
+      Series seriesStat = new Series("Moyenne disponibilité " + this.intToEchelle[echelle]);
+      
+
 
       chartStat = new System.Windows.Forms.DataVisualization.Charting.Chart();
       ((System.ComponentModel.ISupportInitialize) (chartStat)).BeginInit(); 
@@ -215,10 +225,14 @@ namespace Ming.Atf.Pictures {
       seriesStat.Sort( PointSortOrder.Ascending, "X" ); 
       chartStat.Series.Add(seriesStat);
       chartStat.ChartAreas.Add(statArea);
-      legendStat.Name = "LegendStat";
+      legendStat.Name ="legend";
+      //legendStat.Alignment 
       
       chartStat.Legends.Add(legendStat);
-      chartStat.Titles.Add( new Title( "" ) );
+      Title titre = new Title( "Station " + station);
+      titre.Font = new System.Drawing.Font("Helvetica",10,System.Drawing.FontStyle.Bold);
+
+      chartStat.Titles.Add(titre);
       chartStat.Size = new System.Drawing.Size( 600, 400 );
       seriesStat.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.StepLine;
       
