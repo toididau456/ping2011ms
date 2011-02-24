@@ -23,42 +23,48 @@ namespace Ming.Atf
         #region Methodes
 
         // Retourne toutes les lignes valides de la base 
-        public static ArrayList getAllLines()
+        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getAllLines()
         {
-            return sendRequest("select * from donnees" + City + " where valid='1';");
+            return sendRequest("select station , avg(available), variance(available) from donnees" + City + " where valid='1' group by station;" , 1);
         }
 
         // Retourne toutes les lignes comprises entre start et end
-        public static ArrayList getLinesByDate(DateTime start, DateTime end)
+        public static Dictionary<int,Dictionary<int,KeyValuePair<double,double>>> getLinesByDateHours(DateTime start, DateTime end, int i)
         {
             if (start == null && end == null)
                 return getAllLines();
             else if (start == null)
-                return sendRequest("select * from donnees" + City + " where valid='1' and date <='" + convertToTimestamp(end) + "';");
+                return sendRequest("select * from donnees" + City + " where valid='1' and date <='" + convertToTimestamp(end) + "' and hour='"+i+"';",i);
             else if (end == null)
-                return sendRequest("select * from donnees" + City + " where valid='1' and date >='" + convertToTimestamp(start) + "';");
+                return sendRequest("select * from donnees" + City + " where valid='1' and date >='" + convertToTimestamp(start) + "' and hour='" + i + "';", i);
             else
-                return sendRequest("select * from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp(start) + "' and date <= '" + convertToTimestamp(end) + "';");
+                return sendRequest("select * from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp(start) + "' and date <= '" + convertToTimestamp(end) + "' and hour='" + i + "';", i);
         }
 
-        // Retourne toutes les lignes valides pour la station numStation 
-        public static ArrayList getLinesByStation(int numStation)
-        {
-            return sendRequest("select * from donnees" + City + " where valid='1' and station='" + numStation + "';");
-        }
-
-        // Retourne toutes les lignes valides pour la station numStation
-        // Comprises entre les 2 dates si elles ne sont pas null
-        public static ArrayList getLinesByStationAndDate(int numStation, DateTime start, DateTime end)
+        // Retourne toutes les lignes comprises entre start et end
+        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getLinesByDateDays(DateTime start, DateTime end, int i)
         {
             if (start == null && end == null)
-                return getLinesByStation(numStation);
+                return getAllLines();
             else if (start == null)
-                return sendRequest("select * from donnees" + City + " where valid='1' and station = '" + numStation + "' and date <='" + convertToTimestamp(end) + "';");
+                return sendRequest("select * from donnees" + City + " where valid='1' and date <='" + convertToTimestamp(end) + "' and day='" + i + "';", i);
             else if (end == null)
-                return sendRequest("select * from donnees" + City + " where valid='1' and station = '" + numStation + "'and date >='" + convertToTimestamp(start) + "';");
+                return sendRequest("select * from donnees" + City + " where valid='1' and date >='" + convertToTimestamp(start) + "' and day='" + i + "';", i);
             else
-                return sendRequest("select * from donnees" + City + " where valid='1' and station = '" + numStation + "'and date >= '" + convertToTimestamp(start) + "' and date <= '" + convertToTimestamp(end) + "';");
+                return sendRequest("select * from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp(start) + "' and date <= '" + convertToTimestamp(end) + "' and day='" + i + "';", i);
+        }
+
+        // Retourne toutes les lignes comprises entre start et end
+        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getLinesByDateWeeks(DateTime start, DateTime end, int i)
+        {
+            if (start == null && end == null)
+                return getAllLines();
+            else if (start == null)
+                return sendRequest("select * from donnees" + City + " where valid='1' and date <='" + convertToTimestamp(end) + "' and week='" + i + "';", i);
+            else if (end == null)
+                return sendRequest("select * from donnees" + City + " where valid='1' and date >='" + convertToTimestamp(start) + "' and week='" + i + "';", i);
+            else
+                return sendRequest("select * from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp(start) + "' and date <= '" + convertToTimestamp(end) + "' and week='" + i + "';", i);
         }
 
         // Renvoie le details des stations
@@ -119,9 +125,9 @@ namespace Ming.Atf
         }
 
         // Effectue les requetes
-        private static ArrayList sendRequest(String query)
+        private static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> sendRequest(String query, int select)
         {
-            ArrayList result = new ArrayList();
+            Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> result = new Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>();
             try
             {
                 //Connect to MySQL using MyODBC
@@ -140,30 +146,17 @@ namespace Ming.Atf
                 Console.WriteLine("\tServerVersion:" + MyConnection.ServerVersion);
 
                 //Desc de la table donnees
-                OdbcCommand MyCommand = new OdbcCommand("desc donnees" + City + ";", MyConnection);
+                OdbcCommand MyCommand = new OdbcCommand(query, MyConnection);
                 OdbcDataReader MyDataReader;
                 MyDataReader = MyCommand.ExecuteReader();
-                ArrayList header = new ArrayList();
 
-                while (MyDataReader.Read())
-                    if (string.Compare(MyConnection.Driver, "myodbc3.dll") == 0)
-                        header.Add(MyDataReader.GetString(0)); //Supported only by MyODBC 3.5
-
-                //Fetch
-                MyCommand.CommandText = query;
-
-                MyDataReader.Close();
-                MyDataReader = MyCommand.ExecuteReader();
                 Console.WriteLine("Executed : " + MyDataReader.RecordsAffected);
                 while (MyDataReader.Read())
                 {
-                    Dictionary<string, int> temp = new Dictionary<string, int>();
-                    if (string.Compare(MyConnection.Driver, "myodbc3.dll") == 0)
-                        for (int i = 0; i < header.Count; i++)
-                            if (MyDataReader.GetString(i) != "")
-                                temp.Add(header[i] as string, int.Parse(MyDataReader.GetString(i)));
-
-                    result.Add(temp);
+                    KeyValuePair<double, double> temp1 = new KeyValuePair<double, double>(MyDataReader.GetDouble(1), MyDataReader.GetDouble(2));
+                    Dictionary<int,KeyValuePair<double,double>> temp = new Dictionary<int , KeyValuePair<double,double>>();
+                    temp.Add(select, temp1);
+                    result.Add(MyDataReader.GetInt16(0), temp);
                 }
 
                 //Close all resources

@@ -28,7 +28,7 @@ namespace Ming.Atf.Pictures
         Psl.Controls.StatusReporter status = Registry.MainStatus as Psl.Controls.StatusReporter;
 
         /**/
-        TableLayoutPanel panel;
+        SplitContainer panel;
         #endregion
 
         // Constructeur
@@ -56,7 +56,7 @@ namespace Ming.Atf.Pictures
             if (pages.Contains(panel))
                 return;
 
-            panel = new TableLayoutPanel();
+            panel = new SplitContainer();
             panel.Dock = DockStyle.Fill;
             panel.AutoSize = true;
 
@@ -67,7 +67,7 @@ namespace Ming.Atf.Pictures
             // Very Important
             web.ObjectForScripting = this;
             web.Dock = DockStyle.Fill;
-            panel.Controls.Add(web);
+            panel.Panel1.Controls.Add(web);
 
             pages.ClientAdd(panel, "Map", null, true);
         }
