@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using System.Windows.Forms;
-using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
+
 namespace Ming.Atf.Pictures {
   class StatsChartsVelib {
     #region champs
-    private ArrayList dataVelib;
+    //private ArrayList dataVelib;
     private Dictionary<String, int> dayToInt;
     private Dictionary<int, Dictionary<DateTime, KeyValuePair<int, double>>> memberDataMap;
     private Dictionary<int, String> intToEchelle;
@@ -249,7 +249,6 @@ namespace Ming.Atf.Pictures {
     }
 
     #endregion
-
 
     #region méthodes de service
     /*
