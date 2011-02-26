@@ -18,56 +18,55 @@ namespace Ming.Atf
                                      "OPTION=3";
 
         private static string City = "";
+        private static DateTime time = new DateTime(1970,1,1);
         #endregion
 
         #region Methodes
 
         // Retourne toutes les lignes valides de la base 
-        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getAllLines()
+        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getAllLines(int i)
         {
-            return sendRequest("select station , avg(available), variance(available) from donnees" + City + " where valid='1' group by station;" , 1);
+            return sendRequest("select station , avg(available), variance(available) from donnees" + City + " where valid='1' group by station;" , i);
         }
 
         // Retourne toutes les lignes comprises entre start et end
         public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getLinesByDateHours( DateTime start , DateTime end , int i )
         {
-          DateTime time = new DateTime( 1, 1, 1970 );
           if ( start.CompareTo(time) == 0 && end.CompareTo(time) == 0)
-                return getAllLines();
+                return getAllLines(i);
             else if (start.CompareTo(time) == 0)
-                return sendRequest("select * from donnees" + City + " where valid='1' and date <='" + convertToTimestamp(end) + "' and hour='"+i+"';",i);
+            return sendRequest( "select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date <='" + convertToTimestamp( end ) + "' and hour='" + i + "' group by station;", i );
             else if (end.CompareTo(time) == 0)
-                return sendRequest("select * from donnees" + City + " where valid='1' and date >='" + convertToTimestamp(start) + "' and hour='" + i + "';", i);
+            return sendRequest( "select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date >='" + convertToTimestamp( start ) + "' and hour='" + i + "' group by station;", i );
             else
-                return sendRequest("select * from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp(start) + "' and date <= '" + convertToTimestamp(end) + "' and hour='" + i + "';", i);
+            return sendRequest( "select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp( start ) + "' and date <= '" + convertToTimestamp( end ) + "' and hour='" + i + "' group by station;", i );
         }
 
         // Retourne toutes les lignes comprises entre start et end
         public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getLinesByDateDays(DateTime start, DateTime end, int i)
         {
-          DateTime time = new DateTime( 1, 1, 1970 );
+
             if (start.CompareTo(time) == 0 && end.CompareTo(time) == 0)
-                return getAllLines();
+                return getAllLines(i);
             else if (start.CompareTo(time) == 0)
-                return sendRequest("select * from donnees" + City + " where valid='1' and date <='" + convertToTimestamp(end) + "' and day='" + i + "';", i);
+              return sendRequest( "select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date <='" + convertToTimestamp( end ) + "' and day='" + i + "' group by station;", i );
             else if (end.CompareTo(time) == 0)
-                return sendRequest("select * from donnees" + City + " where valid='1' and date >='" + convertToTimestamp(start) + "' and day='" + i + "';", i);
+              return sendRequest( "select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date >='" + convertToTimestamp( start ) + "' and day='" + i + "' group by station;", i );
             else
-                return sendRequest("select * from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp(start) + "' and date <= '" + convertToTimestamp(end) + "' and day='" + i + "';", i);
+              return sendRequest( "select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp( start ) + "' and date <= '" + convertToTimestamp( end ) + "' and day='" + i + "' group by station;", i );
         }
 
         // Retourne toutes les lignes comprises entre start et end
         public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getLinesByDateWeeks(DateTime start, DateTime end, int i)
-        {
-          DateTime time = new DateTime( 1, 1, 1970 );  
+        {  
           if (start.CompareTo(time) == 0 && end.CompareTo(time) == 0)
-                return getAllLines();
+                return getAllLines(i);
             else if (start.CompareTo(time) == 0)
-                return sendRequest("select * from donnees" + City + " where valid='1' and date <='" + convertToTimestamp(end) + "' and week='" + i + "';", i);
+            return sendRequest( "select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date <='" + convertToTimestamp( end ) + "' and week='" + i + "' group by station;", i );
             else if (end.CompareTo(time) == 0)
-                return sendRequest("select * from donnees" + City + " where valid='1' and date >='" + convertToTimestamp(start) + "' and week='" + i + "';", i);
+            return sendRequest( "select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date >='" + convertToTimestamp( start ) + "' and week='" + i + "' group by station;", i );
             else
-                return sendRequest("select * from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp(start) + "' and date <= '" + convertToTimestamp(end) + "' and week='" + i + "';", i);
+            return sendRequest( "select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp( start ) + "' and date <= '" + convertToTimestamp( end ) + "' and week='" + i + "' group by station;", i );
         }
 
         // Renvoie le details des stations
@@ -158,8 +157,9 @@ namespace Ming.Atf
                 {
                     KeyValuePair<double, double> temp1 = new KeyValuePair<double, double>(MyDataReader.GetDouble(1), MyDataReader.GetDouble(2));
                     Dictionary<int,KeyValuePair<double,double>> temp = new Dictionary<int , KeyValuePair<double,double>>();
-                    temp.Add(select, temp1);
-                    result.Add(MyDataReader.GetInt16(0), temp);
+                    temp[select] = temp1;
+                    result[ MyDataReader.GetInt32( 0 ) ] = temp;
+                    //result.Add(MyDataReader.GetInt32(0), temp);
                 }
 
                 //Close all resources
