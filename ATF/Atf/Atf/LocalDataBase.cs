@@ -29,13 +29,14 @@ namespace Ming.Atf
         }
 
         // Retourne toutes les lignes comprises entre start et end
-        public static Dictionary<int,Dictionary<int,KeyValuePair<double,double>>> getLinesByDateHours(DateTime start, DateTime end, int i)
+        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getLinesByDateHours( DateTime start , DateTime end , int i )
         {
-            if (start == null && end == null)
+          DateTime time = new DateTime( 1, 1, 1970 );
+          if ( start.CompareTo(time) == 0 && end.CompareTo(time) == 0)
                 return getAllLines();
-            else if (start == null)
+            else if (start.CompareTo(time) == 0)
                 return sendRequest("select * from donnees" + City + " where valid='1' and date <='" + convertToTimestamp(end) + "' and hour='"+i+"';",i);
-            else if (end == null)
+            else if (end.CompareTo(time) == 0)
                 return sendRequest("select * from donnees" + City + " where valid='1' and date >='" + convertToTimestamp(start) + "' and hour='" + i + "';", i);
             else
                 return sendRequest("select * from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp(start) + "' and date <= '" + convertToTimestamp(end) + "' and hour='" + i + "';", i);
@@ -44,11 +45,12 @@ namespace Ming.Atf
         // Retourne toutes les lignes comprises entre start et end
         public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getLinesByDateDays(DateTime start, DateTime end, int i)
         {
-            if (start == null && end == null)
+          DateTime time = new DateTime( 1, 1, 1970 );
+            if (start.CompareTo(time) == 0 && end.CompareTo(time) == 0)
                 return getAllLines();
-            else if (start == null)
+            else if (start.CompareTo(time) == 0)
                 return sendRequest("select * from donnees" + City + " where valid='1' and date <='" + convertToTimestamp(end) + "' and day='" + i + "';", i);
-            else if (end == null)
+            else if (end.CompareTo(time) == 0)
                 return sendRequest("select * from donnees" + City + " where valid='1' and date >='" + convertToTimestamp(start) + "' and day='" + i + "';", i);
             else
                 return sendRequest("select * from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp(start) + "' and date <= '" + convertToTimestamp(end) + "' and day='" + i + "';", i);
@@ -57,11 +59,12 @@ namespace Ming.Atf
         // Retourne toutes les lignes comprises entre start et end
         public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getLinesByDateWeeks(DateTime start, DateTime end, int i)
         {
-            if (start == null && end == null)
+          DateTime time = new DateTime( 1, 1, 1970 );  
+          if (start.CompareTo(time) == 0 && end.CompareTo(time) == 0)
                 return getAllLines();
-            else if (start == null)
+            else if (start.CompareTo(time) == 0)
                 return sendRequest("select * from donnees" + City + " where valid='1' and date <='" + convertToTimestamp(end) + "' and week='" + i + "';", i);
-            else if (end == null)
+            else if (end.CompareTo(time) == 0)
                 return sendRequest("select * from donnees" + City + " where valid='1' and date >='" + convertToTimestamp(start) + "' and week='" + i + "';", i);
             else
                 return sendRequest("select * from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp(start) + "' and date <= '" + convertToTimestamp(end) + "' and week='" + i + "';", i);
