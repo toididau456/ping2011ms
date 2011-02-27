@@ -9,10 +9,6 @@ namespace Ming.Atf
 {
     public static class LocalDataBase
     {
-        /*
-         * select D.station, T.hour, avg(available) from donnees D, temp T where not D.free="" and T.station = D.station and D.hour = T.hour group by D.station, T.hour;
-         */
-
         #region Champs
         private static string MyConString = "DRIVER={MySQL ODBC 3.51 Driver};" +
                                      "SERVER=82.224.48.10;" +
