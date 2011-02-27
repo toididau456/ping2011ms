@@ -9,6 +9,10 @@ namespace Ming.Atf
 {
     public static class LocalDataBase
     {
+        /*
+         * select D.station, T.hour, avg(available) from donnees D, temp T where not D.free="" and T.station = D.station and D.hour = T.hour group by D.station, T.hour;
+         */
+
         #region Champs
         private static string MyConString = "DRIVER={MySQL ODBC 3.51 Driver};" +
                                      "SERVER=82.224.48.10;" +
@@ -188,6 +192,35 @@ namespace Ming.Atf
             //Close all resources
             MyDataReader.Close();
             //MyConnection.Close();
+
+            return result;
+        }
+
+        // Retourne le total par station
+        public static Dictionary<int,double> getMoyenne()
+        {
+            Dictionary<int, double> result = new Dictionary<int, double>();
+
+            if (!connection)
+            {
+                setConnection();
+                if (!connection)
+                    return result;
+            }
+
+            //Desc de la table donnees
+            OdbcCommand MyCommand = new OdbcCommand("select station, avg(available + free) from donnees where valid='1' group by station;", MyConnection);
+            OdbcDataReader MyDataReader;
+            MyDataReader = MyCommand.ExecuteReader();
+
+            Console.WriteLine("Executed : " + MyDataReader.RecordsAffected);
+            while (MyDataReader.Read())
+            {
+                result[MyDataReader.GetInt32(0)] = MyDataReader.GetDouble(1);
+            }
+
+            //Close all resources
+            MyDataReader.Close();
 
             return result;
         }

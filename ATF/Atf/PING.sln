@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PING", "Atf\PING.csproj", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Statistics", "AtfPicturePlugin\Statistics.csproj", "{127C1E80-ABF8-4218-ABEF-BF1D0060CF77}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clustering", "Clustering\Clustering.csproj", "{1D7AFFE7-EE3B-44AF-BCC0-BCA4654A487B}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -39,6 +41,16 @@ Global
 		{127C1E80-ABF8-4218-ABEF-BF1D0060CF77}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{127C1E80-ABF8-4218-ABEF-BF1D0060CF77}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{127C1E80-ABF8-4218-ABEF-BF1D0060CF77}.Release|x86.ActiveCfg = Release|Any CPU
+		{1D7AFFE7-EE3B-44AF-BCC0-BCA4654A487B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D7AFFE7-EE3B-44AF-BCC0-BCA4654A487B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D7AFFE7-EE3B-44AF-BCC0-BCA4654A487B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1D7AFFE7-EE3B-44AF-BCC0-BCA4654A487B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1D7AFFE7-EE3B-44AF-BCC0-BCA4654A487B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1D7AFFE7-EE3B-44AF-BCC0-BCA4654A487B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D7AFFE7-EE3B-44AF-BCC0-BCA4654A487B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D7AFFE7-EE3B-44AF-BCC0-BCA4654A487B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1D7AFFE7-EE3B-44AF-BCC0-BCA4654A487B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1D7AFFE7-EE3B-44AF-BCC0-BCA4654A487B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
