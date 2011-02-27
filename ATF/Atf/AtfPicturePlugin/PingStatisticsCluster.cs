@@ -58,7 +58,7 @@ namespace Ming.Atf.Pictures
 
             panel = new SplitContainer();
             panel.Dock = DockStyle.Fill;
-            panel.AutoSize = true;
+            //panel.AutoSize = true;
 
             WebBrowser web = new WebBrowser();
             // La page doit contenir des morceaux propre a C# ^^
@@ -67,7 +67,10 @@ namespace Ming.Atf.Pictures
             // Very Important
             web.ObjectForScripting = this;
             web.Dock = DockStyle.Fill;
+            web.AllowNavigation = false;
+            web.ScriptErrorsSuppressed = true;
             panel.Panel1.Controls.Add(web);
+            panel.Panel1MinSize = panel.Size.Width/2;
 
             pages.ClientAdd(panel, "Map", null, true);
         }
