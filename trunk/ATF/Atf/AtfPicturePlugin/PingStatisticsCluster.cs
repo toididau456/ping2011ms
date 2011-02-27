@@ -10,6 +10,7 @@ using Psl.Applications;
 using System.Collections;
 using System.Globalization;
 using System.Security.Permissions;
+using System.Windows.Forms.DataVisualization.Charting;
 
 
 
@@ -29,6 +30,7 @@ namespace Ming.Atf.Pictures
 
         /**/
         SplitContainer panel;
+        
         #endregion
 
         // Constructeur
@@ -39,6 +41,7 @@ namespace Ming.Atf.Pictures
             Registry.MergeInMainTools(this.toolStrip);
             Registry.MainPages.ContextMenuStrip = this.contextMenuStrip;
             Registry.MainPages.SelectedIndexChanged += changeStatus;
+
         }
 
         #region Actions
@@ -74,13 +77,22 @@ namespace Ming.Atf.Pictures
 
             pages.ClientAdd(panel, "Map", null, true);
         }
+       
+
+        
 
         // Test
         public void Test(string numStation)
         {
-            MessageBox.Show(this, "J'ai recu la station : " + numStation);
-            Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> res = LocalDataBase.getAllLines(1);
-            MessageBox.Show(this, "Taille : " + res.Count + " - Cle : " + res.Keys.Count);
+          
+          //Chart toAffiche =  stats.createChartStation(int.Parse(numStation), 0 , "Arrondissement" );
+          StatsChartsVelib stats = new StatsChartsVelib(false );
+          if ( panel.Panel2.Controls.Count > 0 )
+            panel.Panel2.Controls[ 0 ].Dispose();
+ 
+          panel.Panel2.Controls.Add(stats.initSplitPanel(int.Parse(numStation)));
+          
+          //panel.Panel2.Controls.Add( toAffiche );
         }
         #endregion
 
