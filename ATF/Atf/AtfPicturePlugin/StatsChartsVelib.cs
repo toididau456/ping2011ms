@@ -11,11 +11,24 @@ namespace Ming.Atf.Pictures {
     #region champs
     //private ArrayList dataVelib;
     private Dictionary<String, int> dayToInt;
-    private Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> memberDataMap;
     private Dictionary<int, String> intToEchelle;
     private Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabSemaine;
     private Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabHeure;
     private Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabJour;
+    private ComboBox choiceTimeTop;
+    private ComboBox choiceTimeBot;
+    private ComboBox choiceGeoBot;
+    private ComboBox choiceGeoTop;
+    private Panel panTop;
+    private Panel panBot;
+    private int stationDisplayed;
+    private Chart chartBot;
+    private Chart chartTop;
+    int lastIndexgeotop;
+    int lastIndexgeobot;
+    int lastIndexTimetop;
+    int lastIndexTimebot;
+
     #endregion
 
     #region Constructeur
@@ -35,6 +48,10 @@ namespace Ming.Atf.Pictures {
       dayToInt.Add( "Friday", 4 );
       dayToInt.Add( "Saturday", 5 );
       dayToInt.Add( "Sunday", 6 );
+      lastIndexgeotop = 0;
+      lastIndexgeobot = 0;
+      lastIndexTimetop = 0;
+      lastIndexTimebot = 0;
       if ( files ) {
         statsTabHeure = (Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>) MySerializer.DeSerializeObject( "tabStationParHeure" );
         statsTabJour = (Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>) MySerializer.DeSerializeObject( "tabStationParJour" );
@@ -80,10 +97,11 @@ namespace Ming.Atf.Pictures {
       DateTime time = new DateTime( 1970, 1, 1 );
       DateTime timeS = new DateTime( 1970, 1, 2 );
       Dictionary<int, KeyValuePair<double, double>> tempdico = null;
-      for ( int k = 0 ; k < 7 ; k++ ) {
-        Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> receivedData = LocalDataBase.getLinesByDateHours( timeS, time, k );
+
+      for ( int k = 5 ; k < 7 ; k++ ) {
+        Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> receivedData = LocalDataBase.getLinesByDateDays( timeS, time, k );
         foreach ( int station in receivedData.Keys ) {
-          if ( k == 0 ) {
+          if ( k == 5 ) {
             tempdico = new Dictionary<int, KeyValuePair<double, double>>();
             tempdico[ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key, receivedData[ station ][ k ].Value );
             res[ station ] = tempdico;
@@ -95,7 +113,9 @@ namespace Ming.Atf.Pictures {
       }
       MySerializer.SerializeObject( "tabStationParJour", res );
       return res;
-    }
+    } 
+
+
 
     public Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> createDicoStationParSemaine() {
       Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> res = new Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>();
@@ -103,7 +123,7 @@ namespace Ming.Atf.Pictures {
       DateTime timeS = new DateTime( 1970, 1, 2 );
       Dictionary<int, KeyValuePair<double, double>> tempdico = null;
       for ( int k = 0 ; k < 4 ; k++ ) {
-        Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> receivedData = LocalDataBase.getLinesByDateHours( timeS, time, k );
+        Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> receivedData = LocalDataBase.getLinesByDateWeeks( timeS, time, k );
         foreach ( int station in receivedData.Keys ) {
           if ( k == 0 ) {
             tempdico = new Dictionary<int, KeyValuePair<double, double>>();
@@ -210,7 +230,7 @@ namespace Ming.Atf.Pictures {
           statsTab = this.statsTabHeure[ station ];
         }
         else if ( echelle == "Jour" ) {
-          statsTab = this.statsTabJour[ station ];
+            statsTab = this.statsTabJour[ station ];
         }
         else {
           statsTab = this.statsTabSemaine[ station ];        
@@ -292,6 +312,7 @@ namespace Ming.Atf.Pictures {
 
 
     public SplitContainer initSplitPanel(int station) {
+      stationDisplayed = station;
       SplitContainer resPanel = new SplitContainer();
       resPanel.Size = new System.Drawing.Size( 500, 800 );
       resPanel.Panel1.MinimumSize = new System.Drawing.Size( 500, 350 ); 
@@ -307,37 +328,43 @@ namespace Ming.Atf.Pictures {
 
 
     public Panel creatLeftTopPanel(int station,String echelle,String geo) {
-      Panel panTop = new Panel();
+      panTop = new Panel();
+      panTop.Name = "panTop";
       panTop.BorderStyle = BorderStyle.FixedSingle;
       panTop.Size = new System.Drawing.Size( 500, 330 );
-      Chart chartStation = createChartStation( station, echelle, geo );
-      panTop.Controls.Add( chartStation );
+      chartTop = createChartStation( station, echelle, geo );
+      panTop.Controls.Add( chartTop );
 
-      ComboBox choiceTime = createChoiceTimeList();
-      ComboBox choiceGeo = createChoiceGeoList();
-      panTop.Controls.Add( choiceTime );
-      panTop.Controls.Add( choiceGeo );
-      choiceTime.Location = new System.Drawing.Point( 5, 302 );
-      choiceGeo.Location = new System.Drawing.Point( 130, 302 );
+      choiceTimeTop = createChoiceTimeList();
+      choiceTimeTop.SelectedIndexChanged += changeTimeTop;
+      choiceGeoTop = createChoiceGeoList();
+      choiceGeoTop.SelectedIndexChanged += changeGeoTop;
+      panTop.Controls.Add( choiceTimeTop );
+      panTop.Controls.Add( choiceGeoTop );
+      choiceTimeTop.Location = new System.Drawing.Point( 5, 302 );
+      choiceGeoTop.Location = new System.Drawing.Point( 130, 302 );
       return panTop;
     
     }
 
 
     public Panel creatLeftBotPanel( int station, String echelle, String geo ) {
-      Panel panBottom = new Panel();
-      panBottom.Size = new System.Drawing.Size( 500, 330 );
-      panBottom.BorderStyle = BorderStyle.FixedSingle;
-      Chart chartStation = createChartStation( station,echelle,geo );
-      panBottom.Controls.Add( chartStation );
+      panBot = new Panel();
+      panBot.Name = "panBot";
+      panBot.Size = new System.Drawing.Size( 500, 330 );
+      panBot.BorderStyle = BorderStyle.FixedSingle;
+      chartBot = createChartStation( station,echelle,geo );
+      panBot.Controls.Add( chartBot );
 
-      ComboBox choiceTime = createChoiceTimeList();
-      ComboBox choiceGeo = createChoiceGeoList();
-      panBottom.Controls.Add( choiceTime );
-      panBottom.Controls.Add( choiceGeo );
-      choiceTime.Location = new System.Drawing.Point( 5, 302 );
-      choiceGeo.Location = new System.Drawing.Point( 130, 302 );
-      return panBottom;
+      choiceTimeBot = createChoiceTimeList();
+      choiceTimeBot.SelectedIndexChanged += changeTimeBot;
+      choiceGeoBot = createChoiceGeoList();
+      choiceGeoBot.SelectedIndexChanged += changeGeoBot;
+      panBot.Controls.Add( choiceTimeBot );
+      panBot.Controls.Add( choiceGeoBot );
+      choiceTimeBot.Location = new System.Drawing.Point( 5, 302 );
+      choiceGeoBot.Location = new System.Drawing.Point( 130, 302 );
+      return panBot;
 
     }
 
@@ -346,10 +373,127 @@ namespace Ming.Atf.Pictures {
       ComboBox listeRes = new ComboBox();
       listeRes.Items.Add("Heure");
       listeRes.Items.Add("Jour" );
-      listeRes.Items.Add("Semaine");
+      //listeRes.Items.Add("Semaine");
+      
       return listeRes;
     }
 
+    /* Mets a jour la barre de status */
+    private void changeGeoTop( object sender, EventArgs args ) {
+      String geo;
+      String echelle;
+      if(choiceGeoTop.SelectedIndex == 0){
+        geo = "Station";
+      }
+      else if ( choiceGeoTop.SelectedIndex == 1 ) {
+        geo = "Arrondissement";
+      }
+      else{
+        geo = "Paris";
+      }
+
+      if ( lastIndexTimetop == 1 ) {
+        echelle = "Jour";
+      }
+      else if ( lastIndexTimetop == 2 ) {
+        echelle = "Semaine";
+      }
+      else {
+        echelle = "Heure";
+      }
+      lastIndexgeotop = choiceGeoTop.SelectedIndex;
+      chartTop.Dispose();
+      chartTop = createChartStation( stationDisplayed, echelle, geo );
+      panTop.Controls.Add(chartTop  ); 
+     
+    }
+
+    private void changeGeoBot( object sender, EventArgs args ) {
+      String geo;
+      String echelle;
+      if ( choiceGeoBot.SelectedIndex == 0 ) {
+        geo = "Station";
+        
+      }
+      else if ( choiceGeoBot.SelectedIndex == 1 ) {
+        geo = "Arrondissement";
+      }
+      else {
+        geo = "Paris";
+      }
+
+      if ( lastIndexTimebot == 1 ) {
+        echelle = "Jour";
+      }
+      else if ( lastIndexTimebot == 2 ) {
+        echelle = "Semaine";
+      }
+      else {
+        echelle = "Heure";
+      }
+      lastIndexgeobot = choiceGeoBot.SelectedIndex;
+      chartBot.Dispose();
+      chartBot = createChartStation( stationDisplayed, echelle, geo );
+      panBot.Controls.Add( chartBot );
+    }
+
+    private void changeTimeBot( object sender, EventArgs args ) {
+      String geo;
+      String echelle;
+      if ( choiceTimeBot.SelectedIndex == 0 ) {
+        echelle = "Heure";
+      }
+      else if ( choiceTimeBot.SelectedIndex == 1 ) {
+        echelle = "Jour";
+      }
+      else {
+        echelle = "Semaine";
+      }
+
+      if ( lastIndexgeobot == 1 ) {
+        geo = "Arrondissement";
+      }
+      else if ( lastIndexgeobot == 2 ) {
+        geo = "Paris";
+      }
+      else {
+        geo = "Station";
+      }
+
+      chartBot.Dispose();
+      chartBot = createChartStation( stationDisplayed, echelle, geo );
+      panBot.Controls.Add( chartBot );
+      
+    }
+
+    private void changeTimeTop( object sender, EventArgs args ) {
+      String geo;
+      String echelle;
+      if ( choiceTimeTop.SelectedIndex == 0 ) {
+        echelle = "Heure";
+      }
+      else if ( choiceTimeTop.SelectedIndex == 1 ) {
+        echelle = "Jour";
+      }
+      else {
+        echelle = "Semaine";
+      }
+
+      if ( lastIndexgeotop == 1 ) {
+        geo = "Arrondissement";
+      }
+      else if ( lastIndexgeotop == 2 ) {
+        geo = "Paris";
+      }
+      else {
+        geo = "Station";
+      }
+      lastIndexTimetop = choiceTimeTop.SelectedIndex;
+      chartTop.Dispose();
+      chartTop = createChartStation( stationDisplayed, echelle, geo );
+      panTop.Controls.Add( chartTop );                           
+     
+    }
 
     public ComboBox createChoiceGeoList() {
       ComboBox listeRes = new ComboBox();
