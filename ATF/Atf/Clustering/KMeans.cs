@@ -1,5 +1,6 @@
 using System;
 using System.Data;
+using DTW;
 
 namespace ats.KMeans
 {
@@ -80,6 +81,19 @@ namespace ats.KMeans
 
 			return distance;
 		}
+
+        /// <summary>
+        /// Calculates the DTW Measure between two data points
+        /// </summary>
+        /// <param name="X">An array with the values of an object or datapoint</param>
+        /// <param name="Y">An array with the values of an object or datapoint</param>
+        /// <returns>Returns the DTW Measure Between Points X and Points Y</returns>
+        public static double DtwDistance(double[] X, double[] Y)
+        {
+            SimpleDTW dtw = new SimpleDTW(X, Y);
+            dtw.computeDTW();
+            return dtw.getSum();
+        }
 
 		/// <summary>
 		/// Calculates The Mean Of A Cluster OR The Cluster Center
@@ -188,7 +202,7 @@ namespace ats.KMeans
 
 				for (int clusterIndex = 0; clusterIndex < clusters.Count; clusterIndex++)
 				{
-					if ((KMeans.EuclideanDistance(newClusters[clusterIndex].ClusterMean, clusters[clusterIndex].ClusterMean))==0)
+					if ((KMeans.DtwDistance(newClusters[clusterIndex].ClusterMean, clusters[clusterIndex].ClusterMean))==0)
 					{
 						stableClustersCount++;						
 					}			
