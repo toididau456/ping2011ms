@@ -76,6 +76,8 @@ namespace Ming.Atf.Pictures
         public void Test(string numStation)
         {
             MessageBox.Show(this, "J'ai recu la station : " + numStation);
+            Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> res = LocalDataBase.getAllLines(1);
+            MessageBox.Show(this, "Taille : " + res.Count + " - Cle : " + res.Keys.Count);
         }
         #endregion
 
