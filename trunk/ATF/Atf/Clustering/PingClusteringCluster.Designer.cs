@@ -29,12 +29,16 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PingClusteringCluster));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.actionList = new Psl.Actions.ActionList(this.components);
             this.editionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.acOpen = new Psl.Actions.Action(this.components);
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.menuStrip.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.actionList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,11 +63,17 @@
             // 
             // toolStrip
             // 
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton1});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(498, 25);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
+            // 
+            // actionList
+            // 
+            this.actionList.Actions.Add(this.acOpen);
             // 
             // editionToolStripMenuItem
             // 
@@ -72,6 +82,25 @@
             this.editionToolStripMenuItem.Name = "editionToolStripMenuItem";
             this.editionToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.editionToolStripMenuItem.Text = "Edition";
+            // 
+            // acOpen
+            // 
+            this.acOpen.Image = ((System.Drawing.Image)(resources.GetObject("acOpen.Image")));
+            this.acOpen.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.acOpen.Targets.Add(this.toolStripButton1);
+            this.acOpen.Text = "K-Means";
+            this.acOpen.ToolTipText = "Interface de segmentation";
+            this.acOpen.Execute += new System.EventHandler(this.acOpen_Execute);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "K-Means";
+            this.toolStripButton1.ToolTipText = "Interface de segmentation";
             // 
             // PingClusteringCluster
             // 
@@ -83,6 +112,8 @@
             this.Size = new System.Drawing.Size(498, 288);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.actionList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -96,5 +127,7 @@
         private Psl.Actions.ActionList actionList;
         private System.Windows.Forms.ToolStripMenuItem fichierToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editionToolStripMenuItem;
+        private Psl.Actions.Action acOpen;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }
