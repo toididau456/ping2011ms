@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using System.Data.Odbc;
+using System.Globalization;
 
 namespace Ming.Atf
 {
@@ -213,6 +214,52 @@ namespace Ming.Atf
             while (MyDataReader.Read())
             {
                 result[MyDataReader.GetInt32(0)] = MyDataReader.GetDouble(1);
+            }
+
+            //Close all resources
+            MyDataReader.Close();
+
+            return result;
+        }
+
+        // Retourne le Remplissage par station par Heure (sur toute la periode de recolte)
+        public static Dictionary<int, Dictionary<int,double>> getRemplissageByHour()
+        {
+            Dictionary<int, Dictionary<int, double>> result = new Dictionary<int, Dictionary<int, double>>();
+
+            if (!connection)
+            {
+                setConnection();
+                if (!connection)
+                    return result;
+            }
+
+            //Desc de la table donnees
+            OdbcCommand MyCommand = new OdbcCommand("select station as Station, hour as Hour, cast(avg(available)/avg(available + free) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" group by station, hour;", MyConnection);
+            OdbcDataReader MyDataReader;
+            MyDataReader = MyCommand.ExecuteReader();
+
+            Console.WriteLine("Executed : " + MyDataReader.RecordsAffected);
+            while (MyDataReader.Read())
+            {
+                int valeur = 0;
+                int station = MyDataReader.GetInt32(0);
+                int hour = MyDataReader.GetInt32(1);
+
+                try
+                {
+                    valeur = MyDataReader.GetInt32(2);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error : " + e.Message);
+                    Console.WriteLine("Valeur " + valeur);
+                }
+
+                if (!result.ContainsKey(station))
+                    result[station] = new Dictionary<int, double>();
+
+                result[station][hour] = valeur / 100.0;
             }
 
             //Close all resources

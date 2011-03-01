@@ -15,5 +15,11 @@ namespace Ming.Atf.Clustering
         {
             InitializeComponent();
         }
+
+        // Acces au bouton d'execution
+        public Button getExecuteButton()
+        {
+            return button1;
+        }
     }
 }
