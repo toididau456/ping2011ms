@@ -23,6 +23,7 @@ namespace Ming.Atf.Clustering
 
         /* Conteneur */
         FormKmeans panel;
+        Button button;
         #endregion
 
         // Constructeur
@@ -37,16 +38,19 @@ namespace Ming.Atf.Clustering
         // Convert Dictionary to array
         private double[,] convertData(Dictionary<int,Dictionary<int, double>> data)
         {
-            double[,] result = new double[data.Count,data.Keys.Count / data.Count];
+            double[,] result = new double[data.Count , data.Keys.Count];
             ArrayList station = new ArrayList();
             foreach (int key in data.Keys)
                 if(!station.Contains(key))
                     station.Add(key);
 
             foreach (int key in data.Keys)
-                foreach(int val in data[key].Keys)
-                    result[station.IndexOf(key,0),val] = data[key][val];
-            
+                foreach (int val in data[key].Keys)
+                {
+                    //Console.WriteLine(key + " Key : " + station.IndexOf(key) + " - Val : " + val);
+                    double res = data[key][val];
+                    result[station.IndexOf(key) , val] = res;
+                }
             return result;
         }
 
@@ -54,6 +58,8 @@ namespace Ming.Atf.Clustering
         private void initPanel()
         {
             panel = new FormKmeans();
+            button = panel.getExecuteButton();
+            button.Click += execution;
         }
 
         // K-Means
@@ -74,6 +80,16 @@ namespace Ming.Atf.Clustering
 
             initPanel();
             pages.ClientAdd(panel,"K-Means",null,true);
+        }
+        #endregion
+
+        #region Events
+        // Click pour execution
+        private void execution(object sender, EventArgs args)
+        {
+            Dictionary<int, Dictionary<int, double>> data = LocalDataBase.getRemplissageByHour();
+            Kmeans(data,6);
+            MessageBox.Show(this,"Ok - Tout marche");
         }
         #endregion
     }
