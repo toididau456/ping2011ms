@@ -65,6 +65,7 @@ namespace Ming.Atf.Clustering
         // 
         public void addControls(Control control)
         {
+            panel1.AutoSize = true;
             panel1.Controls.Add(control);
         }
         #endregion
