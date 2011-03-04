@@ -98,10 +98,10 @@ namespace Ming.Atf.Pictures {
       DateTime timeS = new DateTime( 1970, 1, 2 );
       Dictionary<int, KeyValuePair<double, double>> tempdico = null;
 
-      for ( int k = 5 ; k < 7 ; k++ ) {
+      for ( int k = 1 ; k < 8 ; k++ ) {
         Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> receivedData = LocalDataBase.getLinesByDateDays( timeS, time, k );
         foreach ( int station in receivedData.Keys ) {
-          if ( k == 5 ) {
+          if ( k == 1 ) {
             tempdico = new Dictionary<int, KeyValuePair<double, double>>();
             tempdico[ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key, receivedData[ station ][ k ].Value );
             res[ station ] = tempdico;
