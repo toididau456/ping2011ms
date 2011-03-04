@@ -38,7 +38,7 @@ namespace Ming.Atf.Clustering
         // Convert Dictionary to array
         private double[,] convertData(Dictionary<int,Dictionary<int, double>> data)
         {
-            double[,] result = new double[data.Count , data.Keys.Count];
+            double[,] result = new double[data.Count , data[20020].Keys.Count];
             ArrayList station = new ArrayList();
             foreach (int key in data.Keys)
                 if(!station.Contains(key))
@@ -51,7 +51,7 @@ namespace Ming.Atf.Clustering
                     double res = data[key][val];
                     result[station.IndexOf(key) , val] = res;
                 }
-            MessageBox.Show(this,"Conversion - ok");
+            //MessageBox.Show(this,"Conversion - ok");
             return result;
         }
 
@@ -68,13 +68,16 @@ namespace Ming.Atf.Clustering
         {
             double[,] db = convertData(data);
             ClusterCollection cluster = KMeans.ClusterDataSet(clusters,db,type);
-            MessageBox.Show(this,"Nombre de cluster : " + cluster.Count);
+            //MessageBox.Show(this,"Nombre de cluster : " + cluster.Count);
             for (int i = 0; i < cluster.Count; i++)
             {
+                string s = "Cluster " + i + " : ";
+                foreach (double z in cluster[i].ClusterMean)
+                    s += (int)(z*100) + " ";
+
                 Label label = new Label();
-                string s = string.Empty;
-                foreach(double z in cluster[i].ClusterMean)
-                    s += z + " ";
+                label.Size = new Size(600, 15);
+                label.Anchor = AnchorStyles.Right;
                 label.Text = s;
                 panel.addControls(label);
             }
@@ -107,7 +110,7 @@ namespace Ming.Atf.Clustering
             // Nombre de cluster
             int cluster = panel.getNbCluster();
             Dictionary<int, Dictionary<int, double>> data = LocalDataBase.getRemplissageByHour(start, end);
-            MessageBox.Show(this,"Remplissage - ok");
+            //MessageBox.Show(this,"Remplissage - ok");
             Kmeans(data, cluster, distance);
             MessageBox.Show(this,"Ok - Tout marche");
         }
