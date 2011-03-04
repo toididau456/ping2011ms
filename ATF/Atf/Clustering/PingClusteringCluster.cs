@@ -61,6 +61,8 @@ namespace Ming.Atf.Clustering
             panel = new FormKmeans();
             button = panel.getExecuteButton();
             button.Click += execution;
+            status.TextLeft = "K-Means";
+            status.TextInfos = "Segmentation des stations";
         }
 
         // K-Means

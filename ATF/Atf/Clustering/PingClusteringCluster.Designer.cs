@@ -32,11 +32,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PingClusteringCluster));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.actionList = new Psl.Actions.ActionList(this.components);
+            this.afficherKMeansToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.acOpen = new Psl.Actions.Action(this.components);
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.actionList = new Psl.Actions.ActionList(this.components);
+            this.acOpen = new Psl.Actions.Action(this.components);
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.actionList)).BeginInit();
@@ -55,11 +56,33 @@
             // 
             // fichierToolStripMenuItem
             // 
+            this.fichierToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.afficherKMeansToolStripMenuItem});
             this.fichierToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
             this.fichierToolStripMenuItem.MergeIndex = 1;
             this.fichierToolStripMenuItem.Name = "fichierToolStripMenuItem";
             this.fichierToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.fichierToolStripMenuItem.Text = "Fichier";
+            // 
+            // afficherKMeansToolStripMenuItem
+            // 
+            this.afficherKMeansToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("afficherKMeansToolStripMenuItem.Image")));
+            this.afficherKMeansToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.afficherKMeansToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
+            this.afficherKMeansToolStripMenuItem.MergeIndex = 2;
+            this.afficherKMeansToolStripMenuItem.Name = "afficherKMeansToolStripMenuItem";
+            this.afficherKMeansToolStripMenuItem.ShortcutKeyDisplayString = "";
+            this.afficherKMeansToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.afficherKMeansToolStripMenuItem.Text = "K-Means";
+            this.afficherKMeansToolStripMenuItem.ToolTipText = "Interface de segmentation";
+            // 
+            // editionToolStripMenuItem
+            // 
+            this.editionToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
+            this.editionToolStripMenuItem.MergeIndex = 5;
+            this.editionToolStripMenuItem.Name = "editionToolStripMenuItem";
+            this.editionToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.editionToolStripMenuItem.Text = "Edition";
             // 
             // toolStrip
             // 
@@ -71,27 +94,6 @@
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
             // 
-            // actionList
-            // 
-            this.actionList.Actions.Add(this.acOpen);
-            // 
-            // editionToolStripMenuItem
-            // 
-            this.editionToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
-            this.editionToolStripMenuItem.MergeIndex = 5;
-            this.editionToolStripMenuItem.Name = "editionToolStripMenuItem";
-            this.editionToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
-            this.editionToolStripMenuItem.Text = "Edition";
-            // 
-            // acOpen
-            // 
-            this.acOpen.Image = ((System.Drawing.Image)(resources.GetObject("acOpen.Image")));
-            this.acOpen.ImageTransparentColor = System.Drawing.Color.Transparent;
-            this.acOpen.Targets.Add(this.toolStripButton1);
-            this.acOpen.Text = "K-Means";
-            this.acOpen.ToolTipText = "Interface de segmentation";
-            this.acOpen.Execute += new System.EventHandler(this.acOpen_Execute);
-            // 
             // toolStripButton1
             // 
             this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -101,6 +103,20 @@
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton1.Text = "K-Means";
             this.toolStripButton1.ToolTipText = "Interface de segmentation";
+            // 
+            // actionList
+            // 
+            this.actionList.Actions.Add(this.acOpen);
+            // 
+            // acOpen
+            // 
+            this.acOpen.Image = ((System.Drawing.Image)(resources.GetObject("acOpen.Image")));
+            this.acOpen.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.acOpen.Targets.Add(this.toolStripButton1);
+            this.acOpen.Targets.Add(this.afficherKMeansToolStripMenuItem);
+            this.acOpen.Text = "K-Means";
+            this.acOpen.ToolTipText = "Interface de segmentation";
+            this.acOpen.Execute += new System.EventHandler(this.acOpen_Execute);
             // 
             // PingClusteringCluster
             // 
@@ -129,5 +145,6 @@
         private System.Windows.Forms.ToolStripMenuItem editionToolStripMenuItem;
         private Psl.Actions.Action acOpen;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripMenuItem afficherKMeansToolStripMenuItem;
     }
 }
