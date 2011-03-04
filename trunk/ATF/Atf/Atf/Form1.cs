@@ -57,8 +57,8 @@ namespace Ming.Atf
             {
                 sender.ArchiveProperty("Top", this, 50);
                 sender.ArchiveProperty("Left", this, 50);
-                sender.ArchiveProperty("Width", this, 50);
-                sender.ArchiveProperty("Height", this, 50);
+                sender.ArchiveProperty("Width", this, 500);
+                sender.ArchiveProperty("Height", this, 500);
                 sender.ArchiveProperty("Checked", this.acShowTools, true);
                 tools.Archive(sender, "Tools");
             }

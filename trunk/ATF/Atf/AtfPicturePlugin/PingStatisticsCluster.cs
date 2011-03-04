@@ -30,7 +30,7 @@ namespace Ming.Atf.Pictures
 
         /**/
         SplitContainer panel;
-        
+
         #endregion
 
         // Constructeur
@@ -49,6 +49,12 @@ namespace Ming.Atf.Pictures
         private void acOpenMap_Execute(object sender, EventArgs e)
         {
             ouvrirMap();
+        }
+
+        // Ouvrir la carte scrollable
+        private void acOpenScrollMap_Execute(object sender, EventArgs e)
+        {
+            ouvrirScrollMap();
         }
         #endregion
 
@@ -73,26 +79,39 @@ namespace Ming.Atf.Pictures
             web.AllowNavigation = false;
             web.ScriptErrorsSuppressed = true;
             panel.Panel1.Controls.Add(web);
-            panel.Panel1MinSize = panel.Size.Width/2;
-
+            panel.Panel1MinSize = panel.Size.Width / 2;
+            status.TextLeft = "Map";
+            status.TextInfos = "Visualisation";
             pages.ClientAdd(panel, "Map", null, true);
         }
-       
 
-        
+        // Cree un onglet avec la carte scrollable
+        private void ouvrirScrollMap()
+        {
+            // Pour eviter les ajouts multiples 
+            /*
+             * if(pages.Contains(ta_carte))
+             *  return;
+             */
+
+            // Ici, tu mets le constructeur de ta carte
+
+            // Ici, tu decommentes pour ajouter un nouvel onglet
+            //pages.ClientAdd(ta_carte,"Carte Scrollable",null,true);
+        }
 
         // Test
         public void Test(string numStation)
         {
-          
-          //Chart toAffiche =  stats.createChartStation(int.Parse(numStation), 0 , "Arrondissement" );
-          StatsChartsVelib stats = new StatsChartsVelib(false);
-          if ( panel.Panel2.Controls.Count > 0 )
-            panel.Panel2.Controls[ 0 ].Dispose();
- 
-          panel.Panel2.Controls.Add(stats.initSplitPanel(int.Parse(numStation)));
-          
-          //panel.Panel2.Controls.Add( toAffiche );
+            status.TextRight = "Station : " + numStation;
+            //Chart toAffiche =  stats.createChartStation(int.Parse(numStation), 0 , "Arrondissement" );
+            StatsChartsVelib stats = new StatsChartsVelib(false);
+            if (panel.Panel2.Controls.Count > 0)
+                panel.Panel2.Controls[0].Dispose();
+
+            panel.Panel2.Controls.Add(stats.initSplitPanel(int.Parse(numStation)));
+
+            //panel.Panel2.Controls.Add( toAffiche );
         }
         #endregion
 
@@ -118,21 +137,21 @@ namespace Ming.Atf.Pictures
         /* Mise a jour de divers elements */
         private void doUpdateState()
         {
-           /* if (pages.TabCount < 1)
-            {
-                status.TextRight = "";
+            /* if (pages.TabCount < 1)
+             {
+                 status.TextRight = "";
 
-                for (int i = 0; i < this.actionList.Actions.Count(); i++)
-                    if (this.actionList.Actions.ElementAt(i).Text != "Charger une image")
-                        this.actionList.Actions.ElementAt(i).Enabled = false;
-            }
-            else
-            {
-                for (int i = 0; i < this.actionList.Actions.Count(); i++)
-                    this.actionList.Actions.ElementAt(i).Enabled = true;
+                 for (int i = 0; i < this.actionList.Actions.Count(); i++)
+                     if (this.actionList.Actions.ElementAt(i).Text != "Charger une image")
+                         this.actionList.Actions.ElementAt(i).Enabled = false;
+             }
+             else
+             {
+                 for (int i = 0; i < this.actionList.Actions.Count(); i++)
+                     this.actionList.Actions.ElementAt(i).Enabled = true;
 
-                status.TextRight = pages.SelectedDockerClient.Tag.ToString();
-            }*/
+                 status.TextRight = pages.SelectedDockerClient.Tag.ToString();
+             }*/
         }
         #endregion
     }

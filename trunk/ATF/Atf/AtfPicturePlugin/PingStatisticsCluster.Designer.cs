@@ -32,18 +32,21 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PingStatisticsCluster));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ouvrirMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.affichageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.barresDoutilsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.actionList = new Psl.Actions.ActionList(this.components);
+            this.acOpenMap = new Psl.Actions.Action(this.components);
             this.proutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.applicationEvents = new Psl.Applications.ApplicationEvents(this.components);
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.acOpenMap = new Psl.Actions.Action(this.components);
             this.fermerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.acOpenScrollMap = new Psl.Actions.Action(this.components);
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.actionList)).BeginInit();
@@ -64,11 +67,25 @@
             // 
             // fichierToolStripMenuItem
             // 
+            this.fichierToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ouvrirMapToolStripMenuItem});
             this.fichierToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
             this.fichierToolStripMenuItem.MergeIndex = 1;
             this.fichierToolStripMenuItem.Name = "fichierToolStripMenuItem";
             this.fichierToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.fichierToolStripMenuItem.Text = "&Fichier";
+            // 
+            // ouvrirMapToolStripMenuItem
+            // 
+            this.ouvrirMapToolStripMenuItem.Image = global::Ming.Atf.Pictures.Properties.Resources.maps;
+            this.ouvrirMapToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.ouvrirMapToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
+            this.ouvrirMapToolStripMenuItem.MergeIndex = 1;
+            this.ouvrirMapToolStripMenuItem.Name = "ouvrirMapToolStripMenuItem";
+            this.ouvrirMapToolStripMenuItem.ShortcutKeyDisplayString = "";
+            this.ouvrirMapToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.ouvrirMapToolStripMenuItem.Text = "Afficher la carte";
+            this.ouvrirMapToolStripMenuItem.ToolTipText = "Affiche la carte";
             // 
             // editionToolStripMenuItem
             // 
@@ -98,16 +115,38 @@
             // toolStrip
             // 
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1});
+            this.toolStripButton1,
+            this.toolStripButton2});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(648, 25);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = global::Ming.Atf.Pictures.Properties.Resources.maps;
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "Afficher la carte";
+            this.toolStripButton1.ToolTipText = "Affiche la carte";
+            // 
             // actionList
             // 
             this.actionList.Actions.Add(this.acOpenMap);
+            this.actionList.Actions.Add(this.acOpenScrollMap);
+            // 
+            // acOpenMap
+            // 
+            this.acOpenMap.Image = global::Ming.Atf.Pictures.Properties.Resources.maps;
+            this.acOpenMap.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.acOpenMap.Targets.Add(this.toolStripButton1);
+            this.acOpenMap.Targets.Add(this.ouvrirMapToolStripMenuItem);
+            this.acOpenMap.Text = "Afficher la carte";
+            this.acOpenMap.ToolTipText = "Affiche la carte";
+            this.acOpenMap.Execute += new System.EventHandler(this.acOpenMap_Execute);
             // 
             // proutToolStripMenuItem
             // 
@@ -120,7 +159,6 @@
             // 
             // openFileDialog
             // 
-            this.openFileDialog.FileName = "openFileDialog1";
             this.openFileDialog.Filter = "Fichiers JPG|*.jpg|Fichiers PNG|*.png|Tous les fichiers|*.*";
             this.openFileDialog.Multiselect = true;
             // 
@@ -137,15 +175,6 @@
             this.contextMenuStrip.Name = "contextMenuStrip";
             this.contextMenuStrip.Size = new System.Drawing.Size(202, 48);
             // 
-            // acOpenMap
-            // 
-            this.acOpenMap.Image = global::Ming.Atf.Pictures.Properties.Resources.maps;
-            this.acOpenMap.ImageTransparentColor = System.Drawing.Color.Transparent;
-            this.acOpenMap.Targets.Add(this.toolStripButton1);
-            this.acOpenMap.Text = "Afficher la carte";
-            this.acOpenMap.ToolTipText = "Affiche la carte";
-            this.acOpenMap.Execute += new System.EventHandler(this.acOpenMap_Execute);
-            // 
             // fermerToolStripMenuItem
             // 
             this.fermerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fermerToolStripMenuItem.Image")));
@@ -156,15 +185,24 @@
             this.fermerToolStripMenuItem.Text = "Detruire Onglet Courant";
             this.fermerToolStripMenuItem.ToolTipText = "Detruit l\'onglet sélectionné";
             // 
-            // toolStripButton1
+            // acOpenScrollMap
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = global::Ming.Atf.Pictures.Properties.Resources.maps;
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Transparent;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "Afficher la carte";
-            this.toolStripButton1.ToolTipText = "Affiche la carte";
+            this.acOpenScrollMap.Image = global::Ming.Atf.Pictures.Properties.Resources.google_maps_icon;
+            this.acOpenScrollMap.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.acOpenScrollMap.Targets.Add(this.toolStripButton2);
+            this.acOpenScrollMap.Text = "Carte Scrollable";
+            this.acOpenScrollMap.ToolTipText = "Carte modulaire";
+            this.acOpenScrollMap.Execute += new System.EventHandler(this.acOpenScrollMap_Execute);
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.Image = global::Ming.Atf.Pictures.Properties.Resources.google_maps_icon;
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Text = "Carte Scrollable";
+            this.toolStripButton2.ToolTipText = "Carte modulaire";
             // 
             // PingStatisticsCluster
             // 
@@ -201,5 +239,8 @@
         private System.Windows.Forms.ToolStripMenuItem editionToolStripMenuItem;
         private Psl.Actions.Action acOpenMap;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripMenuItem ouvrirMapToolStripMenuItem;
+        private Psl.Actions.Action acOpenScrollMap;
+        private System.Windows.Forms.ToolStripButton toolStripButton2;
     }
 }
