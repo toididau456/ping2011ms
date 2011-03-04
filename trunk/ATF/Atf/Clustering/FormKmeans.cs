@@ -61,6 +61,12 @@ namespace Ming.Atf.Clustering
                 return 6;
             return int.Parse(comboBox3.SelectedItem as String);
         }
+
+        // 
+        public void addControls(Control control)
+        {
+            panel1.Controls.Add(control);
+        }
         #endregion
     }
 }

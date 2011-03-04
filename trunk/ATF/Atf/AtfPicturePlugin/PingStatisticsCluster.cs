@@ -86,7 +86,7 @@ namespace Ming.Atf.Pictures
         {
           
           //Chart toAffiche =  stats.createChartStation(int.Parse(numStation), 0 , "Arrondissement" );
-          StatsChartsVelib stats = new StatsChartsVelib(true);
+          StatsChartsVelib stats = new StatsChartsVelib(false);
           if ( panel.Panel2.Controls.Count > 0 )
             panel.Panel2.Controls[ 0 ].Dispose();
  
