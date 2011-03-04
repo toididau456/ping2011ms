@@ -52,11 +52,11 @@ namespace Ming.Atf
             if (start.CompareTo(time) == 0 && end.CompareTo(time) == 0)
                 return getAllLines(i);
             else if (start.CompareTo(time) == 0)
-                return sendRequest("select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date <='" + convertToTimestamp(end) + "' and hour='" + i + "' group by station;", i);
+              return sendRequest( "select station , (avg(available)/total)  *100, (variance(available)/total)*100 from donnees" + City + " where valid='1' and date <='" + convertToTimestamp( end ) + "' and hour='" + i + "' group by station;", i );
             else if (end.CompareTo(time) == 0)
-                return sendRequest("select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date >='" + convertToTimestamp(start) + "' and hour='" + i + "' group by station;", i);
+              return sendRequest( "select station , (avg(available)/total)  *100, (variance(available)/total)*100 from donnees" + City + " where valid='1' and date >='" + convertToTimestamp( start ) + "' and hour='" + i + "' group by station;", i );
             else
-                return sendRequest("select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp(start) + "' and date <= '" + convertToTimestamp(end) + "' and hour='" + i + "' group by station;", i);
+              return sendRequest( "select station , (avg(available)/total)  *100), (variance(available)/total)*100 from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp( start ) + "' and date <= '" + convertToTimestamp( end ) + "' and hour='" + i + "' group by station;", i );
         }
 
         // Retourne toutes les lignes comprises entre start et end
@@ -66,11 +66,11 @@ namespace Ming.Atf
             if (start.CompareTo(time) == 0 && end.CompareTo(time) == 0)
                 return getAllLines(i);
             else if (start.CompareTo(time) == 0)
-                return sendRequest("select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date <='" + convertToTimestamp(end) + "' and day='" + i + "' group by station;", i);
+              return sendRequest( "select station ,(avg(available)/total)  *100), (variance(available)/total)*100 from donnees" + City + " where valid='1'  and date <='" + convertToTimestamp( end ) + "' and day='" + i + "' group by station;", i );
             else if (end.CompareTo(time) == 0)
-                return sendRequest("select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date >='" + convertToTimestamp(start) + "' and day='" + i + "' group by station;", i);
+              return sendRequest( "select station , (avg(available)/total)  *100), (variance(available)/total)*100 from donnees" + City + " where valid='1' and date >='" + convertToTimestamp( start ) + "' and day='" + i + "' group by station;", i );
             else
-                return sendRequest("select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp(start) + "' and date <= '" + convertToTimestamp(end) + "' and day='" + i + "' group by station;", i);
+              return sendRequest( "select station , (avg(available)/total)  *100), (variance(available)/total)*100 from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp( start ) + "' and date <= '" + convertToTimestamp( end ) + "' and day='" + i + "' group by station;", i );
         }
 
         // Retourne toutes les lignes comprises entre start et end
@@ -79,11 +79,11 @@ namespace Ming.Atf
             if (start.CompareTo(time) == 0 && end.CompareTo(time) == 0)
                 return getAllLines(i);
             else if (start.CompareTo(time) == 0)
-                return sendRequest("select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date <='" + convertToTimestamp(end) + "' and week='" + i + "' group by station;", i);
+              return sendRequest( "select station , (avg(available)/total)  *100), (variance(available)/total)*100 from donnees" + City + " where valid='1' and date <='" + convertToTimestamp( end ) + "' and week='" + i + "' group by station;", i );
             else if (end.CompareTo(time) == 0)
-                return sendRequest("select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date >='" + convertToTimestamp(start) + "' and week='" + i + "' group by station;", i);
+              return sendRequest( "select station , (avg(available)/total)  *100), (variance(available)/total)*100 from donnees" + City + " where valid='1' and date >='" + convertToTimestamp( start ) + "' and week='" + i + "' group by station;", i );
             else
-                return sendRequest("select station , avg(available), variance(available) from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp(start) + "' and date <= '" + convertToTimestamp(end) + "' and week='" + i + "' group by station;", i);
+              return sendRequest( "select station , (avg(available)/total)  *100), (variance(available)/total)*100 from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp( start ) + "' and date <= '" + convertToTimestamp( end ) + "' and week='" + i + "' group by station;", i );
         }
 
         // Renvoie le details des stations
