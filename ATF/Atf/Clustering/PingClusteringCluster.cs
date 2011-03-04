@@ -69,6 +69,15 @@ namespace Ming.Atf.Clustering
             double[,] db = convertData(data);
             ClusterCollection cluster = KMeans.ClusterDataSet(clusters,db,type);
             MessageBox.Show(this,"Nombre de cluster : " + cluster.Count);
+            for (int i = 0; i < cluster.Count; i++)
+            {
+                Label label = new Label();
+                string s = string.Empty;
+                foreach(double z in cluster[i].ClusterMean)
+                    s += z + " ";
+                label.Text = s;
+                panel.addControls(label);
+            }
         }
         #endregion
 

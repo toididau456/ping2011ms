@@ -37,6 +37,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
+            this.panel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.SuspendLayout();
             // 
             // comboBox1
@@ -148,10 +149,19 @@
             this.comboBox3.TabIndex = 8;
             this.comboBox3.Text = "Selectionnez le nombre de clusters";
             // 
+            // panel1
+            // 
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel1.Location = new System.Drawing.Point(265, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(344, 357);
+            this.panel1.TabIndex = 9;
+            // 
             // FormKmeans
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.comboBox3);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.label3);
@@ -179,5 +189,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.ComboBox comboBox3;
+        private System.Windows.Forms.FlowLayoutPanel panel1;
     }
 }
