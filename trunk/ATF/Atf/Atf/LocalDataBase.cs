@@ -17,6 +17,14 @@ namespace Ming.Atf
                                      "UID=userCsharp;" +
                                      "PASSWORD=userPass11;" +
                                      "OPTION=3";
+
+        /*private static string MyConString = "DRIVER={MySQL ODBC 3.51 Driver};" +
+                                     "Port=33061;" +
+                                     "SERVER=velib.lip6.fr;" +
+                                     "DATABASE=velib;" +
+                                     "UID=velib;" +
+                                     "PASSWORD=j5G3dXa4fhND94Yr;";*/
+
         // City
         private static string City = "";
 
@@ -223,7 +231,7 @@ namespace Ming.Atf
         }
 
         // Retourne le Remplissage par station par Heure (sur toute la periode de recolte)
-        public static Dictionary<int, Dictionary<int,double>> getRemplissageByHour()
+        public static Dictionary<int, Dictionary<int,double>> getRemplissageByHour(DateTime start, DateTime end)
         {
             Dictionary<int, Dictionary<int, double>> result = new Dictionary<int, Dictionary<int, double>>();
 
@@ -235,7 +243,8 @@ namespace Ming.Atf
             }
 
             //Desc de la table donnees
-            OdbcCommand MyCommand = new OdbcCommand("select station as Station, hour as Hour, cast(avg(available)/avg(available + free) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" group by station, hour;", MyConnection);
+            string s = " and date >= " + convertToTimestamp(start) + " and date <= " + convertToTimestamp(end) + " ";
+            OdbcCommand MyCommand = new OdbcCommand("select station as Station, hour as Hour, cast(avg(available)/avg(available + free) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection);
             OdbcDataReader MyDataReader;
             MyDataReader = MyCommand.ExecuteReader();
 
@@ -253,7 +262,7 @@ namespace Ming.Atf
                 catch (Exception e)
                 {
                     Console.WriteLine("Error : " + e.Message);
-                    Console.WriteLine("Valeur " + valeur);
+                    continue;
                 }
 
                 if (!result.ContainsKey(station))

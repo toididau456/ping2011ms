@@ -143,7 +143,7 @@ namespace ats.KMeans
 		/// <param name="clusterCount">The number of clusters or groups to form</param>
 		/// <param name="data">An array containing data that will be clustered</param>
 		/// <returns>A collection of clusters of data</returns>
-		public static ClusterCollection ClusterDataSet(int clusterCount, double [,] data)
+		public static ClusterCollection ClusterDataSet(int clusterCount, double [,] data, string type)
 		{
 			//bool stableClusterFormation = false;
 
@@ -202,7 +202,17 @@ namespace ats.KMeans
 
 				for (int clusterIndex = 0; clusterIndex < clusters.Count; clusterIndex++)
 				{
-					if ((KMeans.DtwDistance(newClusters[clusterIndex].ClusterMean, clusters[clusterIndex].ClusterMean))==0)
+                    double distance = 0;
+                    switch (type)
+                    {
+                        case "DTW":
+                            distance = (KMeans.DtwDistance(newClusters[clusterIndex].ClusterMean, clusters[clusterIndex].ClusterMean));
+                            break;
+                        default :
+                            distance = (KMeans.EuclideanDistance(newClusters[clusterIndex].ClusterMean, clusters[clusterIndex].ClusterMean));
+                            break;
+                    } 
+					if (distance == 0)
 					{
 						stableClustersCount++;						
 					}			

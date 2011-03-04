@@ -51,6 +51,7 @@ namespace Ming.Atf.Clustering
                     double res = data[key][val];
                     result[station.IndexOf(key) , val] = res;
                 }
+            MessageBox.Show(this,"Conversion - ok");
             return result;
         }
 
@@ -63,11 +64,11 @@ namespace Ming.Atf.Clustering
         }
 
         // K-Means
-        private void Kmeans(Dictionary<int, Dictionary<int, double>> data, int clusters)
+        private void Kmeans(Dictionary<int, Dictionary<int, double>> data, int clusters,string type)
         {
             double[,] db = convertData(data);
-            ClusterCollection cluster = KMeans.ClusterDataSet(clusters,db);
-
+            ClusterCollection cluster = KMeans.ClusterDataSet(clusters,db,type);
+            MessageBox.Show(this,"Nombre de cluster : " + cluster.Count);
         }
         #endregion
 
@@ -87,8 +88,18 @@ namespace Ming.Atf.Clustering
         // Click pour execution
         private void execution(object sender, EventArgs args)
         {
-            Dictionary<int, Dictionary<int, double>> data = LocalDataBase.getRemplissageByHour();
-            Kmeans(data,6);
+            // Dates 
+            DateTime start = panel.getDateStart();
+            DateTime end = panel.getDateEnd();
+            // Type de vector
+            int vector = panel.getSelectedVector();
+            // Type de distance
+            String distance = panel.getSelectedDistance();
+            // Nombre de cluster
+            int cluster = panel.getNbCluster();
+            Dictionary<int, Dictionary<int, double>> data = LocalDataBase.getRemplissageByHour(start, end);
+            MessageBox.Show(this,"Remplissage - ok");
+            Kmeans(data, cluster, distance);
             MessageBox.Show(this,"Ok - Tout marche");
         }
         #endregion
