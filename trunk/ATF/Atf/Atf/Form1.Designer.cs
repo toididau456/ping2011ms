@@ -47,6 +47,11 @@
             this.acQuit = new Psl.Actions.Action(this.components);
             this.acShowTools = new Psl.Actions.Action(this.components);
             this.pages = new Psl.Controls.TabDocker();
+            this.acToFile = new Psl.Actions.Action(this.components);
+            this.editionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exporterToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.menu.SuspendLayout();
             this.tools.SuspendLayout();
             this.toolBar.SuspendLayout();
@@ -62,6 +67,7 @@
             // 
             this.menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fichierToolStripMenuItem,
+            this.editionToolStripMenuItem,
             this.affichageToolStripMenuItem,
             this.toolStripMenuItem1});
             this.menu.Location = new System.Drawing.Point(0, 0);
@@ -116,7 +122,7 @@
             this.barreDoutilsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItem3});
             this.barreDoutilsToolStripMenuItem.Name = "barreDoutilsToolStripMenuItem";
-            this.barreDoutilsToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.barreDoutilsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.barreDoutilsToolStripMenuItem.Text = "&Barres d\'outils";
             // 
             // toolStripMenuItem3
@@ -148,10 +154,11 @@
             // 
             this.toolBar.Dock = System.Windows.Forms.DockStyle.None;
             this.toolBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1});
+            this.toolStripButton1,
+            this.toolStripButton2});
             this.toolBar.Location = new System.Drawing.Point(3, 0);
             this.toolBar.Name = "toolBar";
-            this.toolBar.Size = new System.Drawing.Size(35, 25);
+            this.toolBar.Size = new System.Drawing.Size(58, 25);
             this.toolBar.TabIndex = 0;
             // 
             // toolStripButton1
@@ -212,6 +219,7 @@
             // 
             this.actionList.Actions.Add(this.acQuit);
             this.actionList.Actions.Add(this.acShowTools);
+            this.actionList.Actions.Add(this.acToFile);
             // 
             // acQuit
             // 
@@ -241,6 +249,46 @@
             this.pages.ShowToolTips = true;
             this.pages.Size = new System.Drawing.Size(1046, 581);
             this.pages.TabIndex = 7;
+            // 
+            // acToFile
+            // 
+            this.acToFile.Image = global::Ming.Atf.Properties.Resources.save;
+            this.acToFile.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.acToFile.Targets.Add(this.exporterToolStripMenuItem);
+            this.acToFile.Targets.Add(this.toolStripButton2);
+            this.acToFile.Text = "Exporter";
+            this.acToFile.ToolTipText = "Exporter pour pour MatLab ou Octave";
+            this.acToFile.Execute += new System.EventHandler(this.acToFile_Execute);
+            // 
+            // editionToolStripMenuItem
+            // 
+            this.editionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exporterToolStripMenuItem});
+            this.editionToolStripMenuItem.MergeAction = System.Windows.Forms.MergeAction.MatchOnly;
+            this.editionToolStripMenuItem.MergeIndex = 5;
+            this.editionToolStripMenuItem.Name = "editionToolStripMenuItem";
+            this.editionToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
+            this.editionToolStripMenuItem.Text = "Edition";
+            // 
+            // exporterToolStripMenuItem
+            // 
+            this.exporterToolStripMenuItem.Image = global::Ming.Atf.Properties.Resources.save;
+            this.exporterToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.exporterToolStripMenuItem.Name = "exporterToolStripMenuItem";
+            this.exporterToolStripMenuItem.ShortcutKeyDisplayString = "";
+            this.exporterToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exporterToolStripMenuItem.Text = "Exporter";
+            this.exporterToolStripMenuItem.ToolTipText = "Exporter pour pour MatLab ou Octave";
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.Image = global::Ming.Atf.Properties.Resources.save;
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Text = "Exporter";
+            this.toolStripButton2.ToolTipText = "Exporter pour pour MatLab ou Octave";
             // 
             // Form1
             // 
@@ -287,6 +335,11 @@
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private Psl.Controls.TabDocker pages;
+        private Psl.Actions.Action acToFile;
+        private System.Windows.Forms.ToolStripMenuItem editionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exporterToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }
 
