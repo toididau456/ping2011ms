@@ -129,6 +129,15 @@
   <metadata name="affichageToolStripMenuItem.Action" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value />
   </metadata>
+  <metadata name="fichierToolStripMenuItem.Action" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value />
+  </metadata>
+  <metadata name="editionToolStripMenuItem.Action" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value />
+  </metadata>
+  <metadata name="affichageToolStripMenuItem.Action" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value />
+  </metadata>
   <metadata name="barresDoutilsToolStripMenuItem.Action" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value />
   </metadata>
@@ -147,8 +156,8 @@
   <metadata name="acOpenScrollMap.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>166, 56</value>
   </metadata>
-  <metadata name="proutToolStripMenuItem.Action" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value />
+  <metadata name="acCloseCurrentTab.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>314, 56</value>
   </metadata>
   <metadata name="openFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>317, 17</value>
@@ -159,23 +168,4 @@
   <metadata name="contextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 56</value>
   </metadata>
-  <metadata name="fermerToolStripMenuItem.Action" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value />
-  </metadata>
-  <metadata name="fermerToolStripMenuItem.Action" type="System.Resources.ResXNullRef, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value />
-  </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="fermerToolStripMenuItem.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFKSURBVDhPjZPbSsNAEIbzUvoO+hpK30LIhRdSVDw1iK2l
-        RK1osHhAe2GRiIJ6IQragmeKbamtIfZkamvy6yw0NnaTdGEudpn55p9/WEHo40AQQNGdyntzRbHkQMCG
-        /L/3oYG1tyHdMFYsrR6AF6GVfYiiaEt37UzFloWemIvtMoCqqkx+pzNXAQ8wHUkwgK8HbgqCixt/AK8t
-        LMh73BHMX1nLW6eIKCcYHB51rNHh/Ex0mwswmm1olU8k1DsMDI24AyaXlB5As/UNvWYgV6pCSaW9AROh
-        dQeAiqv1LxTea7h/1RBPXnkDxmdlG9A2TVZc1Op4zOm4fnhDbOfcGyBORRnANC00jBZKegMvhQ/cPJVx
-        dptHePPYGzAWDIMc75iWLVaQeS7jIp3H0WUW0lrKH0Bzk9tkGM1MsqmzFD/EvJz0H4HW5Be8X/cDKf/b
-        5txEVkEAAAAASUVORK5CYII=
-</value>
-  </data>
 </root>
