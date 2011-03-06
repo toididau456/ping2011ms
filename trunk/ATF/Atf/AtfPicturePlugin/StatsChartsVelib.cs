@@ -13,8 +13,9 @@ namespace Ming.Atf.Pictures {
     private Dictionary<String, int> dayToInt;
     private Dictionary<int, String> intToEchelle;
     private Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabSemaine;
-    private Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabHeure;
     private Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabJour;
+    private Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabHeure;
+    
     private ComboBox choiceTimeTop;
     private ComboBox choiceTimeBot;
     private ComboBox choiceGeoBot;
@@ -531,6 +532,24 @@ namespace Ming.Atf.Pictures {
       }
       district = int.Parse( stration );
       return district;
+    }
+
+
+    public Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> StatsTabSemaine {
+      get { return statsTabSemaine; }
+      set { statsTabSemaine = value; }
+    }
+
+
+    public Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> StatsTabHeure {
+      get { return statsTabHeure; }
+      set { statsTabHeure = value; }
+    }
+
+
+    public Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> StatsTabJour {
+      get { return statsTabJour; }
+      set { statsTabJour = value; }
     }
 
     #endregion
