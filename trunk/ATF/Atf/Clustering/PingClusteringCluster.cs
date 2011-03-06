@@ -24,6 +24,9 @@ namespace Ming.Atf.Clustering
         /* Conteneur */
         FormKmeans panel;
         Button button;
+
+        /* Stations sous ArrayList*/
+        ArrayList stations = new ArrayList();
         #endregion
 
         // Constructeur
@@ -48,6 +51,7 @@ namespace Ming.Atf.Clustering
                         keyTemp = key;
                 }
 
+            stations = station;
             double[,] result = new double[data.Count, data[keyTemp].Keys.Count];
             
             foreach (int key in data.Keys)
@@ -76,20 +80,26 @@ namespace Ming.Atf.Clustering
         private void Kmeans(Dictionary<int, Dictionary<int, double>> data, int clusters,string type)
         {
             double[,] db = convertData(data);
+            Console.WriteLine("Donnees convertie");
+
             ClusterCollection cluster = KMeans.ClusterDataSet(clusters,db,type);
             //MessageBox.Show(this,"Nombre de cluster : " + cluster.Count);
-            
+            Console.WriteLine("Kmeans calcule");
+
             for (int i = 0; i < cluster.Count; i++)
             {
-                string s = "Cluster " + i + ", taille = " + cluster[i].Count + " : ";
-                foreach (double z in cluster[i].ClusterMean)
-                    s += (int)(z*100) + " ";
+                //string s = "Cluster " + i + ", taille = " + cluster[i].getValues.Count + " : ";
+                foreach (int z in cluster[i].getValues)
+                {
+                    
+                    string s = stations[z] + " : " + i ;
 
-                Label label = new Label();
-                label.Size = new Size(600, 15);
-                label.Anchor = AnchorStyles.Right;
-                label.Text = s;
-                panel.addControls(label);
+                    Label label = new Label();
+                    label.Size = new Size(75, 15);
+                    label.Anchor = AnchorStyles.Right;
+                    label.Text = s;
+                    panel.addControls(label);
+                }
             }
         }
         #endregion
@@ -139,7 +149,7 @@ namespace Ming.Atf.Clustering
                     data = LocalDataBase.getRemplissageByHour(start, end);
                     break;
             }
-
+            Console.WriteLine("J'ai les donnees");
             Kmeans(data, cluster, distance);
             MessageBox.Show(this,"Ok - Tout marche");
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using DTW;
+using System.Collections;
 
 namespace ats.KMeans
 {
@@ -325,6 +326,7 @@ namespace ats.KMeans
                 }
 
                 newClusters[position].Add(dataPoint);
+                newClusters[position].AddValue(row);
             }
 
             return newClusters;
@@ -408,6 +410,21 @@ namespace ats.KMeans
 
                 return this._clusterMean;
             }
+        }
+
+        private ArrayList values = new ArrayList();
+
+        public ArrayList getValues
+        {
+            get
+            {
+                return values;
+            }
+        }
+
+        public void AddValue(int value)
+        {
+            values.Add(value);
         }
 
         /// <summary>
