@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PingStatisticsCluster));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ouvrirMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -38,15 +37,15 @@
             this.barresDoutilsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.actionList = new Psl.Actions.ActionList(this.components);
             this.acOpenMap = new Psl.Actions.Action(this.components);
-            this.proutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.acOpenScrollMap = new Psl.Actions.Action(this.components);
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.applicationEvents = new Psl.Applications.ApplicationEvents(this.components);
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.fermerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.acOpenScrollMap = new Psl.Actions.Action(this.components);
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.acCloseCurrentTab = new Psl.Actions.Action(this.components);
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.actionList)).BeginInit();
@@ -133,10 +132,21 @@
             this.toolStripButton1.Text = "Afficher la carte";
             this.toolStripButton1.ToolTipText = "Affiche la carte";
             // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton2.Image = global::Ming.Atf.Pictures.Properties.Resources.google_maps_icon;
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton2.Text = "Carte Scrollable";
+            this.toolStripButton2.ToolTipText = "Carte modulaire";
+            // 
             // actionList
             // 
             this.actionList.Actions.Add(this.acOpenMap);
             this.actionList.Actions.Add(this.acOpenScrollMap);
+            this.actionList.Actions.Add(this.acCloseCurrentTab);
             // 
             // acOpenMap
             // 
@@ -148,14 +158,14 @@
             this.acOpenMap.ToolTipText = "Affiche la carte";
             this.acOpenMap.Execute += new System.EventHandler(this.acOpenMap_Execute);
             // 
-            // proutToolStripMenuItem
+            // acOpenScrollMap
             // 
-            this.proutToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Transparent;
-            this.proutToolStripMenuItem.Name = "proutToolStripMenuItem";
-            this.proutToolStripMenuItem.ShortcutKeyDisplayString = "";
-            this.proutToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.proutToolStripMenuItem.Text = "Changer Image";
-            this.proutToolStripMenuItem.ToolTipText = "Changer l\'image de l\'onglet";
+            this.acOpenScrollMap.Image = global::Ming.Atf.Pictures.Properties.Resources.google_maps_icon;
+            this.acOpenScrollMap.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.acOpenScrollMap.Targets.Add(this.toolStripButton2);
+            this.acOpenScrollMap.Text = "Carte Scrollable";
+            this.acOpenScrollMap.ToolTipText = "Carte modulaire";
+            this.acOpenScrollMap.Execute += new System.EventHandler(this.acOpenScrollMap_Execute);
             // 
             // openFileDialog
             // 
@@ -170,39 +180,26 @@
             // contextMenuStrip
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fermerToolStripMenuItem,
-            this.proutToolStripMenuItem});
+            this.fermerToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(202, 48);
+            this.contextMenuStrip.Size = new System.Drawing.Size(199, 26);
             // 
             // fermerToolStripMenuItem
             // 
-            this.fermerToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("fermerToolStripMenuItem.Image")));
             this.fermerToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Transparent;
             this.fermerToolStripMenuItem.Name = "fermerToolStripMenuItem";
             this.fermerToolStripMenuItem.ShortcutKeyDisplayString = "";
-            this.fermerToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
-            this.fermerToolStripMenuItem.Text = "Detruire Onglet Courant";
-            this.fermerToolStripMenuItem.ToolTipText = "Detruit l\'onglet sélectionné";
+            this.fermerToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.fermerToolStripMenuItem.Text = "Fermer l\'onglet courant";
+            this.fermerToolStripMenuItem.ToolTipText = "Fermer l\'onglet courant";
             // 
-            // acOpenScrollMap
+            // acCloseCurrentTab
             // 
-            this.acOpenScrollMap.Image = global::Ming.Atf.Pictures.Properties.Resources.google_maps_icon;
-            this.acOpenScrollMap.ImageTransparentColor = System.Drawing.Color.Transparent;
-            this.acOpenScrollMap.Targets.Add(this.toolStripButton2);
-            this.acOpenScrollMap.Text = "Carte Scrollable";
-            this.acOpenScrollMap.ToolTipText = "Carte modulaire";
-            this.acOpenScrollMap.Execute += new System.EventHandler(this.acOpenScrollMap_Execute);
-            // 
-            // toolStripButton2
-            // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = global::Ming.Atf.Pictures.Properties.Resources.google_maps_icon;
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Transparent;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton2.Text = "Carte Scrollable";
-            this.toolStripButton2.ToolTipText = "Carte modulaire";
+            this.acCloseCurrentTab.ImageTransparentColor = System.Drawing.Color.Transparent;
+            this.acCloseCurrentTab.Targets.Add(this.fermerToolStripMenuItem);
+            this.acCloseCurrentTab.Text = "Fermer l\'onglet courant";
+            this.acCloseCurrentTab.ToolTipText = "Fermer l\'onglet courant";
+            this.acCloseCurrentTab.Execute += new System.EventHandler(this.acCloseCurrentTab_Execute);
             // 
             // PingStatisticsCluster
             // 
@@ -235,12 +232,12 @@
         private Psl.Applications.ApplicationEvents applicationEvents;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem fermerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem proutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editionToolStripMenuItem;
         private Psl.Actions.Action acOpenMap;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripMenuItem ouvrirMapToolStripMenuItem;
         private Psl.Actions.Action acOpenScrollMap;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private Psl.Actions.Action acCloseCurrentTab;
     }
 }

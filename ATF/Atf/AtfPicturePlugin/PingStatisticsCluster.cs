@@ -56,6 +56,13 @@ namespace Ming.Atf.Pictures
         {
             ouvrirScrollMap();
         }
+
+        // Fermer l'onglet courant
+        private void acCloseCurrentTab_Execute(object sender, EventArgs e)
+        {
+            if(pages.TabCount > 0)
+                pages.SelectedDockerClient.Dispose();
+        }
         #endregion
 
         #region Methodes
@@ -88,6 +95,11 @@ namespace Ming.Atf.Pictures
         // Cree un onglet avec la carte scrollable
         private void ouvrirScrollMap()
         {
+            if (pages.TabCount >= 1)
+                for (int i = 0; i < pages.TabCount; i++ )
+                    if (pages.TabPages[i].Text.Equals("Carte Scrollable"))
+                        return;
+
             ScrollableMaps mapScroll = new ScrollableMaps("staticmapbigRoad.png", true);
             /* if ( LocalDataBase.hour == null ) {
                LocalDataBase.hour = mapScroll.createDicoStationParHeure();
@@ -99,9 +111,6 @@ namespace Ming.Atf.Pictures
              }
                */
             mapScroll.drawAllPoints();
-
-            if (pages.Contains(mapScroll.mapBox))
-                return;
 
             // Ici, tu decommentes pour ajouter un nouvel onglet
             pages.ClientAdd(mapScroll.mapBox, "Carte Scrollable", null, true);
