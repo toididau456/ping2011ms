@@ -198,7 +198,7 @@ namespace ats.KMeans
             {
                 stableClustersCount = 0;
 
-                ClusterCollection newClusters = KMeans.ClusterDataSet(clusters, data);
+                ClusterCollection newClusters = KMeans.ClusterDataSet(clusters, data, type);
 
                 for (int clusterIndex = 0; clusterIndex < clusters.Count; clusterIndex++)
                 {
@@ -236,7 +236,7 @@ namespace ats.KMeans
         /// <param name="clusters">A collection of data clusters</param>
         /// <param name="data">An array containing data to b eclustered</param>
         /// <returns>A collection of clusters of data</returns>
-        public static ClusterCollection ClusterDataSet(ClusterCollection clusters, double[,] data)
+        public static ClusterCollection ClusterDataSet(ClusterCollection clusters, double[,] data, string type)
         {
             double[] dataPoint;
 
@@ -286,14 +286,35 @@ namespace ats.KMeans
 
                     if (cluster == 0)
                     {
-                        firstClusterDistance = KMeans.EuclideanDistance(dataPoint, clusterMean);
+                        switch (type)
+                        {
+                            case "DTW":
+                                firstClusterDistance = KMeans.DtwDistance(dataPoint, clusterMean);
+                                break;
+                            case "Manhattan":
+                                firstClusterDistance = KMeans.ManhattanDistance(dataPoint, clusterMean);
+                                break;
+                            default:
+                                firstClusterDistance = KMeans.EuclideanDistance(dataPoint, clusterMean);
+                                break;
+                        }
 
                         position = cluster;
                     }
                     else
                     {
-                        secondClusterDistance = KMeans.EuclideanDistance(dataPoint, clusterMean);
-
+                        switch (type)
+                        {
+                            case "DTW":
+                                secondClusterDistance = KMeans.DtwDistance(dataPoint, clusterMean);
+                                break;
+                            case "Manhattan":
+                                secondClusterDistance = KMeans.ManhattanDistance(dataPoint, clusterMean);
+                                break;
+                            default:
+                                secondClusterDistance = KMeans.EuclideanDistance(dataPoint, clusterMean);
+                                break;
+                        }
                         if (firstClusterDistance > secondClusterDistance)
                         {
                             firstClusterDistance = secondClusterDistance;

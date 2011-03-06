@@ -78,6 +78,7 @@ namespace Ming.Atf.Clustering
             double[,] db = convertData(data);
             ClusterCollection cluster = KMeans.ClusterDataSet(clusters,db,type);
             //MessageBox.Show(this,"Nombre de cluster : " + cluster.Count);
+            
             for (int i = 0; i < cluster.Count; i++)
             {
                 string s = "Cluster " + i + ", taille = " + cluster[i].Count + " : ";
