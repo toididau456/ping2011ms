@@ -66,6 +66,13 @@ namespace Ming.Atf.Pictures.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+
+        internal static System.Drawing.Bitmap staticmapterrainBig {
+          get {
+            object obj = ResourceManager.GetObject( "staticmapterrainBig", resourceCulture );
+            return ((System.Drawing.Bitmap) (obj));
+          }
+        }
         
         internal static System.Drawing.Bitmap maps {
             get {
