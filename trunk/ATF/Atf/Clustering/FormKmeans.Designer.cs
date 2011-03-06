@@ -45,9 +45,10 @@
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
             "0 - Vecteur par Heure",
-            "1 - Vecteur par Heure (Vacances)",
-            "2 - Vecteur par Jour de la Semaine",
-            "3 - Vecteur par Jour de la Semaine (Vacances)"});
+            "1 - Vecteur par Heure (Jours ouvrés)",
+            "2 - Vecteur par Heure (Week-end)",
+            "3 - Vecteur par Demi-Heure",
+            "4 - Vecteur par Jour de la Semaine"});
             this.comboBox1.Location = new System.Drawing.Point(23, 241);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.RightToLeft = System.Windows.Forms.RightToLeft.No;

@@ -277,6 +277,149 @@ namespace Ming.Atf
             return result;
         }
 
+        // Retourne les vecteurs pour les jours ouvres
+        public static Dictionary<int, Dictionary<int, double>> getRemplissageByHourOuvres(DateTime start, DateTime end)
+        {
+            Dictionary<int, Dictionary<int, double>> result = new Dictionary<int, Dictionary<int, double>>();
+
+            if (!connection)
+            {
+                setConnection();
+                if (!connection)
+                    return result;
+            }
+
+            //Desc de la table donnees
+            string s = " and date >= " + convertToTimestamp(start) + " and date <= " + convertToTimestamp(end) + " ";
+            s += "and day < 6 ";
+            OdbcCommand MyCommand = new OdbcCommand("select station as Station, hour as Hour, cast(avg(available)/avg(available + free) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection);
+            OdbcDataReader MyDataReader;
+            MyDataReader = MyCommand.ExecuteReader();
+
+            Console.WriteLine("Executed : " + MyDataReader.RecordsAffected);
+            while (MyDataReader.Read())
+            {
+                int valeur = 0;
+                int station = MyDataReader.GetInt32(0);
+                int hour = MyDataReader.GetInt32(1);
+
+                try
+                {
+                    valeur = MyDataReader.GetInt32(2);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error : " + e.Message);
+                    continue;
+                }
+
+                if (!result.ContainsKey(station))
+                    result[station] = new Dictionary<int, double>();
+
+                result[station][hour] = valeur / 100.0;
+            }
+
+            //Close all resources
+            MyDataReader.Close();
+
+            return result;
+        }
+
+        // Retourne les vecteurs pour les jours ouvres
+        public static Dictionary<int, Dictionary<int, double>> getRemplissageByHourWE(DateTime start, DateTime end)
+        {
+            Dictionary<int, Dictionary<int, double>> result = new Dictionary<int, Dictionary<int, double>>();
+
+            if (!connection)
+            {
+                setConnection();
+                if (!connection)
+                    return result;
+            }
+
+            //Desc de la table donnees
+            string s = " and date >= " + convertToTimestamp(start) + " and date <= " + convertToTimestamp(end) + " ";
+            s += "and day < 6 ";
+            OdbcCommand MyCommand = new OdbcCommand("select station as Station, hour as Hour, cast(avg(available)/avg(available + free) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection);
+            OdbcDataReader MyDataReader;
+            MyDataReader = MyCommand.ExecuteReader();
+
+            Console.WriteLine("Executed : " + MyDataReader.RecordsAffected);
+            while (MyDataReader.Read())
+            {
+                int valeur = 0;
+                int station = MyDataReader.GetInt32(0);
+                int hour = MyDataReader.GetInt32(1);
+
+                try
+                {
+                    valeur = MyDataReader.GetInt32(2);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error : " + e.Message);
+                    continue;
+                }
+
+                if (!result.ContainsKey(station))
+                    result[station] = new Dictionary<int, double>();
+
+                result[station][hour] = valeur / 100.0;
+            }
+
+            //Close all resources
+            MyDataReader.Close();
+
+            return result;
+        }
+
+        // Retourne les vecteurs pour les jours ouvres
+        public static Dictionary<int, Dictionary<int, double>> getRemplissageByDay(DateTime start, DateTime end)
+        {
+            Dictionary<int, Dictionary<int, double>> result = new Dictionary<int, Dictionary<int, double>>();
+
+            if (!connection)
+            {
+                setConnection();
+                if (!connection)
+                    return result;
+            }
+
+            //Desc de la table donnees
+            string s = " and date >= " + convertToTimestamp(start) + " and date <= " + convertToTimestamp(end) + " ";
+            OdbcCommand MyCommand = new OdbcCommand("select station as Station, day as Day, cast(avg(available)/avg(available + free) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, day;", MyConnection);
+            OdbcDataReader MyDataReader;
+            MyDataReader = MyCommand.ExecuteReader();
+
+            Console.WriteLine("Executed : " + MyDataReader.RecordsAffected);
+            while (MyDataReader.Read())
+            {
+                int valeur = 0;
+                int station = MyDataReader.GetInt32(0);
+                int hour = MyDataReader.GetInt32(1);
+
+                try
+                {
+                    valeur = MyDataReader.GetInt32(2);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error : " + e.Message);
+                    continue;
+                }
+
+                if (!result.ContainsKey(station))
+                    result[station] = new Dictionary<int, double>();
+
+                result[station][hour] = valeur / 100.0;
+            }
+
+            //Close all resources
+            MyDataReader.Close();
+
+            return result;
+        }
+
         // Transforme une DateTime en Timestamp
         private static double convertToTimestamp(DateTime value)
         {
