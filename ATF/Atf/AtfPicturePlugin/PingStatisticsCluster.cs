@@ -88,30 +88,38 @@ namespace Ming.Atf.Pictures
         // Cree un onglet avec la carte scrollable
         private void ouvrirScrollMap()
         {
-            // Pour eviter les ajouts multiples 
-            /*
-             * if(pages.Contains(ta_carte))
-             *  return;
-             */
+            ScrollableMaps mapScroll = new ScrollableMaps("staticmapbigRoad.png", true);
+            /* if ( LocalDataBase.hour == null ) {
+               LocalDataBase.hour = mapScroll.createDicoStationParHeure();
+               LocalDataBase.day = mapScroll.createDicoStationParJour();
+             }
+             else {
+               mapScroll.StatsTabHeure = LocalDataBase.hour;
+               mapScroll.StatsTabJour = LocalDataBase.day;
+             }
+               */
+            mapScroll.drawAllPoints();
 
-            // Ici, tu mets le constructeur de ta carte
+            if (pages.Contains(mapScroll.mapBox))
+                return;
 
             // Ici, tu decommentes pour ajouter un nouvel onglet
-            //pages.ClientAdd(ta_carte,"Carte Scrollable",null,true);
+            pages.ClientAdd(mapScroll.mapBox, "Carte Scrollable", null, true);
         }
 
         // Test
         public void Test(string numStation)
         {
-            status.TextRight = "Station : " + numStation;
-            //Chart toAffiche =  stats.createChartStation(int.Parse(numStation), 0 , "Arrondissement" );
             StatsChartsVelib stats = new StatsChartsVelib(false);
+            /*
+             if ( LocalDataBase.hour.Count == null ) {
+               LocalDataBase.hour = stats.StatsTabHeure;
+               LocalDataBase.day = stats.StatsTabJour;
+             }  */
+
             if (panel.Panel2.Controls.Count > 0)
                 panel.Panel2.Controls[0].Dispose();
-
             panel.Panel2.Controls.Add(stats.initSplitPanel(int.Parse(numStation)));
-
-            //panel.Panel2.Controls.Add( toAffiche );
         }
         #endregion
 
