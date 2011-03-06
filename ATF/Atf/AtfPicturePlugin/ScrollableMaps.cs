@@ -67,22 +67,36 @@ namespace Ming.Atf.Pictures
         //int echelle, int cran
         largeurPixel = map.Width;
         hauteurPixel = map.Height;
-        MessageBox.Show("largeur"+ largeurPixel );
-        MessageBox.Show( "hauteur" +hauteurPixel );
-        Pen stylo = new Pen(Color.Tomato);
+        Pen stylo = new Pen(Color.Black);
         stylo.Width = 4.0F;
-        SolidBrush solidBrush = new SolidBrush( Color.FromArgb(120,Color.Red));
+        SolidBrush solidBrush  = new SolidBrush( Color.FromArgb(255,Color.Gray));
         //SolidBrush solidGradiant = new SolidBrush( Color.FromArgb( 0x7800FF00 ) );
         
         KeyValuePair<int,int> tempCoor;
         foreach(int station in coordonnees.Keys){
-          
+          double mean = statsTabHeure[ station ][ 12 ].Key;
+          int val = (int)Math.Floor( mean * 255);
+          if ( val < 120 ) {
+            val = 120;
+          }
+          //MessageBox.Show( "VAL" + val );
+          if ( mean < 0.33 ) {
+               solidBrush  = new SolidBrush( Color.FromArgb(val,Color.Yellow));
+          }
+
+          if ( mean > 0.33 && mean < 0.66) {
+               solidBrush  = new SolidBrush( Color.FromArgb(val,Color.Orange));
+          }
+
+          if ( mean > 0.66 && mean < 1 ) {
+               solidBrush  = new SolidBrush( Color.FromArgb(val,Color.Red));
+          }   
+
             tempCoor = convertFromGPStoPixel( coordonnees[ station ] );
 
-            //graphMap.DrawEllipse( stylo, tempCoor.Key, tempCoor.Value,1,1 );
+            graphMap.DrawEllipse( stylo, (float) tempCoor.Key, (float) tempCoor.Value, 10, 10 );
             //graphMap.FillEllipse( solidBrush, (float)tempCoor.Key, (float)tempCoor.Value, (float)1,(float) 1 );
             graphMap.FillEllipse( solidBrush, (float) tempCoor.Key, (float) tempCoor.Value, 10.0F, 10.0F );
-          
           
         }
         
