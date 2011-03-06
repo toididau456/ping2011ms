@@ -33,7 +33,7 @@ namespace Ming.Atf.Pictures
      private Graphics graphMap;
 
      public ScrollableMaps(String path,Boolean files) {
-       map = Image.FromFile(path);
+       map = Properties.Resources.staticmapterrainBig;
        
        HauteurGPS = Math.Abs( bordBas - bordHaut );
        LargeurGPS = Math.Abs( bordGauche - bordDroit );
