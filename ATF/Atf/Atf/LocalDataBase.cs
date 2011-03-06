@@ -428,6 +428,41 @@ namespace Ming.Atf
             return result;
         }
 
+        // Retourne les vecteurs pour les jours ouvres
+        public static Dictionary<int, ArrayList> getAllToFile()
+        {
+            Dictionary<int, ArrayList> result = new Dictionary<int, ArrayList>();
+
+            if (!connection)
+            {
+                setConnection();
+                if (!connection)
+                    return result;
+            }
+
+            //Desc de la table donnees
+            OdbcCommand MyCommand = new OdbcCommand("select station, available from donnees where valid='1' and free!=\"\";", MyConnection);
+            OdbcDataReader MyDataReader;
+            MyDataReader = MyCommand.ExecuteReader();
+
+            Console.WriteLine("Executed : " + MyDataReader.RecordsAffected);
+            while (MyDataReader.Read())
+            {
+                int station = MyDataReader.GetInt32(0);
+                int hour = MyDataReader.GetInt32(1);
+
+                if (!result.ContainsKey(station))
+                    result[station] = new ArrayList();
+
+                result[station].Add(hour);
+            }
+
+            //Close all resources
+            MyDataReader.Close();
+
+            return result;
+        }
+
         // Transforme une DateTime en Timestamp
         private static double convertToTimestamp(DateTime value)
         {

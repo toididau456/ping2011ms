@@ -59,5 +59,12 @@ namespace Ming.Atf.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static System.Drawing.Bitmap save {
+            get {
+                object obj = ResourceManager.GetObject("save", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
