@@ -36,10 +36,18 @@ namespace Ming.Atf
 
         // Connection is available
         private static bool connection = false;
+
+        // Retourne hour si a deja etait calcule
+        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> hour = null;
+
+        // Retourne hour si a deja etait calcule
+        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> day = null;
+
+        // Retourne hour si a deja etait calcule
+        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> week = null;
         #endregion
 
         #region Methodes
-
         // Retourne toutes les lignes valides de la base 
         public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getAllLines(int i)
         {
