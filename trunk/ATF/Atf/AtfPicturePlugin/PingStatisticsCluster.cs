@@ -110,16 +110,20 @@ namespace Ming.Atf.Pictures
                mapScroll.StatsTabJour = LocalDataBase.day;
              }
                */
-            mapScroll.drawAllPoints();
-
+            //mapScroll.drawAllPoints("Heure",6);
+            //mapScroll.drawClusters();
             // Ici, tu decommentes pour ajouter un nouvel onglet
+            mapScroll.mapBox.Controls.Add( mapScroll.initTrackBar() );
             pages.ClientAdd(mapScroll.mapBox, "Carte Scrollable", null, true);
+            
+            //pages.ClientAdd(mapScroll.initTrackBar(),"trackBar",null,true);
+            
         }
 
         // Test
         public void Test(string numStation)
         {
-            StatsChartsVelib stats = new StatsChartsVelib(false);
+            StatsChartsVelib stats = new StatsChartsVelib(true);
             /*
              if ( LocalDataBase.hour.Count == null ) {
                LocalDataBase.hour = stats.StatsTabHeure;
