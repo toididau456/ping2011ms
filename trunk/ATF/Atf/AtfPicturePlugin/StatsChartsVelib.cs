@@ -283,8 +283,6 @@ namespace Ming.Atf.Pictures {
       meanArea.BackColor = System.Drawing.Color.LightGray;
       legendStat.Name = "legend";
       legendStat.DockedToChartArea = "StatArea";
-      //legendStat.Docking = Docking.Bottom;
-      //legendStat.Alignment = System.Drawing.StringAlignment.Far;
       Title titre;
       chartStat.Legends.Add( legendStat );
       
@@ -503,6 +501,57 @@ namespace Ming.Atf.Pictures {
       listeRes.Items.Add( "Paris" );
       return listeRes;
     }
+
+   
+    public Chart createChartCentroides( double[] centroideI,int numeroCentroide, String echelle ) {
+      Chart chartStat;
+      ChartArea meanArea = new ChartArea();
+
+      meanArea.AxisY.Title = "Moyenne disponibilité";
+      meanArea.AxisX.Title = echelle;
+      meanArea.AxisX.TitleFont = new System.Drawing.Font( "Helvetica", 10, System.Drawing.FontStyle.Bold );
+      meanArea.AxisY.TitleFont = new System.Drawing.Font( "Helvetica", 10, System.Drawing.FontStyle.Bold );
+      meanArea.Name = "StatArea";
+      meanArea.AxisX.MajorGrid.Enabled = false;
+      Legend legendStat = new Legend();
+      Series seriesStat = new Series( "Centroïde numéro "+ numeroCentroide + " Représentation par " + echelle );
+
+
+
+      chartStat = new System.Windows.Forms.DataVisualization.Charting.Chart();
+      ((System.ComponentModel.ISupportInitialize) (chartStat)).BeginInit();
+
+
+      for(int i = 0 ; i < centroideI.GetLength(0); i++) {
+        seriesStat.Points.AddXY(i+1,centroideI[i]);
+
+      }
+
+      seriesStat.Sort( PointSortOrder.Ascending, "X" );
+      seriesStat.Color = System.Drawing.Color.Purple;
+      seriesStat.BorderWidth = 2;
+      chartStat.Series.Add( seriesStat );
+      chartStat.ChartAreas.Add( meanArea );
+      chartStat.BackColor = System.Drawing.Color.Silver;
+      meanArea.BackColor = System.Drawing.Color.LightGray;
+      legendStat.Name = "legend";
+      legendStat.DockedToChartArea = "StatArea";
+      Title titre = new Title("Caractéristiques du centroïde " + numeroCentroide);
+      chartStat.Legends.Add( legendStat );
+
+      titre.Font = new System.Drawing.Font( "Helvetica", 10, System.Drawing.FontStyle.Bold );
+
+      chartStat.Titles.Add( titre );
+      chartStat.Size = new System.Drawing.Size( 500, 300 );
+      seriesStat.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+
+      ((System.ComponentModel.ISupportInitialize) (chartStat)).EndInit();
+
+      return chartStat;
+
+    }
+
+
 
 
     #endregion
