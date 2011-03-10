@@ -111,7 +111,7 @@ namespace Ming.Atf.Pictures
              }
                */
             //mapScroll.drawAllPoints("Heure",6);
-            //mapScroll.drawClusters();
+            mapScroll.drawClusters();
             // Ici, tu decommentes pour ajouter un nouvel onglet
             mapScroll.mapBox.Controls.Add( mapScroll.initTrackBar() );
             pages.ClientAdd(mapScroll.mapBox, "Carte Scrollable", null, true);
