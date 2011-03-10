@@ -504,6 +504,7 @@ namespace Ming.Atf.Pictures {
 
    
     public Chart createChartCentroides( double[] centroideI,int numeroCentroide, String echelle ) {
+      
       Chart chartStat;
       ChartArea meanArea = new ChartArea();
 

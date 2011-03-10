@@ -100,7 +100,7 @@ namespace Ming.Atf.Pictures
                     if (pages.TabPages[i].Text.Equals("Carte Scrollable"))
                         return;
 
-            ScrollableMaps mapScroll = new ScrollableMaps("staticmapbigRoad.png", true);
+            ScrollableMaps mapScroll = new ScrollableMaps( true);
             /* if ( LocalDataBase.hour == null ) {
                LocalDataBase.hour = mapScroll.createDicoStationParHeure();
                LocalDataBase.day = mapScroll.createDicoStationParJour();
@@ -111,7 +111,7 @@ namespace Ming.Atf.Pictures
              }
                */
             //mapScroll.drawAllPoints("Heure",6);
-            mapScroll.drawClusters();
+            //mapScroll.drawClusters();
             // Ici, tu decommentes pour ajouter un nouvel onglet
             mapScroll.mapBox.Controls.Add( mapScroll.initTrackBar() );
             pages.ClientAdd(mapScroll.mapBox, "Carte Scrollable", null, true);
