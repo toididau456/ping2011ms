@@ -283,8 +283,8 @@ namespace Ming.Atf.Pictures
         trackBar.Refresh();
       }
 
-      private void mapClicked( object sender, EventArgs args ) {
-        
+      private void mapClicked( object sender, MouseEventArgs e) {
+        MessageBox.Show(e.X + "    "+e.Y);
       }
 
      #endregion
