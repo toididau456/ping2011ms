@@ -92,7 +92,7 @@ namespace Ming.Atf.Pictures
             pages.ClientAdd(panel, "Map", null, true);
         }
 
-        // Cree un onglet avec la carte scrollable
+        // Cree un onglet avec la carte scrollables
         private void ouvrirScrollMap()
         {
             if (pages.TabCount >= 1)
