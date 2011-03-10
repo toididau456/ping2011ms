@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Psl.Applications;
 using System.Collections;
 using ats.KMeans;
+using Ming.Atf.Pictures;
 
 namespace Ming.Atf.Clustering
 {
@@ -26,7 +27,7 @@ namespace Ming.Atf.Clustering
         Button button;
 
         /* Stations sous ArrayList*/
-        ArrayList stations = new ArrayList();
+        List<int> stations = new List<int>();
         #endregion
 
         // Constructeur
@@ -42,7 +43,7 @@ namespace Ming.Atf.Clustering
         private double[,] convertData(Dictionary<int,Dictionary<int, double>> data)
         {
             int keyTemp = -1;
-            ArrayList station = new ArrayList();
+            List<int> station = new List<int>();
             foreach (int key in data.Keys)
                 if (!station.Contains(key))
                 {
@@ -85,22 +86,20 @@ namespace Ming.Atf.Clustering
             ClusterCollection cluster = KMeans.ClusterDataSet(clusters,db,type);
             //MessageBox.Show(this,"Nombre de cluster : " + cluster.Count);
             Console.WriteLine("Kmeans calcule");
-
+            Dictionary<int, int> stationCluster = new Dictionary<int, int>();
             for (int i = 0; i < cluster.Count; i++)
-            {
                 //string s = "Cluster " + i + ", taille = " + cluster[i].getValues.Count + " : ";
                 foreach (int z in cluster[i].getValues)
                 {
-                    
-                    string s = stations[z] + " : " + i ;
-
-                    Label label = new Label();
-                    label.Size = new Size(75, 15);
-                    label.Anchor = AnchorStyles.Right;
-                    label.Text = s;
-                    panel.addControls(label);
+                    Console.WriteLine(stations[z]);
+                    int temp = stations[z];
+                    stationCluster.Add(temp, i);
+                    //string s = stations[z] + " : " + i ;
                 }
-            }
+            ScrollableMaps maps = new ScrollableMaps();
+            maps.drawClusters(stationCluster);
+            PictureBox map = maps.mapBox;
+            panel.addControls(map);
         }
         #endregion
 

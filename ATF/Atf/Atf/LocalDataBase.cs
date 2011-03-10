@@ -18,7 +18,7 @@ namespace Ming.Atf
                                      "PASSWORD=userPass11;" +
                                      "OPTION=3";
 
-        /*private static string MyConString = "DRIVER={MySQL ODBC 3.51 Driver};" +
+       /*private static string MyConString = "DRIVER={MySQL ODBC 3.51 Driver};" +
                                      "Port=33061;" +
                                      "SERVER=velib.lip6.fr;" +
                                      "DATABASE=velib;" +
@@ -36,6 +36,9 @@ namespace Ming.Atf
 
         // Connection is available
         private static bool connection = false;
+
+        // Taille pour les stations
+        public static Dictionary<int, int> tailles = null;
 
         // Retourne hour si a deja etait calcule
         public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> hour = null;
@@ -154,6 +157,36 @@ namespace Ming.Atf
                 MyConnection = new OdbcConnection(MyConString);
                 MyConnection.Open();
                 connection = true;
+
+                tailles = new Dictionary<int, int>();
+
+                OdbcCommand MyCommand = new OdbcCommand("select station, max(size) from sizedMax group by station;", MyConnection);
+                OdbcDataReader MyDataReader;
+                MyDataReader = MyCommand.ExecuteReader();
+
+                Console.WriteLine("Executed : " + MyDataReader.RecordsAffected);
+                while (MyDataReader.Read())
+                {
+                    int valeur = 0;
+                    int station = MyDataReader.GetInt32(0);
+                    //int hour = MyDataReader.GetInt32(1);
+
+                    try
+                    {
+                        valeur = MyDataReader.GetInt32(1);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Pas de base : " + e.Message);
+                        continue;
+                    }
+
+                    tailles.Add(station, valeur);
+                }
+
+                //Close all resources
+                MyDataReader.Close();
+
             }
             catch (OdbcException MyOdbcException)//Catch any ODBC exception ..
             {
@@ -256,7 +289,7 @@ namespace Ming.Atf
 
             //Desc de la table donnees
             string s = " and date >= " + convertToTimestamp(start) + " and date <= " + convertToTimestamp(end) + " ";
-            OdbcCommand MyCommand = new OdbcCommand("select station as Station, hour as Hour, cast(avg(available)/avg(available + free) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection);
+            OdbcCommand MyCommand = new OdbcCommand("select station as Station, hour as Hour, cast(avg(available) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection);
             OdbcDataReader MyDataReader;
             MyDataReader = MyCommand.ExecuteReader();
 
@@ -281,6 +314,7 @@ namespace Ming.Atf
                     result[station] = new Dictionary<int, double>();
 
                 result[station][hour] = valeur / 100.0;
+                result[station][hour] = result[station][hour] / (double)tailles[station];
             }
 
             //Close all resources
@@ -304,7 +338,7 @@ namespace Ming.Atf
             //Desc de la table donnees
             string s = " and date >= " + convertToTimestamp(start) + " and date <= " + convertToTimestamp(end) + " ";
             s += "and day < 6 ";
-            OdbcCommand MyCommand = new OdbcCommand("select station as Station, hour as Hour, cast(avg(available)/avg(available + free) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection);
+            OdbcCommand MyCommand = new OdbcCommand("select station as Station, hour as Hour, cast(avg(available) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection);
             OdbcDataReader MyDataReader;
             MyDataReader = MyCommand.ExecuteReader();
 
@@ -329,6 +363,7 @@ namespace Ming.Atf
                     result[station] = new Dictionary<int, double>();
 
                 result[station][hour] = valeur / 100.0;
+                result[station][hour] = result[station][hour] / (double)tailles[station];
             }
 
             //Close all resources
@@ -352,7 +387,7 @@ namespace Ming.Atf
             //Desc de la table donnees
             string s = " and date >= " + convertToTimestamp(start) + " and date <= " + convertToTimestamp(end) + " ";
             s += "and day < 6 ";
-            OdbcCommand MyCommand = new OdbcCommand("select station as Station, hour as Hour, cast(avg(available)/avg(available + free) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection);
+            OdbcCommand MyCommand = new OdbcCommand("select station as Station, hour as Hour, cast(avg(available) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection);
             OdbcDataReader MyDataReader;
             MyDataReader = MyCommand.ExecuteReader();
 
@@ -377,6 +412,7 @@ namespace Ming.Atf
                     result[station] = new Dictionary<int, double>();
 
                 result[station][hour] = valeur / 100.0;
+                result[station][hour] = result[station][hour] / (double)tailles[station];
             }
 
             //Close all resources
@@ -399,7 +435,7 @@ namespace Ming.Atf
 
             //Desc de la table donnees
             string s = " and date >= " + convertToTimestamp(start) + " and date <= " + convertToTimestamp(end) + " ";
-            OdbcCommand MyCommand = new OdbcCommand("select station as Station, day as Day, cast(avg(available)/avg(available + free) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, day;", MyConnection);
+            OdbcCommand MyCommand = new OdbcCommand("select station as Station, day as Day, cast(avg(available) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, day;", MyConnection);
             OdbcDataReader MyDataReader;
             MyDataReader = MyCommand.ExecuteReader();
 
@@ -424,6 +460,7 @@ namespace Ming.Atf
                     result[station] = new Dictionary<int, double>();
 
                 result[station][hour] = valeur / 100.0;
+                result[station][hour] = result[station][hour] / (double)tailles[station];
             }
 
             //Close all resources
