@@ -37,7 +37,7 @@ namespace Ming.Atf.Pictures
      private String echelle = "Heure";
 #endregion
      #region Constructeur
-     public ScrollableMaps(String path,Boolean files) {
+     public ScrollableMaps(Boolean files) {
        HauteurGPS = Math.Abs( bordBas - bordHaut );
        LargeurGPS = Math.Abs( bordGauche - bordDroit );
        dayToInt = new Dictionary< int,String>();
@@ -73,6 +73,7 @@ namespace Ming.Atf.Pictures
         mapBox = new PictureBox();
         mapBox.Name = "ScrollMap";
         mapBox.SizeMode = PictureBoxSizeMode.Zoom;
+        mapBox.MouseClick += mapClicked;
 
         mapBox.Image = map;
         mapBox.MouseClick += ReloadMap;
@@ -261,6 +262,10 @@ namespace Ming.Atf.Pictures
           echelle = "Semaine";
         }
         trackBar.Refresh();
+      }
+
+      private void mapClicked( object sender, EventArgs args ) {
+        
       }
 
      #endregion
