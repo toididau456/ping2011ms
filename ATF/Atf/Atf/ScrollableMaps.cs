@@ -176,10 +176,8 @@ namespace Ming.Atf.Pictures
         KeyValuePair<int, int> tempCoor;
 
 
-        foreach ( int station in coordonnees.Keys ) {
+        foreach ( int station in clusters.Keys ) {
           solidBrush = new SolidBrush( Color.FromArgb( 255, Color.FromName(colorList[clusters[station]] )));
-         
-         
           tempCoor = convertFromGPStoPixel( coordonnees[ station ] );
 
           graphMap.DrawEllipse( stylo, (float) tempCoor.Key, (float) tempCoor.Value, 17, 17 );
@@ -284,7 +282,8 @@ namespace Ming.Atf.Pictures
       }
 
       private void mapClicked( object sender, MouseEventArgs e) {
-        MessageBox.Show(e.X + "    "+e.Y);
+        double size = (mapBox.Width - mapBox.Image.Width) / 2;
+          MessageBox.Show( e.X + "    "+e.Y);
       }
 
      #endregion
