@@ -65,6 +65,25 @@ namespace Ming.Atf.Pictures
        createChangeTypeButton();
        
      }
+
+
+
+     public ScrollableMaps() {
+       HauteurGPS = Math.Abs( bordBas - bordHaut );
+       LargeurGPS = Math.Abs( bordGauche - bordDroit );
+       dayToInt = new Dictionary<int, String>();
+       this.fillStationCoordonates();
+       colorList = GetColors();
+       dayToInt.Add( 1, "Monday" );
+       dayToInt.Add( 2, "Tuesday" );
+       dayToInt.Add( 3, "Wednesday" );
+       dayToInt.Add( 4, "Thursday" );
+       dayToInt.Add( 5, "Friday" );
+       dayToInt.Add( 6, "Saturday" );
+       dayToInt.Add( 7, "Sunday" );
+       initPictureOfMap();
+     }
+
 #endregion
 
      #region Graphisme
