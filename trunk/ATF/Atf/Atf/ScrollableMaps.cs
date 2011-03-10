@@ -145,30 +145,28 @@ namespace Ming.Atf.Pictures
       }
 
 
-      public void drawClusters() {
-        // Dictionary<int, int> clusters  
+      public void drawClusters( Dictionary<int, int> clusters ) {
+          
         largeurPixel = map.Width;
         hauteurPixel = map.Height;
         Pen stylo = new Pen( Color.Black );
         stylo.Width = 1.0F;
         SolidBrush solidBrush;
-        Random numbers = new Random();
+        
         KeyValuePair<int, int> tempCoor;
 
 
         foreach ( int station in coordonnees.Keys ) {
-          //solidBrush = new SolidBrush( Color.FromArgb( 255, Color.FromName(colorList[clusters[station]] )));
-          int num = numbers.Next( 10 );
-          //MessageBox.Show( " " + num );
-          solidBrush = new SolidBrush( Color.FromArgb( 255, Color.FromName( colorList[num] ) ) );
+          solidBrush = new SolidBrush( Color.FromArgb( 255, Color.FromName(colorList[clusters[station]] )));
+         
          
           tempCoor = convertFromGPStoPixel( coordonnees[ station ] );
 
           graphMap.DrawEllipse( stylo, (float) tempCoor.Key, (float) tempCoor.Value, 17, 17 );
           graphMap.FillEllipse( solidBrush, (float) tempCoor.Key, (float) tempCoor.Value, 17.0F, 17.0F );
           solidBrush = new SolidBrush( Color.FromArgb( 255, Color.Black ) );
-          //String clust = clusters[ station ].ToString();
-          graphMap.DrawString(num.ToString(), new System.Drawing.Font( "Helvetica", 15, System.Drawing.FontStyle.Bold ), solidBrush, (float) tempCoor.Key, (float) tempCoor.Value );
+          String clust = clusters[ station ].ToString();
+          graphMap.DrawString(clust, new System.Drawing.Font( "Helvetica", 15, System.Drawing.FontStyle.Bold ), solidBrush, (float) tempCoor.Key, (float) tempCoor.Value );
 
         }
 
