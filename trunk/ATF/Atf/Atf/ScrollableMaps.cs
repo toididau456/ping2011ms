@@ -8,7 +8,7 @@ using System.Collections;
 
 namespace Ming.Atf.Pictures
 {
-    class ScrollableMaps
+    public class ScrollableMaps
     {
      #region Champs
      public PictureBox mapBox;
