@@ -29,8 +29,10 @@ namespace Ming.Atf.Pictures
      private double origineImgGPSX = 2.211170196533203;
      private double origineImgGPSY = 48.914715793068105;
      private Graphics graphMap;
-     private Graphics graphBox;
+     //private Graphics graphBox;
      private List<string> colorList;
+
+     
      private TrackBar trackBar ;
      private String echelle = "Heure";
 #endregion
@@ -55,6 +57,7 @@ namespace Ming.Atf.Pictures
        DateTime timeS = new DateTime( 1970, 1, 2 );
        LocalDataBase.getRemplissageByDayHisto( timeS, time );
        LocalDataBase.getRemplissageByHourHisto( timeS, time );
+       this.legend();
      }
 
 
@@ -91,8 +94,7 @@ namespace Ming.Atf.Pictures
         mapBox.MouseClick += ReloadMap;
         graphMap = Graphics.FromImage( map );
         mapBox.Padding = new Padding( 0 );
-        mapBox.Margin = new Padding( 0 );
-  
+        mapBox.Margin = new Padding( 0 );  
       }
 
 
@@ -128,21 +130,25 @@ namespace Ming.Atf.Pictures
           if ( mean < 0.33 ) {
                int val = (int) Math.Floor( (mean / 0.33) * 255 );
                solidBrush  = new SolidBrush( Color.FromArgb(val,Color.Yellow));
+
+               
           }
 
           if ( mean > 0.33 && mean < 0.66) {
               int val = (int) Math.Floor( (mean / 0.66) * 255 ); 
               solidBrush  = new SolidBrush( Color.FromArgb(val,Color.Orange));
+              
           }
 
           if ( mean > 0.66 && mean < 1 ) {
             int val = (int) Math.Floor( mean  * 255 );
                solidBrush  = new SolidBrush( Color.FromArgb(val,Color.Red));
+              
           }
 
           if ( mean == 0.0 ) {
               solidBrush = new SolidBrush( Color.FromArgb( 255, Color.Black ) );
-          }
+              }
 
             tempCoor = convertFromGPStoPixel( coordonnees[ station ] );
 
@@ -154,10 +160,7 @@ namespace Ming.Atf.Pictures
             graphMap.FillRectangle( solidBrush,(cran * 55), 0,100,25 );
             
             solidBrush = new SolidBrush( Color.FromArgb( 255, Color.Black ) );
-            graphMap.DrawString(label, new System.Drawing.Font( " Helvetica", 20 , System.Drawing.FontStyle.Bold ), solidBrush, (cran * 55), 0 );
-
-
-            graphMap.DrawString( label, new System.Drawing.Font( " Helvetica", 20, System.Drawing.FontStyle.Bold ), solidBrush, -200, 0 );
+            graphMap.DrawString(label, new System.Drawing.Font( " Helvetica", 20 , System.Drawing.FontStyle.Bold ), solidBrush, (cran * 55), 0 );   
         }
         
       }
@@ -224,7 +227,7 @@ namespace Ming.Atf.Pictures
         mapBox.Image = map;
         graphMap = Graphics.FromImage( map );
         //this.drawAllPoints( echelle, trackBar.Value );
-        mapBox.Refresh();
+        //mapBox.Refresh();
       }
 
       private void ReloadMap( object sender, EventArgs args ) {        
@@ -240,8 +243,35 @@ namespace Ming.Atf.Pictures
         mapBox.Image = map;
         graphMap = Graphics.FromImage( map );
         this.drawAllPoints( echelle, trackBar.Value );
-        mapBox.Refresh();
-        
+      }
+
+
+      public Panel legend() {
+        Panel panLegend = new Panel();
+        panLegend.BackColor = Color.Transparent;
+        panLegend.Location = new Point( 10, 10 );
+        panLegend.Size = new Size( 200, 60 );
+        panLegend.Paint +=new PaintEventHandler(panLegend_Paint);
+        return panLegend;
+      }
+
+      public void panLegend_Paint( object sender, System.Windows.Forms.PaintEventArgs e ) {
+        Graphics graphBox = e.Graphics;
+        Pen stylo = new Pen( Color.Black );
+        SolidBrush solidBrush = new SolidBrush( Color.FromArgb( 255, Color.Yellow ) );
+        graphBox.DrawEllipse( stylo, 0, 5, 10, 10 );
+        graphBox.FillEllipse( solidBrush, 0, 5, 10.0F, 10.0F );
+        graphBox.DrawString( "Disponibilité [0 : 0.33] ", new System.Drawing.Font( " Helvetica", 10, System.Drawing.FontStyle.Bold ), solidBrush, 10, 5 );
+
+        solidBrush = new SolidBrush( Color.FromArgb( 255, Color.Orange ) );
+        graphBox.DrawEllipse( stylo, 0, 20, 10, 10 );
+        graphBox.FillEllipse( solidBrush, 0,20, 10.0F, 10.0F );
+        graphBox.DrawString( "Disponibilité [0.33 : 0.66] ", new System.Drawing.Font( " Helvetica", 10, System.Drawing.FontStyle.Bold ), solidBrush, 10, 20 );
+
+        solidBrush = new SolidBrush( Color.FromArgb( 255, Color.Red ) );
+        graphBox.DrawEllipse( stylo, 0, 35, 10, 10 );
+        graphBox.FillEllipse( solidBrush, 0, 35, 10.0F, 10.0F );
+        graphBox.DrawString( "Disponibilité [0.66 : 1.0] ", new System.Drawing.Font( " Helvetica", 10, System.Drawing.FontStyle.Bold ), solidBrush, 10, 35 );
       }
 
 
@@ -285,8 +315,8 @@ namespace Ming.Atf.Pictures
         //MessageBox.Show( size.Height + " " + size.Width + " " + e.X + "    " + e.Y );
         Pen stylo = new Pen( Color.Black );
         MessageBox.Show( "DIFF " + mapBox.DisplayRectangle.X + "  " + e.Y );
-        Graphics graphBox =mapBox.CreateGraphics();
-        graphBox.DrawEllipse( stylo, e.X-20, e.Y-20, 40, 40 );
+        //Graphics graphBox =mapBox.CreateGraphics();
+        //graphBox.DrawEllipse( stylo, e.X-20, e.Y-20, 40, 40 );
         MessageBox.Show( "DIFF " + map.HorizontalResolution + "   " + graphMap.RenderingOrigin.Y );
       }
 
@@ -309,6 +339,13 @@ namespace Ming.Atf.Pictures
 
 
      #region Services
+
+      public List<string> ColorList {
+        get { return colorList; }
+        set { colorList = value; }
+      }
+
+
       private List<string> GetAllColors() {
        
         List<string> colors = new List<string>();
@@ -341,10 +378,18 @@ namespace Ming.Atf.Pictures
         colors.Add( "Gray" );
         colors.Add( "Orange" );
         colors.Add( "DarkViolet" );
-        colors.Add( "Navy" );
+        colors.Add( "SlateBlue" );
         colors.Add( "White" );
         colors.Add( "HotPink" );
-                    
+        colors.Add( "Sienna" );
+        colors.Add( "Violet" );
+        colors.Add( "LightGray" );
+        colors.Add( "DarkTurquoise" );
+        colors.Add( "Lime" );
+        //colors.Add( "" );
+        //colors.Add( "" );
+        //colors.Add( "" );
+        //colors.Add( "" );
 
         return colors;
       }

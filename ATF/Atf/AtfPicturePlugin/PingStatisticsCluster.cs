@@ -111,7 +111,9 @@ namespace Ming.Atf.Pictures
               mapScroll = new ScrollableMaps( true );
             }
             mapScroll.mapBox.Controls.Add( mapScroll.initTrackBar() );
-            pages.ClientAdd(mapScroll.mapBox, "Carte Scrollable", null, true); 
+            mapScroll.mapBox.Controls.Add( mapScroll.legend() );
+            pages.ClientAdd(mapScroll.mapBox, "Carte Scrollable", null, true);
+           
         }
 
         // Test
