@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Ming.Atf.Pictures {
-  class StatsChartsVelib {
+  public class StatsChartsVelib {
     #region champs
 
     private Dictionary<String, int> dayToInt;
@@ -25,6 +25,7 @@ namespace Ming.Atf.Pictures {
     private int stationDisplayed;
     private Chart chartBot;
     private Chart chartTop;
+    private List<string> colors ;
     int lastIndexgeotop;
     int lastIndexgeobot;
     int lastIndexTimetop;
@@ -57,6 +58,8 @@ namespace Ming.Atf.Pictures {
       DateTime timeS = new DateTime( 1970, 1, 2 );
       LocalDataBase.getRemplissageByDayHisto(timeS,time);
       LocalDataBase.getRemplissageByHourHisto( timeS, time );
+      colors = new List<string>();
+      this.GetAllColors();
     }
 
     public StatsChartsVelib() {
@@ -76,6 +79,8 @@ namespace Ming.Atf.Pictures {
       lastIndexgeobot = 0;
       lastIndexTimetop = 0;
       lastIndexTimebot = 0;
+      colors = new List<string>();
+      this.GetAllColors();
     }
 
     #endregion
@@ -484,7 +489,8 @@ namespace Ming.Atf.Pictures {
       }
 
       seriesStat.Sort( PointSortOrder.Ascending, "X" );
-      seriesStat.Color = System.Drawing.Color.Purple;
+
+      seriesStat.Color = System.Drawing.Color.FromName(colors[numeroCentroide]);
       seriesStat.BorderWidth = 2;
       chartStat.Series.Add( seriesStat );
       chartStat.ChartAreas.Add( meanArea );
@@ -555,6 +561,52 @@ namespace Ming.Atf.Pictures {
     public Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> StatsTabJour {
       get { return statsTabJour; }
       set { statsTabJour = value; }
+    }
+
+    private void GetAllColors() {
+
+      
+      /*colors.Add( "Blue" );
+      colors.Add( "Red" );
+      colors.Add( "DodgerBlue" );
+      colors.Add( "Lime" );
+      colors.Add( "YellowGreen" );
+      colors.Add( "Fushia" );
+      colors.Add( "Chartreuse" );
+      colors.Add( "Brown" );
+      colors.Add( "CadetBlue" );
+      colors.Add( "Crimson" );
+      colors.Add( "DarkOrange" );
+      colors.Add( "DeepPink" );
+      colors.Add( "DodgerBlue" );
+      colors.Add( "Tomato" );
+      colors.Add( "Gold" );
+      colors.Add( "Green" );
+      colors.Add( "Blue" );
+      colors.Add( "Yellow" );
+        
+      colors.Add( "SteelBlue" );
+                               */
+      colors.Add( "Red" );
+      colors.Add( "RoyalBlue" );
+      colors.Add( "Violet" );
+      colors.Add( "ForestGreen" );
+      colors.Add( "Yellow" );
+      colors.Add( "Gray" );
+      colors.Add( "Orange" );
+      colors.Add( "DarkViolet" );
+      colors.Add( "SlateBlue" );
+      colors.Add( "White" );
+      colors.Add( "HotPink" );
+      colors.Add( "Sienna" );
+      colors.Add( "Violet" );
+      colors.Add( "LightGray" );
+      colors.Add( "DarkTurquoise" );
+      colors.Add( "Lime" );
+      //colors.Add( "" );
+      //colors.Add( "" );
+      //colors.Add( "" );
+      //colors.Add( "" );
     }
 
     #endregion
