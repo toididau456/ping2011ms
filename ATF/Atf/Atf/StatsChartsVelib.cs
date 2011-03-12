@@ -59,6 +59,25 @@ namespace Ming.Atf.Pictures {
       LocalDataBase.getRemplissageByHourHisto( timeS, time );
     }
 
+    public StatsChartsVelib() {
+      dayToInt = new Dictionary<String, int>();
+      intToEchelle = new Dictionary<int, String>();
+      intToEchelle.Add( 0, "Par Heures" );
+      intToEchelle.Add( 1, "Par jour de la semaine" );
+      intToEchelle.Add( 2, "Par semaines" );
+      dayToInt.Add( "Monday", 0 );
+      dayToInt.Add( "Tuesday", 1 );
+      dayToInt.Add( "Wednesday", 2 );
+      dayToInt.Add( "Thursday", 3 );
+      dayToInt.Add( "Friday", 4 );
+      dayToInt.Add( "Saturday", 5 );
+      dayToInt.Add( "Sunday", 6 );
+      lastIndexgeotop = 0;
+      lastIndexgeobot = 0;
+      lastIndexTimetop = 0;
+      lastIndexTimebot = 0;
+    }
+
     #endregion
 
     #region méthodes
