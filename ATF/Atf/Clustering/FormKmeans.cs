@@ -62,13 +62,20 @@ namespace Ming.Atf.Clustering
             return int.Parse(comboBox3.SelectedItem as String);
         }
 
-        // 
+        // Ajoute un element dans le panel droit en haut
         public void addControls(Control control)
         {
-            control.Size = panel1.Size;
-            if (panel1.Controls.Count > 0)
-                panel1.Controls[0].Dispose();
-            panel1.Controls.Add(control);
+            if (splitContainer2.Panel1.Controls.Count > 0)
+                splitContainer2.Panel1.Controls[0].Dispose();
+            splitContainer2.Panel1.Controls.Add(control);
+        }
+
+        // Ajoute un element dans le panel droit en bas
+        public void addChart(Control control)
+        {
+            if (splitContainer2.Panel2.Controls.Count > 0)
+                splitContainer2.Panel2.Controls[0].Dispose();
+            splitContainer2.Panel2.Controls.Add(control);
         }
         #endregion
     }
