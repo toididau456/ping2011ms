@@ -39,13 +39,11 @@
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-            this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -135,24 +133,16 @@
             this.comboBox3.FormattingEnabled = true;
             this.comboBox3.Items.AddRange(new object[] {
             "2",
-            "3",
             "4",
-            "5",
             "6",
-            "7",
             "8",
-            "9",
             "10",
-            "11",
             "12",
-            "13",
-            "14",
             "15",
-            "16",
-            "17",
             "18",
-            "19",
-            "20"});
+            "20",
+            "25",
+            "30"});
             this.comboBox3.Location = new System.Drawing.Point(3, 257);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(198, 21);
@@ -187,25 +177,18 @@
             // 
             // splitContainer2
             // 
+            this.splitContainer2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // splitContainer2.Panel1
+            // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.panel1);
-            this.splitContainer2.Size = new System.Drawing.Size(452, 353);
-            this.splitContainer2.SplitterDistance = 150;
+            this.splitContainer2.Panel2.AutoScroll = true;
+            this.splitContainer2.Size = new System.Drawing.Size(456, 357);
+            this.splitContainer2.SplitterDistance = 151;
             this.splitContainer2.TabIndex = 0;
-            // 
-            // panel1
-            // 
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(452, 150);
-            this.panel1.TabIndex = 0;
             // 
             // FormKmeans
             // 
@@ -220,7 +203,6 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.splitContainer2.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -240,6 +222,5 @@
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.Panel panel1;
     }
 }

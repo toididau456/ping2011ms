@@ -99,6 +99,8 @@ namespace Ming.Atf.Clustering
             ScrollableMaps maps = new ScrollableMaps();
             maps.drawClusters(stationCluster);
             PictureBox map = maps.mapBox;
+            map.SizeMode = PictureBoxSizeMode.Zoom;
+            map.Dock = DockStyle.Fill;
             panel.addControls(map);
         }
         #endregion
