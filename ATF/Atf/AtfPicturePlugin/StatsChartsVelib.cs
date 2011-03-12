@@ -9,7 +9,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 namespace Ming.Atf.Pictures {
   class StatsChartsVelib {
     #region champs
-    //private ArrayList dataVelib;
+
     private Dictionary<String, int> dayToInt;
     private Dictionary<int, String> intToEchelle;
     private Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabSemaine;
@@ -53,103 +53,26 @@ namespace Ming.Atf.Pictures {
       lastIndexgeobot = 0;
       lastIndexTimetop = 0;
       lastIndexTimebot = 0;
-      if ( files ) {
-        statsTabHeure = (Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>) MySerializer.DeSerializeObject( "tabStationParHeure" );
-        statsTabJour = (Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>) MySerializer.DeSerializeObject( "tabStationParJour" );
-        //statsTabSemaine = (Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>) MySerializer.DeSerializeObject( "tabStationParSemaine" );
-      }
-      else {
-        //statsTabSemaine = createDicoStationParSemaine();
-        statsTabHeure = createDicoStationParHeure();
-        statsTabJour = createDicoStationParJour();
-      }
-      
-      
+      DateTime time = new DateTime( 2025, 1, 1 );
+      DateTime timeS = new DateTime( 1970, 1, 2 );
+      LocalDataBase.getRemplissageByDayHisto(timeS,time);
+      LocalDataBase.getRemplissageByHourHisto( timeS, time );
     }
 
     #endregion
 
     #region méthodes
 
-    public Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> createDicoStationParHeure() {
-      Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> res = new Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>();
-      DateTime time = new DateTime(1970,1,1);
-      DateTime timeS = new DateTime( 1970, 1, 2 );
-      Dictionary<int, KeyValuePair<double, double>> tempdico = null ;
-      for ( int k = 0 ; k < 24 ; k++ ) {   
-        Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> receivedData = LocalDataBase.getLinesByDateHours(timeS,time, k);
-        foreach ( int station in receivedData.Keys ) {
-          if ( k == 0 ) {
-            tempdico = new Dictionary<int, KeyValuePair<double, double>>();
-            tempdico[ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key, receivedData[ station ][ k ].Value );
-            res[ station ] = tempdico;
-          }
-          else {
-            res[ station ][ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key, receivedData[ station ][ k ].Value );
-          }
-        }
-      }
-      MySerializer.SerializeObject( "tabStationParHeure", res );
-      return res;
-    }
-
-    public Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> createDicoStationParJour() {
-      Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> res = new Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>();
-      DateTime time = new DateTime( 1970, 1, 1 );
-      DateTime timeS = new DateTime( 1970, 1, 2 );
-      Dictionary<int, KeyValuePair<double, double>> tempdico = null;
-
-      for ( int k = 1 ; k < 8 ; k++ ) {
-        Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> receivedData = LocalDataBase.getLinesByDateDays( timeS, time, k );
-        foreach ( int station in receivedData.Keys ) {
-          if ( k == 1 ) {
-            tempdico = new Dictionary<int, KeyValuePair<double, double>>();
-            tempdico[ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key, receivedData[ station ][ k ].Value );
-            res[ station ] = tempdico;
-          }
-          else {
-            res[ station ][ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key, receivedData[ station ][ k ].Value );
-          }
-        }
-      }
-      MySerializer.SerializeObject( "tabStationParJour", res );
-      return res;
-    } 
-
-
-
-    public Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> createDicoStationParSemaine() {
-      Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> res = new Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>();
-      DateTime time = new DateTime( 1970, 1, 1 );
-      DateTime timeS = new DateTime( 1970, 1, 2 );
-      Dictionary<int, KeyValuePair<double, double>> tempdico = null;
-      for ( int k = 0 ; k < 4 ; k++ ) {
-        Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> receivedData = LocalDataBase.getLinesByDateWeeks( timeS, time, k );
-        foreach ( int station in receivedData.Keys ) {
-          if ( k == 0 ) {
-            tempdico = new Dictionary<int, KeyValuePair<double, double>>();
-            tempdico[ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key, receivedData[ station ][ k ].Value );
-            res[ station ] = tempdico;
-          }
-          else {
-            res[ station ][ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key, receivedData[ station ][ k ].Value );
-          }
-        }
-      }
-      MySerializer.SerializeObject( "tabStationParSemaine", res );
-      return res;
-    }
-
     public Dictionary<int, KeyValuePair<double, double>> StatistiquesParis(String echelle) {
       Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> dataMap;
       if ( echelle == "Heure" ) {
-        dataMap = statsTabHeure;
+        dataMap = LocalDataBase.statsTabHeure;
       }
       else if ( echelle == "Jour" ) {
-        dataMap = statsTabJour;
+        dataMap = LocalDataBase.statsTabJour;
       }
       else {
-        dataMap = statsTabSemaine;
+        dataMap = LocalDataBase.statsTabSemaine;
       }
       Dictionary<int, KeyValuePair<double, double>> res = new Dictionary<int, KeyValuePair<double, double>>();
       Dictionary<int, int> resCount = new Dictionary<int, int>();
@@ -177,13 +100,13 @@ namespace Ming.Atf.Pictures {
     public Dictionary<int, KeyValuePair<double, double>> StatistiquesArrondissement(  int Arrondissement, String echelle) {
       Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> dataMap;
       if ( echelle == "Heure" ) {
-        dataMap = statsTabHeure;
+        dataMap = LocalDataBase.statsTabHeure;
       }
       else if(echelle == "Jour"){
-        dataMap = statsTabJour;
+        dataMap = LocalDataBase.statsTabJour;
       }
       else{
-        dataMap = statsTabSemaine;
+        dataMap = LocalDataBase.statsTabSemaine;
       }
       Dictionary<int, KeyValuePair<double, double>> res = new Dictionary<int, KeyValuePair<double, double>>();
       Dictionary<int, int> resCount = new Dictionary<int, int>();
@@ -228,13 +151,13 @@ namespace Ming.Atf.Pictures {
       }
       else {
         if ( echelle == "Heure" ) {
-          statsTab = this.statsTabHeure[ station ];
+          statsTab = LocalDataBase.statsTabHeure[ station ];
         }
         else if ( echelle == "Jour" ) {
-            statsTab = this.statsTabJour[ station ];
+          statsTab = LocalDataBase.statsTabJour[ station ];
         }
         else {
-          statsTab = this.statsTabSemaine[ station ];        
+          statsTab = LocalDataBase.statsTabSemaine[ station ];        
         }
         
       }
@@ -263,11 +186,24 @@ namespace Ming.Atf.Pictures {
         seriesStat.Points.AddXY(temps,statsTab[ temps ].Key );
         
       }
+
+      /*
       foreach ( int temps in statsTab.Keys ) {
-        double[] dataD = new double[] { statsTab[ temps ].Key ,statsTab[ temps ].Key - Math.Sqrt(statsTab[ temps ].Value), statsTab[ temps ].Key + Math.Sqrt(statsTab[ temps ].Value)};
+        double varUp =1.0 ;
+        if ( statsTab[ temps ].Key + Math.Sqrt( statsTab[ temps ].Value ) < 0.95 ) {
+          varUp = statsTab[ temps ].Key + Math.Sqrt( statsTab[ temps ].Value );
+        }
+
+        double varDw = 0.0;
+        if ( statsTab[ temps ].Key - Math.Sqrt( statsTab[ temps ].Value ) > 0.05 ) {
+          varDw = statsTab[ temps ].Key - Math.Sqrt( statsTab[ temps ].Value );
+        }
+
+        //double[] dataD = new double[] { statsTab[ temps ].Key ,var, statsTab[ temps ].Key + Math.Sqrt(statsTab[ temps ].Value)}; 
+        double[] dataD = new double[] { statsTab[ temps ].Key, varDw , varUp };
         DataPoint point = new DataPoint(temps,dataD);
         plusEcart.Points.Add(point); 
-      }
+      }  */
 
 
       seriesStat.Sort( PointSortOrder.Ascending, "X" );
@@ -277,7 +213,7 @@ namespace Ming.Atf.Pictures {
       plusEcart.BorderWidth = 1;
       plusEcart.Sort( PointSortOrder.Ascending, "X" );
       chartStat.Series.Add( seriesStat );
-      chartStat.Series.Add( plusEcart );
+      //chartStat.Series.Add( plusEcart );
       chartStat.ChartAreas.Add( meanArea );
       chartStat.BackColor = System.Drawing.Color.Silver;
       meanArea.BackColor = System.Drawing.Color.LightGray;
@@ -301,7 +237,7 @@ namespace Ming.Atf.Pictures {
       chartStat.Titles.Add( titre );
       chartStat.Size = new System.Drawing.Size( 500, 300 );
       seriesStat.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-      plusEcart.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.ErrorBar;
+      //plusEcart.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.ErrorBar;
 
       ((System.ComponentModel.ISupportInitialize) (chartStat)).EndInit();
 

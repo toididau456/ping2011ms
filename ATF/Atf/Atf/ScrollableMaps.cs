@@ -42,17 +42,7 @@ namespace Ming.Atf.Pictures
        LargeurGPS = Math.Abs( bordGauche - bordDroit );
        dayToInt = new Dictionary< int,String>();
        this.fillStationCoordonates();
-       colorList = GetColors();
-       if ( files ) {
-         statsTabHeure = (Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>) MySerializer.DeSerializeObject( "tabStationParHeure" );
-         statsTabJour = (Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>) MySerializer.DeSerializeObject( "tabStationParJour" );
-         //statsTabSemaine = (Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>) MySerializer.DeSerializeObject( "tabStationParSemaine" );
-       }
-       else {
-         //statsTabSemaine = createDicoStationParSemaine();
-         statsTabHeure = createDicoStationParHeure();
-         statsTabJour = createDicoStationParJour();
-       }
+       colorList = GetAllColors();
        dayToInt.Add(  1, "Monday");
        dayToInt.Add(  2, "Tuesday");
        dayToInt.Add(  3,"Wednesday" );
@@ -63,7 +53,10 @@ namespace Ming.Atf.Pictures
        initPictureOfMap();
        createChoiceTimeList();
        createChangeTypeButton();
-       
+       DateTime time = new DateTime( 2025, 1, 1 );
+       DateTime timeS = new DateTime( 1970, 1, 2 );
+       LocalDataBase.getRemplissageByDayHisto( timeS, time );
+       LocalDataBase.getRemplissageByHourHisto( timeS, time );
      }
 
 
@@ -73,7 +66,7 @@ namespace Ming.Atf.Pictures
        LargeurGPS = Math.Abs( bordGauche - bordDroit );
        dayToInt = new Dictionary<int, String>();
        this.fillStationCoordonates();
-       colorList = GetColors();
+       colorList = GetAllColors();
        dayToInt.Add( 1, "Monday" );
        dayToInt.Add( 2, "Tuesday" );
        dayToInt.Add( 3, "Wednesday" );
@@ -81,8 +74,11 @@ namespace Ming.Atf.Pictures
        dayToInt.Add( 5, "Friday" );
        dayToInt.Add( 6, "Saturday" );
        dayToInt.Add( 7, "Sunday" );
+       
        initPictureOfMap();
+       
      }
+
 
 #endregion
 
@@ -93,10 +89,13 @@ namespace Ming.Atf.Pictures
         mapBox.Name = "ScrollMap";
         mapBox.SizeMode = PictureBoxSizeMode.Zoom;
         mapBox.MouseClick += mapClicked;
-
         mapBox.Image = map;
         mapBox.MouseClick += ReloadMap;
         graphMap = Graphics.FromImage( map );
+        mapBox.Padding = new Padding( 0 );
+        mapBox.Margin = new Padding( 0 );
+        
+  
       }
 
 
@@ -185,7 +184,7 @@ namespace Ming.Atf.Pictures
           solidBrush = new SolidBrush( Color.FromArgb( 255, Color.Black ) );
           String clust = clusters[ station ].ToString();
           graphMap.DrawString(clust, new System.Drawing.Font( "Helvetica", 15, System.Drawing.FontStyle.Bold ), solidBrush, (float) tempCoor.Key, (float) tempCoor.Value );
-
+          
         }
 
       }
@@ -282,8 +281,14 @@ namespace Ming.Atf.Pictures
       }
 
       private void mapClicked( object sender, MouseEventArgs e) {
-        double size = (mapBox.Width - mapBox.Image.Width) / 2;
-          MessageBox.Show( e.X + "    "+e.Y);
+        Size size = mapBox.Size ;
+        double diff = mapBox.Location.X;   
+        //MessageBox.Show( size.Height + " " + size.Width + " " + e.X + "    " + e.Y );
+        Pen stylo = new Pen( Color.Black );
+        MessageBox.Show( "DIFF " + mapBox.DisplayRectangle.X + "  " + e.Y );
+        Graphics graphBox =mapBox.CreateGraphics();
+        graphBox.DrawEllipse( stylo, e.X-20, e.Y-20, 40, 40 );
+        MessageBox.Show( "DIFF " + map.HorizontalResolution + "   " + graphMap.RenderingOrigin.Y );
       }
 
      #endregion
@@ -300,103 +305,41 @@ namespace Ming.Atf.Pictures
       }
 
 
-      public Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> StatsTabSemaine {
-        get { return statsTabSemaine; }
-        set { statsTabSemaine = value; }
-      }
-
-      public Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> StatsTabHeure {
-        get { return statsTabHeure; }
-        set { statsTabHeure = value; }
-      }
-
-
-      public Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> StatsTabJour {
-        get { return statsTabJour; }
-        set { statsTabJour = value; }
-      }
-
-
-      public Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> createDicoStationParHeure() {
-        Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> res = new Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>();
-        DateTime time = new DateTime( 1970, 1, 1 );
-        DateTime timeS = new DateTime( 1970, 1, 2 );
-        Dictionary<int, KeyValuePair<double, double>> tempdico = null;
-        for ( int k = 0 ; k < 24 ; k++ ) {
-          Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> receivedData = LocalDataBase.getLinesByDateHours( timeS, time, k );
-          foreach ( int station in receivedData.Keys ) {
-            if ( k == 0 ) {
-              tempdico = new Dictionary<int, KeyValuePair<double, double>>();
-              tempdico[ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key, receivedData[ station ][ k ].Value );
-              res[ station ] = tempdico;
-            }
-            else {
-              res[ station ][ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key, receivedData[ station ][ k ].Value );
-            }
-          }
-        }
-        MySerializer.SerializeObject( "tabStationParHeure", res );
-        return res;
-      }
-
-      public Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> createDicoStationParJour() {
-        Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> res = new Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>();
-        DateTime time = new DateTime( 1970, 1, 1 );
-        DateTime timeS = new DateTime( 1970, 1, 2 );
-        Dictionary<int, KeyValuePair<double, double>> tempdico = null;
-
-        for ( int k = 1 ; k < 8 ; k++ ) {
-          Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> receivedData = LocalDataBase.getLinesByDateDays( timeS, time, k );
-          foreach ( int station in receivedData.Keys ) {
-            if ( k == 1 ) {
-              tempdico = new Dictionary<int, KeyValuePair<double, double>>();
-              tempdico[ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key, receivedData[ station ][ k ].Value );
-              res[ station ] = tempdico;
-            }
-            else {
-              res[ station ][ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key, receivedData[ station ][ k ].Value );
-            }
-          }
-        }
-        MySerializer.SerializeObject( "tabStationParJour", res );
-        return res;
-      }
-
-
-
-      public Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> createDicoStationParSemaine() {
-        Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> res = new Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>();
-        DateTime time = new DateTime( 1970, 1, 1 );
-        DateTime timeS = new DateTime( 1970, 1, 2 );
-        Dictionary<int, KeyValuePair<double, double>> tempdico = null;
-        for ( int k = 0 ; k < 4 ; k++ ) {
-          Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> receivedData = LocalDataBase.getLinesByDateWeeks( timeS, time, k );
-          foreach ( int station in receivedData.Keys ) {
-            if ( k == 0 ) {
-              tempdico = new Dictionary<int, KeyValuePair<double, double>>();
-              tempdico[ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key, receivedData[ station ][ k ].Value );
-              res[ station ] = tempdico;
-            }
-            else {
-              res[ station ][ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key, receivedData[ station ][ k ].Value );
-            }
-          }
-        }
-        MySerializer.SerializeObject( "tabStationParSemaine", res );
-        return res;
-      }
+      
       #endregion
 
 
      #region Services
-      private List<string> GetColors() {
+      private List<string> GetAllColors() {
        
         List<string> colors = new List<string>();
+        colors.Add( "Blue" );
+        colors.Add( "Red" );
+        colors.Add( "DodgerBlue" );
+        colors.Add( "Lime" );
+        colors.Add( "YellowGreen" );
+        colors.Add( "Fushia" );
+        colors.Add( "Chartreuse" );
+        colors.Add( "Brown" );
+        colors.Add( "CadetBlue" );
+        colors.Add( "Crimson" );
+        colors.Add( "Chartreuse" );
+        colors.Add( "DarkOrange" );
+        colors.Add( "DeepPink" );
+        colors.Add( "DodgerBlue" );
+        colors.Add( "Tomato" );
+        colors.Add( "Gold" );
+        colors.Add( "Green" );
+        colors.Add( "Blue" );
+        colors.Add( "Yellow" );
+        
+        colors.Add( "Olive" );
+        colors.Add( "SteelBlue" );
         string[] colorNames = Enum.GetNames( typeof( KnownColor ) );
         foreach ( string colorName in colorNames ) {
           KnownColor knownColor = (KnownColor) Enum.Parse( typeof( KnownColor ), colorName );
           if ( knownColor > KnownColor.Transparent ) {
-            if ( !colorName.Equals( "Black" ) && !colorName.Equals( "Salmon" ) && !colorName.Equals( "Beige" ) && !colorName.Equals( "Cyan" ) && !colorName.Equals( "Transparent" ) && !colorName.Contains( "Light" ) && !colorName.Contains( "White" ) && !colorName.Contains( "Pale" ) && !colorName.Contains( "Medium" ) ) {
+            if (!colors.Contains(colorName)) {
               colors.Add( colorName );
             }
             
@@ -404,6 +347,8 @@ namespace Ming.Atf.Pictures
         }
         return colors;
       }
+
+
       #endregion
 
 

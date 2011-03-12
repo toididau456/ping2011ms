@@ -28,6 +28,12 @@ namespace Ming.Atf.Pictures
         /* Acces au StatusReporter de la fenetre principale */
         Psl.Controls.StatusReporter status = Registry.MainStatus as Psl.Controls.StatusReporter;
 
+        /* Objet gérant l'affichage des statistiques*/
+        StatsChartsVelib StatsVelib = null;
+
+        /*objet gérant la carte scrollable des stats*/
+        ScrollableMaps mapScroll = null;
+
         /**/
         SplitContainer panel;
 
@@ -41,6 +47,7 @@ namespace Ming.Atf.Pictures
             Registry.MergeInMainTools(this.toolStrip);
             Registry.MainPages.ContextMenuStrip = this.contextMenuStrip;
             Registry.MainPages.SelectedIndexChanged += changeStatus;
+
 
         }
 
@@ -100,39 +107,23 @@ namespace Ming.Atf.Pictures
                     if (pages.TabPages[i].Text.Equals("Carte Scrollable"))
                         return;
 
-            ScrollableMaps mapScroll = new ScrollableMaps( true);
-            /* if ( LocalDataBase.hour == null ) {
-               LocalDataBase.hour = mapScroll.createDicoStationParHeure();
-               LocalDataBase.day = mapScroll.createDicoStationParJour();
-             }
-             else {
-               mapScroll.StatsTabHeure = LocalDataBase.hour;
-               mapScroll.StatsTabJour = LocalDataBase.day;
-             }
-               */
-            //mapScroll.drawAllPoints("Heure",6);
-            //mapScroll.drawClusters();
-            // Ici, tu decommentes pour ajouter un nouvel onglet
+            if ( mapScroll == null ) {
+              mapScroll = new ScrollableMaps( true );
+            }
             mapScroll.mapBox.Controls.Add( mapScroll.initTrackBar() );
-            pages.ClientAdd(mapScroll.mapBox, "Carte Scrollable", null, true);
-            
-            //pages.ClientAdd(mapScroll.initTrackBar(),"trackBar",null,true);
-            
+            pages.ClientAdd(mapScroll.mapBox, "Carte Scrollable", null, true); 
         }
 
         // Test
         public void Test(string numStation)
         {
-            StatsChartsVelib stats = new StatsChartsVelib(true);
-            /*
-             if ( LocalDataBase.hour.Count == null ) {
-               LocalDataBase.hour = stats.StatsTabHeure;
-               LocalDataBase.day = stats.StatsTabJour;
-             }  */
-
+          if ( StatsVelib == null ) {
+             StatsVelib = new StatsChartsVelib(true);
+          }
+            
             if (panel.Panel2.Controls.Count > 0)
                 panel.Panel2.Controls[0].Dispose();
-            panel.Panel2.Controls.Add(stats.initSplitPanel(int.Parse(numStation)));
+            panel.Panel2.Controls.Add(StatsVelib.initSplitPanel(int.Parse(numStation)));
         }
         #endregion
 
