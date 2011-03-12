@@ -17,9 +17,6 @@ namespace Ming.Atf.Pictures
      private Boolean type = true;
      private ComboBox choiceTime;
      private Dictionary<int, KeyValuePair<double, double>> coordonnees;
-     private Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabSemaine;
-     private Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabHeure;
-     private Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabJour;
      private Dictionary<int, String> dayToInt;
      private int largeurPixel;
      private int hauteurPixel;
@@ -32,6 +29,7 @@ namespace Ming.Atf.Pictures
      private double origineImgGPSX = 2.211170196533203;
      private double origineImgGPSY = 48.914715793068105;
      private Graphics graphMap;
+     private Graphics graphBox;
      private List<string> colorList;
      private TrackBar trackBar ;
      private String echelle = "Heure";
@@ -88,13 +86,12 @@ namespace Ming.Atf.Pictures
         mapBox = new PictureBox();
         mapBox.Name = "ScrollMap";
         mapBox.SizeMode = PictureBoxSizeMode.Zoom;
-        mapBox.MouseClick += mapClicked;
+        //mapBox.MouseClick += mapClicked;
         mapBox.Image = map;
         mapBox.MouseClick += ReloadMap;
         graphMap = Graphics.FromImage( map );
         mapBox.Padding = new Padding( 0 );
         mapBox.Margin = new Padding( 0 );
-        
   
       }
 
@@ -112,17 +109,17 @@ namespace Ming.Atf.Pictures
         String label = "";
         KeyValuePair<int,int> tempCoor;
         if ( echelle == "Heure" ) {
-          datas = statsTabHeure;
+          datas = LocalDataBase.statsTabHeure;
           label = cran + " heures";
         }
         else if ( echelle == "Jour" ) {
-          datas = statsTabJour;
+          datas = LocalDataBase.statsTabJour;
           cran++;
           label = dayToInt[cran];
           
         }
         else {
-          datas = statsTabSemaine;
+          datas = LocalDataBase.statsTabSemaine;
         }
        
         foreach(int station in coordonnees.Keys){
@@ -158,7 +155,9 @@ namespace Ming.Atf.Pictures
             
             solidBrush = new SolidBrush( Color.FromArgb( 255, Color.Black ) );
             graphMap.DrawString(label, new System.Drawing.Font( " Helvetica", 20 , System.Drawing.FontStyle.Bold ), solidBrush, (cran * 55), 0 );
-          
+
+
+            graphMap.DrawString( label, new System.Drawing.Font( " Helvetica", 20, System.Drawing.FontStyle.Bold ), solidBrush, -200, 0 );
         }
         
       }
@@ -181,9 +180,9 @@ namespace Ming.Atf.Pictures
 
           graphMap.DrawEllipse( stylo, (float) tempCoor.Key, (float) tempCoor.Value, 17, 17 );
           graphMap.FillEllipse( solidBrush, (float) tempCoor.Key, (float) tempCoor.Value, 17.0F, 17.0F );
-          solidBrush = new SolidBrush( Color.FromArgb( 255, Color.Black ) );
+          SolidBrush StringBrush = new SolidBrush( Color.FromArgb( 255, Color.Black ) );
           String clust = clusters[ station ].ToString();
-          graphMap.DrawString(clust, new System.Drawing.Font( "Helvetica", 15, System.Drawing.FontStyle.Bold ), solidBrush, (float) tempCoor.Key, (float) tempCoor.Value );
+          graphMap.DrawString(clust, new System.Drawing.Font( "Helvetica", 15, System.Drawing.FontStyle.Bold ), StringBrush, (float) tempCoor.Key, (float) tempCoor.Value );
           
         }
 
@@ -313,7 +312,7 @@ namespace Ming.Atf.Pictures
       private List<string> GetAllColors() {
        
         List<string> colors = new List<string>();
-        colors.Add( "Blue" );
+        /*colors.Add( "Blue" );
         colors.Add( "Red" );
         colors.Add( "DodgerBlue" );
         colors.Add( "Lime" );
@@ -323,7 +322,6 @@ namespace Ming.Atf.Pictures
         colors.Add( "Brown" );
         colors.Add( "CadetBlue" );
         colors.Add( "Crimson" );
-        colors.Add( "Chartreuse" );
         colors.Add( "DarkOrange" );
         colors.Add( "DeepPink" );
         colors.Add( "DodgerBlue" );
@@ -333,18 +331,21 @@ namespace Ming.Atf.Pictures
         colors.Add( "Blue" );
         colors.Add( "Yellow" );
         
-        colors.Add( "Olive" );
         colors.Add( "SteelBlue" );
-        string[] colorNames = Enum.GetNames( typeof( KnownColor ) );
-        foreach ( string colorName in colorNames ) {
-          KnownColor knownColor = (KnownColor) Enum.Parse( typeof( KnownColor ), colorName );
-          if ( knownColor > KnownColor.Transparent ) {
-            if (!colors.Contains(colorName)) {
-              colors.Add( colorName );
-            }
-            
-          }
-        }
+                                 */
+        colors.Add( "Red" );
+        colors.Add( "RoyalBlue" );
+        colors.Add( "Violet" );
+        colors.Add( "ForestGreen" );
+        colors.Add( "Yellow" );
+        colors.Add( "Gray" );
+        colors.Add( "Orange" );
+        colors.Add( "DarkViolet" );
+        colors.Add( "Navy" );
+        colors.Add( "White" );
+        colors.Add( "HotPink" );
+                    
+
         return colors;
       }
 
