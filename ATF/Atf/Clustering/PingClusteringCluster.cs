@@ -10,6 +10,7 @@ using Psl.Applications;
 using System.Collections;
 using ats.KMeans;
 using Ming.Atf.Pictures;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Ming.Atf.Clustering
 {
@@ -25,9 +26,16 @@ namespace Ming.Atf.Clustering
         /* Conteneur */
         FormKmeans panel;
         Button button;
+        ComboBox combo1;
 
         /* Stations sous ArrayList*/
         List<int> stations = new List<int>();
+
+        /* Clusters */
+        ClusterCollection cluster;
+
+        /* Chart */
+        StatsChartsVelib chart;
         #endregion
 
         // Constructeur
@@ -83,7 +91,7 @@ namespace Ming.Atf.Clustering
             double[,] db = convertData(data);
             Console.WriteLine("Donnees convertie");
 
-            ClusterCollection cluster = KMeans.ClusterDataSet(clusters,db,type);
+            cluster = KMeans.ClusterDataSet(clusters,db,type);
             //MessageBox.Show(this,"Nombre de cluster : " + cluster.Count);
             Console.WriteLine("Kmeans calcule");
             Dictionary<int, int> stationCluster = new Dictionary<int, int>();
@@ -101,7 +109,33 @@ namespace Ming.Atf.Clustering
             PictureBox map = maps.mapBox;
             map.SizeMode = PictureBoxSizeMode.Zoom;
             map.Dock = DockStyle.Fill;
-            panel.addControls(map);
+            Panel tempPanel = new Panel();
+            tempPanel.Dock = DockStyle.Fill;
+            
+            combo1 = new ComboBox();
+            for (int i = 0; i < cluster.Count; i++)
+                combo1.Items.Add(i);
+            combo1.SelectedIndexChanged += changeCluster;
+            combo1.Dock = DockStyle.Top;
+
+            tempPanel.Controls.Add(combo1);
+            tempPanel.Controls.Add(map);
+
+            panel.addControls(tempPanel);
+            /*chart = new StatsChartsVelib();
+            SplitContainer tempPanel = new SplitContainer();
+            tempPanel.Orientation = Orientation.Horizontal;
+            Chart myChart = chart.createChartCentroides(cluster[0].ClusterMean, 0, "Dunno");
+            tempPanel.Panel1.Controls.Add(myChart);
+            combo1 = new ComboBox();
+
+            for (int i = 0; i < cluster.Count; i++)
+                combo1.Items.Add(i);
+            combo1.SelectedIndexChanged += changeCluster;
+            
+            tempPanel.Panel2.Controls.Add(combo1);
+            tempPanel.Dock = DockStyle.Fill;
+            panel.addChart(tempPanel);*/
         }
         #endregion
 
@@ -153,6 +187,21 @@ namespace Ming.Atf.Clustering
             Console.WriteLine("J'ai les donnees");
             Kmeans(data, cluster, distance);
             MessageBox.Show(this,"Ok - Tout marche");
+        }
+
+        // Changement de cluster
+        private void changeCluster(object sender, EventArgs args)
+        {
+            //MessageBox.Show(this,"Selected : " + combo1.SelectedItem);
+            chart = new StatsChartsVelib();
+            //String s = combo1.SelectedItem as String;
+            int selected = combo1.SelectedIndex;
+            Chart myChart = chart.createChartCentroides(cluster[selected].ClusterMean, selected, "");
+            Form frame = new Form();
+            myChart.Dock = DockStyle.Fill;
+            frame.Text = "Cluster " + selected;
+            frame.Controls.Add(myChart);
+            frame.Show();
         }
         #endregion
     }
