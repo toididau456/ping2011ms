@@ -5,7 +5,7 @@ using System.Text;
 using System.Collections;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-
+using System.ComponentModel;
 namespace Ming.Atf.Pictures {
   public class StatsChartsVelib {
     #region champs
@@ -20,6 +20,8 @@ namespace Ming.Atf.Pictures {
     private ComboBox choiceTimeBot;
     private ComboBox choiceGeoBot;
     private ComboBox choiceGeoTop;
+    private DateTimePicker choixDateDeb;
+    private DateTimePicker choixDateFin;
     private Panel panTop;
     private Panel panBot;
     private int stationDisplayed;
@@ -30,6 +32,8 @@ namespace Ming.Atf.Pictures {
     int lastIndexgeobot;
     int lastIndexTimetop;
     int lastIndexTimebot;
+    DateTime time;
+    DateTime timeS;
 
     #endregion
 
@@ -54,10 +58,14 @@ namespace Ming.Atf.Pictures {
       lastIndexgeobot = 0;
       lastIndexTimetop = 0;
       lastIndexTimebot = 0;
-      DateTime time = new DateTime( 2025, 1, 1 );
-      DateTime timeS = new DateTime( 1970, 1, 2 );
-      LocalDataBase.getRemplissageByDayHisto(timeS,time);
-      LocalDataBase.getRemplissageByHourHisto( timeS, time );
+      time = new DateTime( 2025, 1, 1 );
+      timeS = new DateTime( 1970, 1, 2 );
+      if ( LocalDataBase.statsTabHeure == null ) {
+        LocalDataBase.getRemplissageByDayHisto( timeS, time );
+        LocalDataBase.getRemplissageByHourHisto( timeS, time );
+        LocalDataBase.getRemplissageByHourOuvresHisto( timeS, time );
+      }
+      
       colors = new List<string>();
       this.GetAllColors();
     }
@@ -96,7 +104,7 @@ namespace Ming.Atf.Pictures {
         dataMap = LocalDataBase.statsTabJour;
       }
       else {
-        dataMap = LocalDataBase.statsTabSemaine;
+        dataMap = LocalDataBase.statsTabHeureOuvre;
       }
       Dictionary<int, KeyValuePair<double, double>> res = new Dictionary<int, KeyValuePair<double, double>>();
       Dictionary<int, int> resCount = new Dictionary<int, int>();
@@ -130,7 +138,7 @@ namespace Ming.Atf.Pictures {
         dataMap = LocalDataBase.statsTabJour;
       }
       else{
-        dataMap = LocalDataBase.statsTabSemaine;
+        dataMap = LocalDataBase.statsTabHeureOuvre;
       }
       Dictionary<int, KeyValuePair<double, double>> res = new Dictionary<int, KeyValuePair<double, double>>();
       Dictionary<int, int> resCount = new Dictionary<int, int>();
@@ -181,7 +189,7 @@ namespace Ming.Atf.Pictures {
           statsTab = LocalDataBase.statsTabJour[ station ];
         }
         else {
-          statsTab = LocalDataBase.statsTabSemaine[ station ];        
+            statsTab = LocalDataBase.statsTabHeureOuvre[ station ];
         }
         
       }
@@ -242,7 +250,8 @@ namespace Ming.Atf.Pictures {
       chartStat.BackColor = System.Drawing.Color.Silver;
       meanArea.BackColor = System.Drawing.Color.LightGray;
       legendStat.Name = "legend";
-      legendStat.DockedToChartArea = "StatArea";
+      //legendStat.DockedToChartArea = "StatArea";
+      legendStat.Docking = Docking.Bottom;
       Title titre;
       chartStat.Legends.Add( legendStat );
       
@@ -278,10 +287,14 @@ namespace Ming.Atf.Pictures {
       resPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
       Panel top = creatLeftTopPanel( station,"Heure","Station" );
       Panel bot = creatLeftBotPanel( station,"Heure","Paris" );
+      Button DateChangement = new Button();
+      DateChangement.Text = "Recupérer la période Debut-Fin";
+      DateChangement.Dock = DockStyle.Bottom;
+      DateChangement.MouseClick += new MouseEventHandler(DateChangement_MouseClick);
+      //top.Controls.Add( DateChangement );
       resPanel.Panel1.Controls.Add( top );
+      resPanel.Panel1.Controls.Add( DateChangement );
       resPanel.Panel2.Controls.Add( bot );
-      top.Padding = new Padding( 15 );
-      bot.Padding = new Padding( 15 );
       return resPanel;
     }
 
@@ -289,6 +302,8 @@ namespace Ming.Atf.Pictures {
     public Panel creatLeftTopPanel(int station,String echelle,String geo) {
       panTop = new Panel();
       panTop.Name = "panTop";
+      Label labDeb = new Label();
+      labDeb.Text = "Debut :";
       panTop.BorderStyle = BorderStyle.FixedSingle;
       panTop.Size = new System.Drawing.Size( 500, 330 );
       chartTop = createChartStation( station, echelle, geo );
@@ -302,6 +317,12 @@ namespace Ming.Atf.Pictures {
       panTop.Controls.Add( choiceGeoTop );
       choiceTimeTop.Location = new System.Drawing.Point( 5, 302 );
       choiceGeoTop.Location = new System.Drawing.Point( 130, 302 );
+      choixDateDeb = createChoixDate();
+      choixDateDeb.Location = new System.Drawing.Point( 290, 302 );
+      panTop.Controls.Add( choixDateDeb );
+      labDeb.Location = new System.Drawing.Point( 255, 306 );
+      panTop.Controls.Add( labDeb );
+      panTop.Padding = new Padding( 20 );
       return panTop;
     
     }
@@ -309,6 +330,8 @@ namespace Ming.Atf.Pictures {
 
     public Panel creatLeftBotPanel( int station, String echelle, String geo ) {
       panBot = new Panel();
+      Label labFin = new Label();
+      labFin.Text = "Fin :";
       panBot.Name = "panBot";
       panBot.Size = new System.Drawing.Size( 500, 330 );
       panBot.BorderStyle = BorderStyle.FixedSingle;
@@ -323,18 +346,42 @@ namespace Ming.Atf.Pictures {
       panBot.Controls.Add( choiceGeoBot );
       choiceTimeBot.Location = new System.Drawing.Point( 5, 302 );
       choiceGeoBot.Location = new System.Drawing.Point( 130, 302 );
+      choixDateFin = createChoixDate();
+      choixDateFin.Location = new System.Drawing.Point( 290, 302 );
+      panBot.Controls.Add( choixDateFin );
+      labFin.Location = new System.Drawing.Point( 260, 306 );
+      panBot.Controls.Add( labFin );
+      panBot.Padding = new Padding( 20 );
+      
       return panBot;
 
     }
 
+    private void DateChangement_MouseClick( Object sender, EventArgs e ) {
+      timeS = choixDateDeb.Value;
+      time = choixDateFin.Value;
+      LocalDataBase.getRemplissageByDayHisto( timeS, time );
+      LocalDataBase.getRemplissageByHourHisto( timeS, time );
+      LocalDataBase.getRemplissageByHourOuvresHisto( timeS, time );
+    }
 
     public ComboBox createChoiceTimeList() {
       ComboBox listeRes = new ComboBox();
-      listeRes.Items.Add("Heure");
+      listeRes.Text = ("Echelle Temps");
+      
+      listeRes.Items.Add("Heure / jours ");
+      listeRes.Items.Add( "Heure / jours Ouvrés" );
       listeRes.Items.Add("Jour" );
-      //listeRes.Items.Add("Semaine");
+      listeRes.Items.Add("Semaine");
       
       return listeRes;
+    }
+
+    public DateTimePicker createChoixDate() {
+      DateTimePicker datePicker = new DateTimePicker();
+      //datePicker.Text = "Choisir la pèriode";
+      datePicker.MinDate = new DateTime( 2011, 1, 1 );  
+      return datePicker; 
     }
 
     /* Mets a jour la barre de status */
@@ -355,7 +402,7 @@ namespace Ming.Atf.Pictures {
         echelle = "Jour";
       }
       else if ( lastIndexTimetop == 2 ) {
-        echelle = "Semaine";
+        echelle = "Heure Ouvrés";
       }
       else {
         echelle = "Heure";
@@ -385,7 +432,7 @@ namespace Ming.Atf.Pictures {
         echelle = "Jour";
       }
       else if ( lastIndexTimebot == 2 ) {
-        echelle = "Semaine";
+        echelle = "Heure Ouvrés";
       }
       else {
         echelle = "Heure";
@@ -402,11 +449,11 @@ namespace Ming.Atf.Pictures {
       if ( choiceTimeBot.SelectedIndex == 0 ) {
         echelle = "Heure";
       }
-      else if ( choiceTimeBot.SelectedIndex == 1 ) {
+      else if ( choiceTimeBot.SelectedIndex == 2 ) {
         echelle = "Jour";
       }
       else {
-        echelle = "Semaine";
+        echelle = "Heure Ouvrés";
       }
 
       if ( lastIndexgeobot == 1 ) {
@@ -431,11 +478,11 @@ namespace Ming.Atf.Pictures {
       if ( choiceTimeTop.SelectedIndex == 0 ) {
         echelle = "Heure";
       }
-      else if ( choiceTimeTop.SelectedIndex == 1 ) {
+      else if ( choiceTimeTop.SelectedIndex == 2 ) {
         echelle = "Jour";
       }
       else {
-        echelle = "Semaine";
+        echelle = "Heure Ouvrés";
       }
 
       if ( lastIndexgeotop == 1 ) {
@@ -456,6 +503,7 @@ namespace Ming.Atf.Pictures {
 
     public ComboBox createChoiceGeoList() {
       ComboBox listeRes = new ComboBox();
+      listeRes.Text = "Echelle Geo";
       listeRes.Items.Add( "Station" );
       listeRes.Items.Add( "Arrondissement" );
       listeRes.Items.Add( "Paris" );
@@ -491,13 +539,14 @@ namespace Ming.Atf.Pictures {
       seriesStat.Sort( PointSortOrder.Ascending, "X" );
 
       seriesStat.Color = System.Drawing.Color.FromName(colors[numeroCentroide]);
+      seriesStat.BorderColor = System.Drawing.Color.Black;
       seriesStat.BorderWidth = 2;
       chartStat.Series.Add( seriesStat );
       chartStat.ChartAreas.Add( meanArea );
       chartStat.BackColor = System.Drawing.Color.Silver;
       meanArea.BackColor = System.Drawing.Color.LightGray;
       legendStat.Name = "legend";
-      legendStat.DockedToChartArea = "StatArea";
+      legendStat.Docking = Docking.Bottom;
       Title titre = new Title("Caractéristiques du centroïde " + numeroCentroide);
       chartStat.Legends.Add( legendStat );
 
@@ -544,6 +593,9 @@ namespace Ming.Atf.Pictures {
       district = int.Parse( stration );
       return district;
     }
+
+    
+
 
 
     public Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> StatsTabSemaine {

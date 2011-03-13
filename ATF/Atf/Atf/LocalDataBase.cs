@@ -50,14 +50,17 @@ namespace Ming.Atf
         public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> week = null;
 
         //Représente chaque station sous forme d'histogramme avec la moyenne du taux de disponibilité par semaine
-        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabSemaine;
+        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabSemaine = null;
 
         //Représente chaque station sous forme d'histogramme avec la moyenne du taux de disponibilité par Heure
-        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabHeure;
+        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabHeure = null;
 
         //Représente chaque station sous forme d'histogramme avec la moyenne du taux de disponibilité par Jour
-        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabJour;
+        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabJour = null;
 
+        //Représente chaque station sous forme d'histogramme avec la moyenne du taux de disponibilité par Heure
+        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabHeureOuvre = null;
+        
         #endregion
 
         #region Methodes
@@ -533,72 +536,8 @@ namespace Ming.Atf
 
         #region DataSet
         
-      public static void createDicoStationParHeure() {
-          Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> res = new Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>();
-          DateTime time = new DateTime( 1970, 1, 1 );
-          DateTime timeS = new DateTime( 1970, 1, 2 );
-          Dictionary<int, KeyValuePair<double, double>> tempdico = null;
-          for ( int k = 0 ; k < 24 ; k++ ) {
-            Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> receivedData = LocalDataBase.getLinesByDateHours( timeS, time, k );
-            foreach ( int station in receivedData.Keys ) {
-              if ( k == 0 ) {
-                tempdico = new Dictionary<int, KeyValuePair<double, double>>();
-                tempdico[ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key / tailles[ station ], receivedData[ station ][ k ].Value / tailles[ station ] );
-                res[ station ] = tempdico;
-              }
-              else {
-                res[ station ][ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key / tailles[ station ], receivedData[ station ][ k ].Value / tailles[ station ] );
-              }
-            }
-          }
-          //MySerializer.SerializeObject( "tabStationParHeure", res );
-          statsTabHeure = res;
-        }
 
-      public static void createDicoStationParJour() {
-          Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> res = new Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>();
-          DateTime time = new DateTime( 1970, 1, 1 );
-          DateTime timeS = new DateTime( 1970, 1, 2 );
-          Dictionary<int, KeyValuePair<double, double>> tempdico = null;
 
-          for ( int k = 1 ; k < 8 ; k++ ) {
-            Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> receivedData = LocalDataBase.getLinesByDateDays( timeS, time, k );
-            foreach ( int station in receivedData.Keys ) {
-              if ( k == 1 ) {
-                tempdico = new Dictionary<int, KeyValuePair<double, double>>();
-                tempdico[ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key / tailles[station], receivedData[ station ][ k ].Value / tailles[station] );
-                res[ station ] = tempdico;
-              }
-              else {
-                res[ station ][ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key / tailles[station], receivedData[ station ][ k ].Value / tailles[station]);
-              }
-            }
-          }
-          //MySerializer.SerializeObject( "tabStationParJour", res );
-          statsTabJour = res;
-        }
-
-      public static void createDicoStationParSemaine() {
-          Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> res = new Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>();
-          DateTime time = new DateTime( 1970, 1, 1 );
-          DateTime timeS = new DateTime( 1970, 1, 2 );
-          Dictionary<int, KeyValuePair<double, double>> tempdico = null;
-          for ( int k = 0 ; k < 4 ; k++ ) {
-            Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> receivedData = LocalDataBase.getLinesByDateWeeks( timeS, time, k );
-            foreach ( int station in receivedData.Keys ) {
-              if ( k == 0 ) {
-                tempdico = new Dictionary<int, KeyValuePair<double, double>>();
-                tempdico[ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key / tailles[ station ], receivedData[ station ][ k ].Value / tailles[ station ] );
-                res[ station ] = tempdico;
-              }
-              else {
-                res[ station ][ k ] = new KeyValuePair<double, double>( receivedData[ station ][ k ].Key / tailles[ station ], receivedData[ station ][ k ].Value / tailles[ station ] );
-              }
-            }
-          }
-          //MySerializer.SerializeObject( "tabStationParSemaine", res );
-          statsTabSemaine = res;
-        }
 
       // Retourne le Remplissage par station par Heure (sur toute la periode de recolte)
       public static void getRemplissageByHourHisto(  DateTime start, DateTime end ) {
@@ -692,56 +631,7 @@ namespace Ming.Atf
 
         //Close all resources
         MyDataReader.Close();
-        statsTabHeure = result;
-      }
-
-      // Retourne les vecteurs pour les we
-      public static void getRemplissageByHourWEHisto( DateTime start, DateTime end ) {
-        Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> result = new Dictionary<int, Dictionary<int, KeyValuePair<double, double>>>();
-
-        if ( !connection ) {
-          setConnection();
-        }
-
-        //Desc de la table donnees
-        string s = " and date >= " + convertToTimestamp( start ) + " and date <= " + convertToTimestamp( end ) + " ";
-        s += "and day >= 6 ";
-        OdbcCommand MyCommand = new OdbcCommand( "select station as Station, hour as Hour, cast(avg(available) * 100 as unsigned) as Valeur,cast(variance(available) * 100 as unsigned) as Variance from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection );
-        OdbcDataReader MyDataReader;
-        MyDataReader = MyCommand.ExecuteReader();
-
-        Console.WriteLine( "Executed : " + MyDataReader.RecordsAffected );
-        while ( MyDataReader.Read() ) {
-          int valeur = 0;
-          int station = MyDataReader.GetInt32( 0 );
-          int hour = MyDataReader.GetInt32( 1 );
-          int variance = 0;
-          try {
-            valeur = MyDataReader.GetInt32( 2 );
-          }
-          catch ( Exception e ) {
-            Console.WriteLine( "Error : " + e.Message );
-            continue;
-          }
-
-          try {
-            variance = MyDataReader.GetInt32( 3 );
-          }
-          catch ( Exception e ) {
-            Console.WriteLine( "Error : " + e.Message );
-            continue;
-          }
-
-          if ( !result.ContainsKey( station ) )
-            result[ station ] = new Dictionary<int, KeyValuePair<double, double>>();
-
-          result[ station ][ hour ] = new KeyValuePair<double, double>( (valeur / 100.0) / (double) tailles[ station ], (variance / 100.0) / (double) tailles[ station ] );
-        }
-
-        //Close all resources
-        MyDataReader.Close();
-
-        statsTabHeure = result;
+        statsTabHeureOuvre = result;
       }
 
       // Retourne les vecteurs pour les jours de la semaine (we inclu)

@@ -55,8 +55,11 @@ namespace Ming.Atf.Pictures
        createChangeTypeButton();
        DateTime time = new DateTime( 2025, 1, 1 );
        DateTime timeS = new DateTime( 1970, 1, 2 );
-       LocalDataBase.getRemplissageByDayHisto( timeS, time );
-       LocalDataBase.getRemplissageByHourHisto( timeS, time );
+       if ( LocalDataBase.statsTabHeure == null ) {
+         LocalDataBase.getRemplissageByDayHisto( timeS, time );
+         LocalDataBase.getRemplissageByHourHisto( timeS, time );
+         LocalDataBase.getRemplissageByHourOuvresHisto( timeS, time );
+       }
        this.legend();
      }
 
