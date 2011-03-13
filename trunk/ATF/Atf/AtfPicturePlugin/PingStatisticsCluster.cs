@@ -34,6 +34,9 @@ namespace Ming.Atf.Pictures
         /*objet gérant la carte scrollable des stats*/
         ScrollableMaps mapScroll = null;
 
+
+       
+
         /**/
         SplitContainer panel;
 
