@@ -113,6 +113,8 @@ namespace Ming.Atf.Clustering
             tempPanel.Dock = DockStyle.Fill;
             
             combo1 = new ComboBox();
+            combo1.Text = "Affichage des statistiques pour les clusters";
+            combo1.Items.Add("Tous les clusters");
             for (int i = 0; i < cluster.Count; i++)
                 combo1.Items.Add(i);
             combo1.SelectedIndexChanged += changeCluster;
@@ -196,12 +198,28 @@ namespace Ming.Atf.Clustering
             chart = new StatsChartsVelib();
             //String s = combo1.SelectedItem as String;
             int selected = combo1.SelectedIndex;
-            Chart myChart = chart.createChartCentroides(cluster[selected].ClusterMean, selected, "");
-            Form frame = new Form();
-            myChart.Dock = DockStyle.Fill;
-            frame.Text = "Cluster " + selected;
-            frame.Controls.Add(myChart);
-            frame.Show();
+            if (selected == 0)
+            {
+                Dictionary<int,double[]> temp = new Dictionary<int,double[]>();
+                for (int i = 0; i < cluster.Count; i++)
+                    temp.Add(i, cluster[i].ClusterMean);
+
+                Chart myChart = chart.createChartAllCentroides(temp ,"");
+                Form frame = new Form();
+                myChart.Dock = DockStyle.Fill;
+                frame.Text = "Cluster " + selected;
+                frame.Controls.Add(myChart);
+                frame.Show();
+            }
+            else
+            {
+                Chart myChart = chart.createChartCentroides(cluster[selected-1].ClusterMean, selected - 1, "");
+                Form frame = new Form();
+                myChart.Dock = DockStyle.Fill;
+                frame.Text = "Cluster " + selected;
+                frame.Controls.Add(myChart);
+                frame.Show();
+            }
         }
         #endregion
     }
