@@ -563,6 +563,51 @@ namespace Ming.Atf.Pictures {
     }
 
 
+    public Chart createChartAllCentroides( Dictionary<int,double[]> centroides, String echelle ) {
+
+      Chart chartStat;
+      ChartArea meanArea = new ChartArea();
+
+      meanArea.AxisY.Title = "Moyenne disponibilité";
+      meanArea.AxisX.Title = echelle;
+      meanArea.AxisX.TitleFont = new System.Drawing.Font( "Helvetica", 10, System.Drawing.FontStyle.Bold );
+      meanArea.AxisY.TitleFont = new System.Drawing.Font( "Helvetica", 10, System.Drawing.FontStyle.Bold );
+      meanArea.Name = "StatArea";
+      meanArea.AxisX.MajorGrid.Enabled = false;
+      chartStat = new System.Windows.Forms.DataVisualization.Charting.Chart();
+      ((System.ComponentModel.ISupportInitialize) (chartStat)).BeginInit();
+
+
+      foreach ( int centroide in centroides.Keys ) {
+        Series tempSer = new Series("Centroide " + centroide );
+        tempSer.Color = System.Drawing.Color.FromName( colors[ centroide ] );
+        tempSer.BorderColor = System.Drawing.Color.Black;
+        tempSer.BorderWidth = 2;
+        for ( int i = 0 ; i < centroides[centroide].GetLength( 0 ) ; i++ ) {
+          tempSer.Points.AddXY( i + 1, centroides[ centroide ][ i ] );
+        }
+        tempSer.Sort( PointSortOrder.Ascending, "X" );
+        tempSer.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+        chartStat.Series.Add( tempSer );
+      }
+      chartStat.ChartAreas.Add( meanArea );
+      chartStat.BackColor = System.Drawing.Color.Silver;
+      meanArea.BackColor = System.Drawing.Color.LightGray;
+      Title titre = new Title( "Caractéristiques des centroïdes ");
+
+      titre.Font = new System.Drawing.Font( "Helvetica", 10, System.Drawing.FontStyle.Bold );
+
+      chartStat.Titles.Add( titre );
+      chartStat.Size = new System.Drawing.Size( 500, 300 );
+      
+
+      ((System.ComponentModel.ISupportInitialize) (chartStat)).EndInit();
+
+      return chartStat;
+
+    }
+
+
 
 
     #endregion
