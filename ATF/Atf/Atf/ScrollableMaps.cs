@@ -36,6 +36,7 @@ namespace Ming.Atf.Pictures
      private TrackBar trackBar ;
      private String echelle = "Heure";
 #endregion
+
      #region Constructeur
      public ScrollableMaps(Boolean files) {
        HauteurGPS = Math.Abs( bordBas - bordHaut );
@@ -339,7 +340,6 @@ namespace Ming.Atf.Pictures
 
       
       #endregion
-
 
      #region Services
 
