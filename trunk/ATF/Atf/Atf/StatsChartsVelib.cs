@@ -15,7 +15,7 @@ namespace Ming.Atf.Pictures {
     private Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabSemaine;
     private Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabJour;
     private Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> statsTabHeure;
-    
+    private Dictionary<int, int> altitudes;
     private ComboBox choiceTimeTop;
     private ComboBox choiceTimeBot;
     private ComboBox choiceGeoBot;
@@ -28,6 +28,7 @@ namespace Ming.Atf.Pictures {
     private Chart chartBot;
     private Chart chartTop;
     private List<string> colors ;
+    private Dictionary<int, int> poiNumber;
     int lastIndexgeotop;
     int lastIndexgeobot;
     int lastIndexTimetop;
@@ -42,6 +43,8 @@ namespace Ming.Atf.Pictures {
      * Constructeur
      */
     public StatsChartsVelib(Boolean files) {
+      this.fillStationPOIS();
+      this.fillStationAlt();
       dayToInt = new Dictionary<String, int>();
       intToEchelle = new Dictionary<int, String>();
       intToEchelle.Add( 0, "Par Heures" );
@@ -65,7 +68,8 @@ namespace Ming.Atf.Pictures {
         LocalDataBase.getRemplissageByHourHisto( timeS, time );
         LocalDataBase.getRemplissageByHourOuvresHisto( timeS, time );
       }
-      
+     this.fillStationPOIS();
+     this.fillStationAlt();
       colors = new List<string>();
       this.GetAllColors();
     }
@@ -89,6 +93,8 @@ namespace Ming.Atf.Pictures {
       lastIndexTimebot = 0;
       colors = new List<string>();
       this.GetAllColors();
+     this.fillStationPOIS();
+     this.fillStationAlt();
     }
 
     #endregion
@@ -380,7 +386,7 @@ namespace Ming.Atf.Pictures {
     public DateTimePicker createChoixDate() {
       DateTimePicker datePicker = new DateTimePicker();
       //datePicker.Text = "Choisir la pèriode";
-      datePicker.MinDate = new DateTime( 2011, 1, 1 );  
+      datePicker.MinDate = new DateTime( 2011, 2, 26 );
       return datePicker; 
     }
 
@@ -562,6 +568,137 @@ namespace Ming.Atf.Pictures {
 
     }
 
+    public Chart createChartPOIs( Dictionary<int,int> clusters,int nbClusters) {
+      Chart chartStat;
+      ChartArea meanArea = new ChartArea();
+      double[] histoMoyenneCluster = new double[nbClusters ];
+      int[] compteur = new int[nbClusters];
+      for ( int i = 0 ; i < histoMoyenneCluster.Length ; i++ ) {
+        histoMoyenneCluster[ i ] = 0.0;
+        compteur[i] = 0;
+      }
+
+      foreach ( int station in clusters.Keys ) {
+        histoMoyenneCluster[ clusters[ station ] ] += poiNumber[ station ];
+        compteur[clusters[ station ]]++;
+      }
+
+      for ( int i = 0 ; i < histoMoyenneCluster.Length ; i++ ) {
+        histoMoyenneCluster[ i ] = histoMoyenneCluster[ i ] / compteur[ i ];
+      }
+
+      meanArea.AxisY.Title = "Moyenne de POIS proches de chaque station du cluster";
+      meanArea.AxisX.Title = "Cluster";
+      meanArea.AxisX.TitleFont = new System.Drawing.Font( "Helvetica", 10, System.Drawing.FontStyle.Bold );
+      meanArea.AxisY.TitleFont = new System.Drawing.Font( "Helvetica", 10, System.Drawing.FontStyle.Bold );
+      meanArea.Name = "StatArea";
+      meanArea.AxisX.MajorGrid.Enabled = false;
+      Legend legendStat = new Legend();
+      Series seriesStat = new Series( "Centroïde numéro Représentation par "  );
+      chartStat = new System.Windows.Forms.DataVisualization.Charting.Chart();
+      ((System.ComponentModel.ISupportInitialize) (chartStat)).BeginInit();
+      
+      for ( int i = 0 ; i <histoMoyenneCluster.Length ; i++ ) {
+        Series tempSer = new Series( "Centroide" + i );
+        tempSer.Points.AddXY( i, histoMoyenneCluster[ i ] );
+        tempSer.Color = System.Drawing.Color.FromName(colors[i] );
+        tempSer.BorderColor = System.Drawing.Color.Black;
+        tempSer.BorderWidth = 1;
+        tempSer.Sort( PointSortOrder.Ascending, "X" );
+        tempSer.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+        chartStat.Series.Add( tempSer );
+      }
+      seriesStat.Sort( PointSortOrder.Ascending, "X" );
+      
+      seriesStat.BorderColor = System.Drawing.Color.Black;
+      seriesStat.BorderWidth = 2;
+      chartStat.Series.Add( seriesStat );
+      chartStat.ChartAreas.Add( meanArea );
+      chartStat.BackColor = System.Drawing.Color.Silver;
+      meanArea.BackColor = System.Drawing.Color.LightGray;
+      legendStat.Name = "legend";
+      legendStat.Docking = Docking.Bottom;
+      Title titre = new Title( "Caractéristiques du centroïde en terme de POIS " );
+      chartStat.Legends.Add( legendStat );
+
+      titre.Font = new System.Drawing.Font( "Helvetica", 10, System.Drawing.FontStyle.Bold );
+
+      chartStat.Titles.Add( titre );
+      chartStat.Size = new System.Drawing.Size( 500, 300 );
+      
+
+      ((System.ComponentModel.ISupportInitialize) (chartStat)).EndInit();
+
+      return chartStat;
+
+    }
+
+
+    public Chart createChartAltitude( Dictionary<int, int> clusters, int nbClusters ) {
+      Chart chartStat;
+      ChartArea meanArea = new ChartArea();
+      double[] histoMoyenneCluster = new double[ nbClusters ];
+      int[] compteur = new int[ nbClusters ];
+      for ( int i = 0 ; i < histoMoyenneCluster.Length ; i++ ) {
+        histoMoyenneCluster[ i ] = 0.0;
+        compteur[ i ] = 0;
+      }
+
+      foreach ( int station in clusters.Keys ) {
+        histoMoyenneCluster[ clusters[ station ] ] += altitudes[ station ];
+        compteur[ clusters[ station ] ]++;
+      }
+
+      for ( int i = 0 ; i < histoMoyenneCluster.Length ; i++ ) {
+        histoMoyenneCluster[ i ] = histoMoyenneCluster[ i ] / compteur[ i ];
+      }
+
+      meanArea.AxisY.Title = "Moyenne des altitudes des stations";
+      meanArea.AxisX.Title = "Cluster";
+      meanArea.AxisX.TitleFont = new System.Drawing.Font( "Helvetica", 10, System.Drawing.FontStyle.Bold );
+      meanArea.AxisY.TitleFont = new System.Drawing.Font( "Helvetica", 10, System.Drawing.FontStyle.Bold );
+      meanArea.Name = "StatArea";
+      meanArea.AxisX.MajorGrid.Enabled = false;
+      Legend legendStat = new Legend();
+      Series seriesStat = new Series( "Centroïde numéro Représentation par " );
+      chartStat = new System.Windows.Forms.DataVisualization.Charting.Chart();
+      ((System.ComponentModel.ISupportInitialize) (chartStat)).BeginInit();
+
+      for ( int i = 0 ; i < histoMoyenneCluster.Length ; i++ ) {
+        Series tempSer = new Series( "Centroide" + i );
+
+        tempSer.Points.AddXY( i, histoMoyenneCluster[ i ] );
+        tempSer.Color = System.Drawing.Color.FromName( colors[ i ] );
+        tempSer.BorderColor = System.Drawing.Color.Black;
+        tempSer.BorderWidth = 1;
+        tempSer.Sort( PointSortOrder.Ascending, "X" );
+        tempSer.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Column;
+        chartStat.Series.Add( tempSer );
+      }
+      seriesStat.Sort( PointSortOrder.Ascending, "X" );
+
+      seriesStat.BorderColor = System.Drawing.Color.Black;
+      seriesStat.BorderWidth = 2;
+      chartStat.Series.Add( seriesStat );
+      chartStat.ChartAreas.Add( meanArea );
+      chartStat.BackColor = System.Drawing.Color.Silver;
+      meanArea.BackColor = System.Drawing.Color.LightGray;
+      legendStat.Name = "legend";
+      legendStat.Docking = Docking.Bottom;
+      Title titre = new Title( "Caractéristiques du centroïde en terme d'altitude " );
+      chartStat.Legends.Add( legendStat );
+
+      titre.Font = new System.Drawing.Font( "Helvetica", 10, System.Drawing.FontStyle.Bold );
+
+      chartStat.Titles.Add( titre );
+      chartStat.Size = new System.Drawing.Size( 500, 300 );
+
+
+      ((System.ComponentModel.ISupportInitialize) (chartStat)).EndInit();
+
+      return chartStat;
+
+    }
 
     public Chart createChartAllCentroides( Dictionary<int,double[]> centroides, String echelle ) {
 
@@ -639,6 +776,8 @@ namespace Ming.Atf.Pictures {
       return district;
     }
 
+
+
     
 
 
@@ -700,10 +839,30 @@ namespace Ming.Atf.Pictures {
       colors.Add( "LightGray" );
       colors.Add( "DarkTurquoise" );
       colors.Add( "Lime" );
-      //colors.Add( "" );
-      //colors.Add( "" );
-      //colors.Add( "" );
-      //colors.Add( "" );
+    }
+
+
+    private void fillStationPOIS() {
+      poiNumber = new Dictionary<int,int>();
+      
+
+      ArrayList donneesStation = LocalDataBase.getStationsDetails();
+      Dictionary<String, String> tempLine;
+      for ( int i = 0 ; i < donneesStation.Count ; i++ ) {
+        tempLine = (Dictionary<String, String>) donneesStation[ i ];
+        poiNumber[ int.Parse( tempLine[ "id" ] ) ] =  int.Parse( tempLine[ "poiCount" ].Replace( ".", "," ))  ;
+      }
+    }
+
+
+    private void fillStationAlt() {
+      altitudes = new Dictionary<int, int>();
+      ArrayList donneesStation = LocalDataBase.getStationsDetails();
+      Dictionary<String, String> tempLine;
+      for ( int i = 0 ; i < donneesStation.Count ; i++ ) {
+        tempLine = (Dictionary<String, String>) donneesStation[ i ];
+        altitudes[ int.Parse( tempLine[ "id" ] ) ] = int.Parse( tempLine[ "altitude" ].Replace( ".", "," ) );
+      }
     }
 
     #endregion
