@@ -25,7 +25,7 @@ namespace Ming.Atf
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.ThreadException += OnThreadException;
-            Application.Run(new Form1());
+            Application.Run(new MainForm());
         }
     }
 }

@@ -194,16 +194,31 @@ namespace ats.KMeans
                 }
             }
 
-
+            int compteur = 0;
             while (stableClustersCount != clusters.Count)
             {
                 stableClustersCount = 0;
 
+                bool isNotGood = false;
+
                 ClusterCollection newClusters = KMeans.ClusterDataSet(clusters, data, type);
+                for (int tempo = 0; tempo < newClusters.Count; tempo++)
+                    if (newClusters[tempo].Count < 1)
+                        isNotGood = true;
+
+                if (compteur == 10)
+                    return clusters;
+
+                if (isNotGood)
+                {
+                    compteur++;
+                    continue;
+                }
 
                 for (int clusterIndex = 0; clusterIndex < clusters.Count; clusterIndex++)
                 {
                     double distance = 0;
+                    
                     switch (type)
                     {
                         case "DTW":
@@ -403,6 +418,9 @@ namespace ats.KMeans
         {
             get
             {
+                if (this.Count == 0)
+                    return null;
+
                 for (int count = 0; count < this[0].Length; count++)
                 {
                     this._clusterMean[count] = (this._clusterSum[count] / this.List.Count);
@@ -484,7 +502,7 @@ namespace ats.KMeans
         {
             get
             {
-                //return the Neuron at IList[Index] 
+                //return the Neuron at IList[Index]
                 return (Cluster)this.List[Index];
             }
         }
