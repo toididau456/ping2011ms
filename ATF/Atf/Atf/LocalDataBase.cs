@@ -677,10 +677,6 @@ namespace Ming.Atf
         statsTabJour = result;
       }
 
-      
-
-
-
       #endregion
     }
 }

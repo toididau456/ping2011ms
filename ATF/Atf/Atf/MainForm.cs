@@ -73,38 +73,24 @@ namespace Ming.Atf
         }
         #endregion
 
-        #region Methodes
-        // Ecrit dans un fichier l'integralite de la base
-        private void writeOnFile()
-        {
-            DialogResult result = saveFileDialog.ShowDialog();
-            if (result != System.Windows.Forms.DialogResult.OK || saveFileDialog.FileName == "")
-                return;
-            Dictionary<int, ArrayList> res = LocalDataBase.getAllToFile();
-
-            StreamWriter sw = new StreamWriter(saveFileDialog.FileName);//création du fichier
-            foreach (int key in res.Keys)
-            {
-                string text = string.Empty;
-
-                foreach (int value in res[key])
-                    text += value + " ";
-
-                sw.WriteLine("{0}", text + "\n");//enregistrement du message dans le fichier
-            }
-            sw.Close();
-        }
-        #endregion
-
         #region Actions
+        // Quitter l'application
         private void acQuit_Execute(object sender, EventArgs e)
         {
             this.Close();
         }
 
+        // Importer les données
         private void acToFile_Execute(object sender, EventArgs e)
         {
-            writeOnFile();
+            bool isNotHere = true;
+            if (pages.TabCount > 0)
+                for (int i = 0; i < pages.TabCount; i++)
+                    if (pages.TabPages[i].Text.Equals("Importer"))
+                        isNotHere = false;
+
+            if (isNotHere)
+                        pages.ClientAdd(new SaveData(), "Importer", null, true);
         }
         #endregion
     }
