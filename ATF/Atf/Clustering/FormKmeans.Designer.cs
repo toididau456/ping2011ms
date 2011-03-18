@@ -38,6 +38,7 @@
             this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.comboBox4 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -52,7 +53,7 @@
             "2 - Vecteur par Heure (Week-end)",
             "3 - Vecteur par Demi-Heure",
             "4 - Vecteur par Jour de la Semaine"});
-            this.comboBox1.Location = new System.Drawing.Point(3, 216);
+            this.comboBox1.Location = new System.Drawing.Point(3, 207);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.comboBox1.Size = new System.Drawing.Size(198, 21);
@@ -62,7 +63,7 @@
             // 
             // dateTimePicker1
             // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(3, 75);
+            this.dateTimePicker1.Location = new System.Drawing.Point(3, 63);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(198, 20);
             this.dateTimePicker1.TabIndex = 1;
@@ -70,7 +71,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(39, 301);
+            this.button1.Location = new System.Drawing.Point(39, 328);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(115, 34);
             this.button1.TabIndex = 2;
@@ -79,7 +80,7 @@
             // 
             // dateTimePicker2
             // 
-            this.dateTimePicker2.Location = new System.Drawing.Point(3, 131);
+            this.dateTimePicker2.Location = new System.Drawing.Point(3, 119);
             this.dateTimePicker2.Name = "dateTimePicker2";
             this.dateTimePicker2.Size = new System.Drawing.Size(198, 20);
             this.dateTimePicker2.TabIndex = 3;
@@ -106,7 +107,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 115);
+            this.label3.Location = new System.Drawing.Point(3, 103);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(68, 13);
             this.label3.TabIndex = 6;
@@ -118,7 +119,7 @@
             this.comboBox2.Items.AddRange(new object[] {
             "DTW",
             "Euclidienne"});
-            this.comboBox2.Location = new System.Drawing.Point(3, 178);
+            this.comboBox2.Location = new System.Drawing.Point(3, 169);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(198, 21);
             this.comboBox2.TabIndex = 7;
@@ -139,7 +140,7 @@
             "20",
             "25",
             "30"});
-            this.comboBox3.Location = new System.Drawing.Point(3, 257);
+            this.comboBox3.Location = new System.Drawing.Point(3, 245);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(198, 21);
             this.comboBox3.TabIndex = 8;
@@ -154,6 +155,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.comboBox4);
             this.splitContainer1.Panel1.Controls.Add(this.label1);
             this.splitContainer1.Panel1.Controls.Add(this.button1);
             this.splitContainer1.Panel1.Controls.Add(this.comboBox3);
@@ -163,9 +165,21 @@
             this.splitContainer1.Panel1.Controls.Add(this.dateTimePicker1);
             this.splitContainer1.Panel1.Controls.Add(this.dateTimePicker2);
             this.splitContainer1.Panel1.Controls.Add(this.label3);
-            this.splitContainer1.Size = new System.Drawing.Size(690, 357);
-            this.splitContainer1.SplitterDistance = 230;
+            this.splitContainer1.Size = new System.Drawing.Size(700, 369);
+            this.splitContainer1.SplitterDistance = 233;
             this.splitContainer1.TabIndex = 10;
+            // 
+            // comboBox4
+            // 
+            this.comboBox4.FormattingEnabled = true;
+            this.comboBox4.Items.AddRange(new object[] {
+            "Aucun",
+            "Binaire"});
+            this.comboBox4.Location = new System.Drawing.Point(3, 283);
+            this.comboBox4.Name = "comboBox4";
+            this.comboBox4.Size = new System.Drawing.Size(198, 21);
+            this.comboBox4.TabIndex = 9;
+            this.comboBox4.Text = "Selectionnez le type de codage";
             // 
             // FormKmeans
             // 
@@ -174,7 +188,7 @@
             this.AutoSize = true;
             this.Controls.Add(this.splitContainer1);
             this.Name = "FormKmeans";
-            this.Size = new System.Drawing.Size(690, 357);
+            this.Size = new System.Drawing.Size(700, 369);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -195,5 +209,6 @@
         private System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.ComboBox comboBox3;
         private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.ComboBox comboBox4;
     }
 }
