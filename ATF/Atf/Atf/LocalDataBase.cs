@@ -534,9 +534,6 @@ namespace Ming.Atf
         #endregion
 
         #region DataSet
-        
-
-
 
       // Retourne le Remplissage par station par Heure (sur toute la periode de recolte)
       public static void getRemplissageByHourHisto(  DateTime start, DateTime end ) {
