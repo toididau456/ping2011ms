@@ -150,6 +150,8 @@ namespace Ming.Atf.Clustering
             //Dictionary<int, int> stationCluster = new Dictionary<int, int>();
             stationCluster = new Dictionary<int, int>();
             for (int i = 0; i < cluster.Count; i++)
+            {
+                Console.WriteLine("Cluster : " + i + " - Taille : " + cluster[i].Count);
                 //string s = "Cluster " + i + ", taille = " + cluster[i].getValues.Count + " : ";
                 foreach (int z in cluster[i].getValues)
                 {
@@ -158,6 +160,7 @@ namespace Ming.Atf.Clustering
                     stationCluster.Add(temp, i);
                     //string s = stations[z] + " : " + i ;
                 }
+            }
             ScrollableMaps maps = new ScrollableMaps();
             maps.drawClusters(stationCluster);
             PictureBox map = maps.mapBox;
