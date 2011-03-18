@@ -62,7 +62,15 @@ namespace Ming.Atf.Clustering
             return int.Parse(comboBox3.SelectedItem as String);
         }
 
-        // Ajoute un element dans le panel droit en haut
+        // Retourne le codage a utiliser
+        public string getCodage()
+        {
+            if (comboBox4.SelectedItem == null)
+                return "Aucun";
+            return comboBox4.SelectedItem as string;
+        }
+
+        // Ajoute un element dans le panel droit
         public void addControls(Control control)
         {
             if (splitContainer1.Panel2.Controls.Count > 0)

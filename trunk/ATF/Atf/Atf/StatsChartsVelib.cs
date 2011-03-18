@@ -8,7 +8,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.ComponentModel;
 namespace Ming.Atf.Pictures {
   public class StatsChartsVelib {
-    #region champs
+    #region Champs
 
     private Dictionary<String, int> dayToInt;
     private Dictionary<int, String> intToEchelle;
@@ -99,7 +99,7 @@ namespace Ming.Atf.Pictures {
 
     #endregion
 
-    #region méthodes
+    #region Méthodes
 
     public Dictionary<int, KeyValuePair<double, double>> StatistiquesParis(String echelle) {
       Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> dataMap;
@@ -172,7 +172,6 @@ namespace Ming.Atf.Pictures {
        
       return res;
     }
-
 
     #endregion
 
@@ -284,7 +283,6 @@ namespace Ming.Atf.Pictures {
 
     }
 
-
     public SplitContainer initSplitPanel(int station) {
       stationDisplayed = station;
       SplitContainer resPanel = new SplitContainer();
@@ -303,7 +301,6 @@ namespace Ming.Atf.Pictures {
       resPanel.Panel2.Controls.Add( bot );
       return resPanel;
     }
-
 
     public Panel creatLeftTopPanel(int station,String echelle,String geo) {
       panTop = new Panel();
@@ -332,7 +329,6 @@ namespace Ming.Atf.Pictures {
       return panTop;
     
     }
-
 
     public Panel creatLeftBotPanel( int station, String echelle, String geo ) {
       panBot = new Panel();
@@ -516,7 +512,6 @@ namespace Ming.Atf.Pictures {
       return listeRes;
     }
 
-   
     public Chart createChartCentroides( double[] centroideI,int numeroCentroide, String echelle ) {
       
       Chart chartStat;
@@ -633,7 +628,6 @@ namespace Ming.Atf.Pictures {
 
     }
 
-
     public Chart createChartAltitude( Dictionary<int, int> clusters, int nbClusters ) {
       Chart chartStat;
       ChartArea meanArea = new ChartArea();
@@ -744,12 +738,9 @@ namespace Ming.Atf.Pictures {
 
     }
 
-
-
-
     #endregion
 
-    #region méthodes de service
+    #region Méthodes de service
     /*
      * Convertion de timestamp en DateTime
      */
