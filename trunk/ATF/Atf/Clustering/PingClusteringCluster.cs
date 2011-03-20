@@ -72,6 +72,7 @@ namespace Ming.Atf.Clustering
                 {
                     //Console.WriteLine(key + " Key : " + station.IndexOf(key) + " - Val : " + val);
                     double res = data[key][val];
+                    //Console.WriteLine("Cle : " + key + " - Valeur : " + val);
                     //Console.WriteLine("Key : " + key + " - Index : " + station.IndexOf(key));
                     result[station.IndexOf(key), val] = res;
                 }
@@ -155,7 +156,7 @@ namespace Ming.Atf.Clustering
                 //string s = "Cluster " + i + ", taille = " + cluster[i].getValues.Count + " : ";
                 foreach (int z in cluster[i].getValues)
                 {
-                    Console.WriteLine(stations[z]);
+                    //Console.WriteLine(stations[z]);
                     int temp = stations[z];
                     stationCluster.Add(temp, i);
                     //string s = stations[z] + " : " + i ;
@@ -224,10 +225,13 @@ namespace Ming.Atf.Clustering
                     data = LocalDataBase.getRemplissageByHourWE(start, end);
                     break;
                 case 3:
-                    //data = LocalDataBase.getRemplissageByHalfHour(start, end);
+                    data = LocalDataBase.getRemplissageByHalfHour(start, end);
                     break;
                 case 4:
                     data = LocalDataBase.getRemplissageByDay(start, end);
+                    break;
+                case 5:
+                    data = LocalDataBase.getVarianceByHour(start, end);
                     break;
                 default:
                     data = LocalDataBase.getRemplissageByHour(start, end);

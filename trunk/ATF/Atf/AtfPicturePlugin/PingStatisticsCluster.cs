@@ -94,6 +94,8 @@ namespace Ming.Atf.Pictures
             web.ObjectForScripting = this;
             web.Dock = DockStyle.Fill;
             web.AllowNavigation = false;
+            web.AllowWebBrowserDrop = false;
+            web.IsWebBrowserContextMenuEnabled = false;
             web.ScriptErrorsSuppressed = true;
             panel.Panel1.Controls.Add(web);
             panel.Panel1MinSize = panel.Size.Width / 2;
