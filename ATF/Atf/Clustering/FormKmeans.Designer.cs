@@ -51,8 +51,9 @@
             "0 - Vecteur par Heure",
             "1 - Vecteur par Heure (Jours ouvrés)",
             "2 - Vecteur par Heure (Week-end)",
-            "3 - Vecteur par Demi-Heure",
-            "4 - Vecteur par Jour de la Semaine"});
+            "3 - Vecteur par Demie-Heure",
+            "4 - Vecteur par Jour de la Semaine",
+            "5 - Vecteur Variance par Heure"});
             this.comboBox1.Location = new System.Drawing.Point(3, 207);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -118,6 +119,7 @@
             this.comboBox2.FormattingEnabled = true;
             this.comboBox2.Items.AddRange(new object[] {
             "DTW",
+            "Manhattan",
             "Euclidienne"});
             this.comboBox2.Location = new System.Drawing.Point(3, 169);
             this.comboBox2.Name = "comboBox2";

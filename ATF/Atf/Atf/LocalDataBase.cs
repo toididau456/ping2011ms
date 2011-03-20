@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections;
 using System.Data.Odbc;
 using System.Globalization;
+using System.Windows.Forms;
 
 namespace Ming.Atf
 {
@@ -69,11 +70,7 @@ namespace Ming.Atf
         {
             return sendRequest("select station , avg(available), variance(available) from donnees" + City + " where valid='1' group by station;", i);
         }
-        /*
-        public static Dictionary<int, double> getSizeStation(int i) {
-          //return sendRequest( "select station,size from estimatedSize ;",i);
-        }
-        */
+        
         // Retourne toutes les lignes comprises entre start et end
         public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getLinesByDateHours(DateTime start, DateTime end, int i)
         {
@@ -161,6 +158,53 @@ namespace Ming.Atf
             return result;
         }
 
+        // Renvoie le details des POIs
+        public static ArrayList getPOIsDetails()
+        {
+            ArrayList result = new ArrayList();
+
+            if (!connection)
+            {
+                setConnection();
+                if (!connection)
+                    return result;
+            }
+
+            //Desc de la table donnees
+            OdbcCommand MyCommand = new OdbcCommand("desc pois;", MyConnection);
+            OdbcDataReader MyDataReader;
+            MyDataReader = MyCommand.ExecuteReader();
+            ArrayList header = new ArrayList();
+
+            while (MyDataReader.Read())
+                if (string.Compare(MyConnection.Driver, "myodbc3.dll") == 0)
+                    header.Add(MyDataReader.GetString(0)); //Supported only by MyODBC 3.5
+
+            //Fetch
+            MyCommand.CommandText = "select * from pois;";
+
+            MyDataReader.Close();
+            MyDataReader = MyCommand.ExecuteReader();
+
+            Console.WriteLine("Executed : " + MyDataReader.RecordsAffected);
+
+            while (MyDataReader.Read())
+            {
+                Dictionary<string, string> temp = new Dictionary<string, string>();
+                if (string.Compare(MyConnection.Driver, "myodbc3.dll") == 0)
+                    for (int i = 0; i < header.Count; i++)
+                        if (MyDataReader.GetString(i) != "")
+                            temp.Add(header[i] as string, MyDataReader.GetString(i));
+                result.Add(temp);
+            }
+
+            //Close all resources
+            MyDataReader.Close();
+            //MyConnection.Close();
+
+            return result;
+        }
+
         // Initialize the connection to the DB
         private static void setConnection()
         {
@@ -206,6 +250,7 @@ namespace Ming.Atf
                 connection = false;
                 for (int i = 0; i < MyOdbcException.Errors.Count; i++)
                 {
+                    MessageBox.Show("Aucune connection à la base de données n'a pu être établie");
                     Console.Write("ERROR #" + i + "\n" +
                       "Message: " + MyOdbcException.Errors[i].Message + "\n" +
                       "Native: " + MyOdbcException.Errors[i].NativeError.ToString() + "\n" +
@@ -336,7 +381,55 @@ namespace Ming.Atf
             return result;
         }
 
-        // Retourne les vecteurs pour les jours ouvres
+        // Retourne la variance par station par Heure (sur toute la periode de recolte)
+        public static Dictionary<int, Dictionary<int, double>> getVarianceByHour(DateTime start, DateTime end)
+        {
+            Dictionary<int, Dictionary<int, double>> result = new Dictionary<int, Dictionary<int, double>>();
+
+            if (!connection)
+            {
+                setConnection();
+                if (!connection)
+                    return result;
+            }
+
+            //Desc de la table donnees
+            string s = " and date >= " + convertToTimestamp(start) + " and date <= " + convertToTimestamp(end) + " ";
+            OdbcCommand MyCommand = new OdbcCommand("select station as Station, hour as Hour, cast(variance(available) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection);
+            OdbcDataReader MyDataReader;
+            MyDataReader = MyCommand.ExecuteReader();
+
+            Console.WriteLine("Executed : " + MyDataReader.RecordsAffected);
+            while (MyDataReader.Read())
+            {
+                int valeur = 0;
+                int station = MyDataReader.GetInt32(0);
+                int hour = MyDataReader.GetInt32(1);
+
+                try
+                {
+                    valeur = MyDataReader.GetInt32(2);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error : " + e.Message);
+                    continue;
+                }
+
+                if (!result.ContainsKey(station))
+                    result[station] = new Dictionary<int, double>();
+
+                result[station][hour] = valeur / 100.0;
+                result[station][hour] = result[station][hour] / (double)tailles[station];
+            }
+
+            //Close all resources
+            MyDataReader.Close();
+
+            return result;
+        }
+
+        // Retourne les vecteurs par heures pour les jours ouvres
         public static Dictionary<int, Dictionary<int, double>> getRemplissageByHourOuvres(DateTime start, DateTime end)
         {
             Dictionary<int, Dictionary<int, double>> result = new Dictionary<int, Dictionary<int, double>>();
@@ -385,7 +478,88 @@ namespace Ming.Atf
             return result;
         }
 
-        // Retourne les vecteurs pour les jours ouvres
+        // Retourne les vecteurs par demie-heure pour les jours ouvres
+        public static Dictionary<int, Dictionary<int, double>> getRemplissageByHalfHour(DateTime start, DateTime end)
+        {
+            Dictionary<int, Dictionary<int, double>> result = new Dictionary<int, Dictionary<int, double>>();
+
+            if (!connection)
+            {
+                setConnection();
+                if (!connection)
+                    return result;
+            }
+
+            //Desc de la table donnees
+            string s = " and date >= " + convertToTimestamp(start) + " and date <= " + convertToTimestamp(end) + " ";
+            s += "and minute < 30 ";
+            OdbcCommand MyCommand = new OdbcCommand("select station as Station, hour as Hour, cast(avg(available) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection);
+            OdbcDataReader MyDataReader;
+            MyDataReader = MyCommand.ExecuteReader();
+
+            Console.WriteLine("Executed : " + MyDataReader.RecordsAffected);
+            while (MyDataReader.Read())
+            {
+                int valeur = 0;
+                int station = MyDataReader.GetInt32(0);
+                int hour = MyDataReader.GetInt32(1);
+
+                try
+                {
+                    valeur = MyDataReader.GetInt32(2);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error : " + e.Message);
+                    continue;
+                }
+
+                if (!result.ContainsKey(station))
+                    result[station] = new Dictionary<int, double>();
+
+                result[station][hour] = valeur / 100.0;
+                result[station][hour] = result[station][hour] / (double)tailles[station];
+            }
+
+            MyDataReader.Close();
+
+            s = " and date >= " + convertToTimestamp(start) + " and date <= " + convertToTimestamp(end) + " ";
+            s += "and minute > 30 ";
+            
+            MyCommand.CommandText = "select station as Station, hour as Hour, cast(avg(available) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;";
+            MyDataReader = MyCommand.ExecuteReader();
+
+            Console.WriteLine("Executed : " + MyDataReader.RecordsAffected);
+            while (MyDataReader.Read())
+            {
+                int valeur = 0;
+                int station = MyDataReader.GetInt32(0);
+                int hour = MyDataReader.GetInt32(1);
+
+                try
+                {
+                    valeur = MyDataReader.GetInt32(2);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error : " + e.Message);
+                    continue;
+                }
+
+                if (!result.ContainsKey(station))
+                    result[station] = new Dictionary<int, double>();
+
+                result[station][hour + 24] = valeur / 100.0;
+                result[station][hour + 24] = result[station][hour + 24] / (double)tailles[station];
+            }
+
+            //Close all resources
+            MyDataReader.Close();
+
+            return result;
+        }
+
+        // Retourne les vecteurs pour le week-end
         public static Dictionary<int, Dictionary<int, double>> getRemplissageByHourWE(DateTime start, DateTime end)
         {
             Dictionary<int, Dictionary<int, double>> result = new Dictionary<int, Dictionary<int, double>>();
@@ -434,7 +608,7 @@ namespace Ming.Atf
             return result;
         }
 
-        // Retourne les vecteurs pour les jours ouvres
+        // Retourne les vecteurs par jour
         public static Dictionary<int, Dictionary<int, double>> getRemplissageByDay(DateTime start, DateTime end)
         {
             Dictionary<int, Dictionary<int, double>> result = new Dictionary<int, Dictionary<int, double>>();
@@ -482,7 +656,7 @@ namespace Ming.Atf
             return result;
         }
 
-        // Retourne les vecteurs pour les jours ouvres
+        // Retourne toute la base
         public static Dictionary<int, ArrayList> getAllToFile()
         {
             Dictionary<int, ArrayList> result = new Dictionary<int, ArrayList>();
