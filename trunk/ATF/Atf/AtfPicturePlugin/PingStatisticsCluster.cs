@@ -34,9 +34,6 @@ namespace Ming.Atf.Pictures
         /*objet gérant la carte scrollable des stats*/
         ScrollableMaps mapScroll = null;
 
-
-       
-
         /**/
         SplitContainer panel;
 
@@ -70,7 +67,7 @@ namespace Ming.Atf.Pictures
         // Fermer l'onglet courant
         private void acCloseCurrentTab_Execute(object sender, EventArgs e)
         {
-            if(pages.TabCount > 0)
+            if (pages.TabCount > 0)
                 pages.SelectedDockerClient.Dispose();
         }
         #endregion
@@ -93,10 +90,10 @@ namespace Ming.Atf.Pictures
             // Very Important
             web.ObjectForScripting = this;
             web.Dock = DockStyle.Fill;
-            web.AllowNavigation = false;
-            web.AllowWebBrowserDrop = false;
-            web.IsWebBrowserContextMenuEnabled = false;
-            web.ScriptErrorsSuppressed = true;
+            //web.AllowNavigation = false;
+            //web.AllowWebBrowserDrop = false;
+            //web.IsWebBrowserContextMenuEnabled = false;
+            //web.ScriptErrorsSuppressed = true;
             panel.Panel1.Controls.Add(web);
             panel.Panel1MinSize = panel.Size.Width / 2;
             status.TextLeft = "Map";
@@ -108,26 +105,31 @@ namespace Ming.Atf.Pictures
         private void ouvrirScrollMap()
         {
             if (pages.TabCount >= 1)
-                for (int i = 0; i < pages.TabCount; i++ )
+                for (int i = 0; i < pages.TabCount; i++)
                     if (pages.TabPages[i].Text.Equals("Carte Scrollable"))
                         return;
 
-            if ( mapScroll == null ) {
-              mapScroll = new ScrollableMaps( true );
+            if (mapScroll == null)
+            {
+                mapScroll = new ScrollableMaps(true);
             }
-            mapScroll.mapBox.Controls.Add( mapScroll.initTrackBar() );
-            mapScroll.mapBox.Controls.Add( mapScroll.legend() );
+            mapScroll.mapBox.Controls.Add(mapScroll.initTrackBar());
+            mapScroll.mapBox.Controls.Add(mapScroll.legend());
             pages.ClientAdd(mapScroll.mapBox, "Carte Scrollable", null, true);
-           
+
         }
 
         // Test
         public void Test(string numStation)
         {
-          if ( StatsVelib == null ) {
-             StatsVelib = new StatsChartsVelib(true);
-          }
-            
+
+            if (StatsVelib == null)
+            {
+                MessageBox.Show("Station " + numStation);
+                StatsVelib = new StatsChartsVelib(true);
+                MessageBox.Show("Ok ca a dl");
+            }
+
             if (panel.Panel2.Controls.Count > 0)
                 panel.Panel2.Controls[0].Dispose();
             panel.Panel2.Controls.Add(StatsVelib.initSplitPanel(int.Parse(numStation)));
