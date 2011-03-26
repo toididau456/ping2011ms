@@ -347,11 +347,8 @@ namespace Ming.Atf.Pictures
         {
             Size size = mapBox.Size;
             double diff = mapBox.Location.X;
-            //MessageBox.Show( size.Height + " " + size.Width + " " + e.X + "    " + e.Y );
             Pen stylo = new Pen(Color.Black);
             MessageBox.Show("DIFF " + mapBox.DisplayRectangle.X + "  " + e.Y);
-            //Graphics graphBox =mapBox.CreateGraphics();
-            //graphBox.DrawEllipse( stylo, e.X-20, e.Y-20, 40, 40 );
             MessageBox.Show("DIFF " + map.HorizontalResolution + "   " + graphMap.RenderingOrigin.Y);
         }
 

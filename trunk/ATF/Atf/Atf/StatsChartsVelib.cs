@@ -100,7 +100,7 @@ namespace Ming.Atf.Pictures {
     #endregion
 
     #region Méthodes
-
+    
     public Dictionary<int, KeyValuePair<double, double>> StatistiquesParis(String echelle) {
       Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> dataMap;
       if ( echelle == "Heure" ) {
@@ -119,21 +119,24 @@ namespace Ming.Atf.Pictures {
             if ( res.ContainsKey( temps ) ) {
               KeyValuePair<double, double> kvp = new KeyValuePair<double, double>( res[ temps ].Key + dataMap[ borne ][ temps ].Key, res[ temps ].Value + dataMap[ borne ][ temps ].Value );
               res[ temps ] = kvp;
-              resCount[ temps ] = resCount[temps] + 1;
+              resCount[ temps ] = resCount[temps] + 1; 
             }
             else {
               KeyValuePair<double, double> kvp = new KeyValuePair<double, double>( dataMap[ borne ][ temps ].Key, dataMap[ borne ][ temps ].Value );
+          
               res[ temps ] = kvp;
               resCount[ temps ] = 1;
             }
           }
         }
 
-      foreach ( int cpt in resCount.Keys ) {
+      foreach ( int cpt in resCount.Keys ) { 
         res[ cpt ] = new KeyValuePair<double, double>( res[ cpt ].Key / resCount[cpt], res[ cpt ].Value / resCount[cpt] ); 
       }
       return res;
     }
+
+
 
     public Dictionary<int, KeyValuePair<double, double>> StatistiquesArrondissement(  int Arrondissement, String echelle) {
       Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> dataMap;
@@ -183,7 +186,6 @@ namespace Ming.Atf.Pictures {
         statsTab = this.StatistiquesArrondissement( convertStationToDistrict( station ) ,echelle);
       }
       else if ( type == "Paris" ) {
-
         statsTab = this.StatistiquesParis(echelle);
       }
       else {
@@ -221,26 +223,30 @@ namespace Ming.Atf.Pictures {
       
       foreach(int temps in statsTab.Keys){
         seriesStat.Points.AddXY(temps,statsTab[ temps ].Key );
-        
+    
       }
 
-      /*
+      
       foreach ( int temps in statsTab.Keys ) {
-        double varUp =1.0 ;
+        double varUp =0.95 ;
+        
+        
         if ( statsTab[ temps ].Key + Math.Sqrt( statsTab[ temps ].Value ) < 0.95 ) {
-          varUp = statsTab[ temps ].Key + Math.Sqrt( statsTab[ temps ].Value );
+          varUp = statsTab[ temps ].Key +  statsTab[ temps ].Value ;
         }
 
-        double varDw = 0.0;
+        double varDw = 0.05;
         if ( statsTab[ temps ].Key - Math.Sqrt( statsTab[ temps ].Value ) > 0.05 ) {
-          varDw = statsTab[ temps ].Key - Math.Sqrt( statsTab[ temps ].Value );
+          varDw = statsTab[ temps ].Key - statsTab[ temps ].Value ;
         }
-
+        
+        //double varUp = statsTab[ temps ].Key +  statsTab[ temps ].Value ;
+        //double varDw = statsTab[ temps ].Key - statsTab[ temps ].Value ;
         //double[] dataD = new double[] { statsTab[ temps ].Key ,var, statsTab[ temps ].Key + Math.Sqrt(statsTab[ temps ].Value)}; 
         double[] dataD = new double[] { statsTab[ temps ].Key, varDw , varUp };
         DataPoint point = new DataPoint(temps,dataD);
         plusEcart.Points.Add(point); 
-      }  */
+      }  
 
 
       seriesStat.Sort( PointSortOrder.Ascending, "X" );
@@ -250,7 +256,7 @@ namespace Ming.Atf.Pictures {
       plusEcart.BorderWidth = 1;
       plusEcart.Sort( PointSortOrder.Ascending, "X" );
       chartStat.Series.Add( seriesStat );
-      //chartStat.Series.Add( plusEcart );
+      chartStat.Series.Add( plusEcart );
       chartStat.ChartAreas.Add( meanArea );
       chartStat.BackColor = System.Drawing.Color.Silver;
       meanArea.BackColor = System.Drawing.Color.LightGray;
@@ -275,7 +281,7 @@ namespace Ming.Atf.Pictures {
       chartStat.Titles.Add( titre );
       chartStat.Size = new System.Drawing.Size( 500, 300 );
       seriesStat.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-      //plusEcart.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.ErrorBar;
+      plusEcart.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.ErrorBar;
 
       ((System.ComponentModel.ISupportInitialize) (chartStat)).EndInit();
 
@@ -589,7 +595,7 @@ namespace Ming.Atf.Pictures {
       meanArea.Name = "StatArea";
       meanArea.AxisX.MajorGrid.Enabled = false;
       Legend legendStat = new Legend();
-      Series seriesStat = new Series( "Centroïde numéro Représentation par "  );
+      Series seriesStat = new Series();
       chartStat = new System.Windows.Forms.DataVisualization.Charting.Chart();
       ((System.ComponentModel.ISupportInitialize) (chartStat)).BeginInit();
       
@@ -654,7 +660,7 @@ namespace Ming.Atf.Pictures {
       meanArea.Name = "StatArea";
       meanArea.AxisX.MajorGrid.Enabled = false;
       Legend legendStat = new Legend();
-      Series seriesStat = new Series( "Centroïde numéro Représentation par " );
+      Series seriesStat = new Series();
       chartStat = new System.Windows.Forms.DataVisualization.Charting.Chart();
       ((System.ComponentModel.ISupportInitialize) (chartStat)).BeginInit();
 
