@@ -12,19 +12,19 @@ namespace Ming.Atf
     public static class LocalDataBase
     {
         #region Champs
-        private static string MyConString = "DRIVER={MySQL ODBC 3.51 Driver};" +
+        /*private static string MyConString = "DRIVER={MySQL ODBC 3.51 Driver};" +
                                      "SERVER=82.224.48.10;" +
                                      "DATABASE=velib;" +
                                      "UID=userCsharp;" +
                                      "PASSWORD=userPass11;" +
-                                     "OPTION=3";
+                                     "OPTION=3";*/
 
-       /*private static string MyConString = "DRIVER={MySQL ODBC 3.51 Driver};" +
+       private static string MyConString = "DRIVER={MySQL ODBC 3.51 Driver};" +
                                      "Port=33061;" +
                                      "SERVER=velib.lip6.fr;" +
                                      "DATABASE=velib;" +
                                      "UID=velib;" +
-                                     "PASSWORD=j5G3dXa4fhND94Yr;";*/
+                                     "PASSWORD=j5G3dXa4fhND94Yr;";
 
         // City
         private static string City = "";
