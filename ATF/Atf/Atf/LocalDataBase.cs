@@ -65,52 +65,7 @@ namespace Ming.Atf
         #endregion
 
         #region Methodes
-        // Retourne toutes les lignes valides de la base 
-        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getAllLines(int i)
-        {
-            return sendRequest("select station , avg(available), variance(available) from donnees" + City + " where valid='1' group by station;", i);
-        }
-        
-        // Retourne toutes les lignes comprises entre start et end
-        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getLinesByDateHours(DateTime start, DateTime end, int i)
-        {
-            if (start.CompareTo(time) == 0 && end.CompareTo(time) == 0)
-                return getAllLines(i);
-            else if (start.CompareTo(time) == 0)
-              return sendRequest( "select station , avg(available) * 100, variance(available)*100 from donnees" + City + " where valid='1' and free!=\"\" and date <='" + convertToTimestamp( end ) + "' and hour='" + i + "' group by station;", i );
-            else if (end.CompareTo(time) == 0)
-              return sendRequest( "select station , avg(available) * 100 , variance(available)*100 from donnees" + City + " where valid='1' and free!=\"\" and date >='" + convertToTimestamp( start ) + "' and hour='" + i + "' group by station;", i );
-            else
-              return sendRequest( "select station , avg(available) * 100 , variance(available)*100 from donnees" + City + " where valid='1' and free!=\"\" and date >= '" + convertToTimestamp( start ) + "' and date <= '" + convertToTimestamp( end ) + "' and hour='" + i + "' group by station;", i );
-        }
-
-        // Retourne toutes les lignes comprises entre start et end
-        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getLinesByDateDays(DateTime start, DateTime end, int i)
-        {
-
-            if (start.CompareTo(time) == 0 && end.CompareTo(time) == 0)
-                return getAllLines(i);
-            else if (start.CompareTo(time) == 0)
-              return sendRequest( "select station ,avg(available) * 100, variance(available)*100 from donnees" + City + " where valid='1' and free!=\"\"  and date <='" + convertToTimestamp( end ) + "' and day='" + i + "' group by station;", i );
-            else if (end.CompareTo(time) == 0)
-              return sendRequest( "select station , avg(available) * 100  , variance(available)*100 from donnees" + City + " where valid='1' and free!=\"\" and date >='" + convertToTimestamp( start ) + "' and day='" + i + "' group by station;", i );
-            else
-              return sendRequest( "select station ,avg(available) * 100, variance(available)*100 from donnees" + City + " where valid='1' and free!=\"\" and date >= '" + convertToTimestamp( start ) + "' and date <= '" + convertToTimestamp( end ) + "' and day='" + i + "' group by station;", i );
-        }
-
-        // Retourne toutes les lignes comprises entre start et end
-        public static Dictionary<int, Dictionary<int, KeyValuePair<double, double>>> getLinesByDateWeeks(DateTime start, DateTime end, int i)
-        {
-            if (start.CompareTo(time) == 0 && end.CompareTo(time) == 0)
-                return getAllLines(i);
-            else if (start.CompareTo(time) == 0)
-              return sendRequest( "select station , avg(available) * 100, variance(available)*100 from donnees" + City + " where valid='1' and date <='" + convertToTimestamp( end ) + "' and week='" + i + "' group by station;", i );
-            else if (end.CompareTo(time) == 0)
-              return sendRequest( "select station , avg(available) * 100, variance(available)*100 from donnees" + City + " where valid='1' and date >='" + convertToTimestamp( start ) + "' and week='" + i + "' group by station;", i );
-            else
-              return sendRequest( "select station , avg(available) * 100, variance(available)*100 from donnees" + City + " where valid='1' and date >= '" + convertToTimestamp( start ) + "' and date <= '" + convertToTimestamp( end ) + "' and week='" + i + "' group by station;", i );
-        }
-
+      
         // Renvoie le details des stations
         public static ArrayList getStationsDetails()
         {
@@ -218,6 +173,7 @@ namespace Ming.Atf
                 tailles = new Dictionary<int, int>();
 
                 OdbcCommand MyCommand = new OdbcCommand("select station, max(size) from sizedMax group by station;", MyConnection);
+                //OdbcCommand MyCommand = new OdbcCommand( "select station, max(free+available) from donnees where free !=\"\" group by station;", MyConnection );
                 OdbcDataReader MyDataReader;
                 MyDataReader = MyCommand.ExecuteReader();
 
@@ -719,7 +675,7 @@ namespace Ming.Atf
 
         //Desc de la table donnees
         string s = " and date >= " + convertToTimestamp( start ) + " and date <= " + convertToTimestamp( end ) + " ";
-        OdbcCommand MyCommand = new OdbcCommand( "select station as Station, hour as Hour, cast(avg(available) * 100 as unsigned) as Valeur,cast(variance(available) * 100 as unsigned) as Variance from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection );
+        OdbcCommand MyCommand = new OdbcCommand( "select station as Station, hour as Hour, cast(avg(available) * 100 as unsigned) as Valeur,cast(std(available) * 100 as unsigned) as Variance from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection );
         OdbcDataReader MyDataReader;
         MyDataReader = MyCommand.ExecuteReader();
 
@@ -748,7 +704,7 @@ namespace Ming.Atf
           if ( !result.ContainsKey( station ) )
             result[ station ] = new Dictionary<int, KeyValuePair<double, double>>();
 
-          result[ station ][ hour ] = new KeyValuePair<double, double>( (valeur / 100.0) / (double) tailles[ station ], (variance / (double) tailles[ station ]) / 100.0 );
+          result[ station ][ hour ] = new KeyValuePair<double, double>( (valeur / 100.0) / (double) tailles[ station ], ((variance/100.0) / (double) tailles[ station ]));
         }
 
         //Close all resources
