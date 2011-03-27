@@ -17,7 +17,7 @@ namespace Ming.Atf
                                      "DATABASE=velib;" +
                                      "UID=userCsharp;" +
                                      "PASSWORD=userPass11;" +
-                                     "OPTION=3";*/
+                                     "OPTION=3";  */
 
        private static string MyConString = "DRIVER={MySQL ODBC 3.51 Driver};" +
                                      "Port=33061;" +
@@ -172,7 +172,7 @@ namespace Ming.Atf
 
                 tailles = new Dictionary<int, int>();
 
-                OdbcCommand MyCommand = new OdbcCommand("select station, max(size) from sizedMax group by station;", MyConnection);
+                OdbcCommand MyCommand = new OdbcCommand("select id,max(total) from stations group by id;", MyConnection);
                 //OdbcCommand MyCommand = new OdbcCommand( "select station, max(free+available) from donnees where free !=\"\" group by station;", MyConnection );
                 OdbcDataReader MyDataReader;
                 MyDataReader = MyCommand.ExecuteReader();
@@ -351,7 +351,7 @@ namespace Ming.Atf
 
             //Desc de la table donnees
             string s = " and date >= " + convertToTimestamp(start) + " and date <= " + convertToTimestamp(end) + " ";
-            OdbcCommand MyCommand = new OdbcCommand("select station as Station, hour as Hour, cast(variance(available) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection);
+            OdbcCommand MyCommand = new OdbcCommand("select station as Station, hour as Hour, cast(std(available) * 100 as unsigned) as Valeur from donnees where valid='1' and free!=\"\" " + s + "group by station, hour;", MyConnection);
             OdbcDataReader MyDataReader;
             MyDataReader = MyCommand.ExecuteReader();
 
@@ -770,7 +770,7 @@ namespace Ming.Atf
 
         //Desc de la table donnees
         string s = " and date >= " + convertToTimestamp( start ) + " and date <= " + convertToTimestamp( end ) + " ";
-        OdbcCommand MyCommand = new OdbcCommand( "select station as Station, day as Day, cast(avg(available) * 100 as unsigned) as Valeur,cast(variance(available) * 100 as unsigned) as Variance from donnees where valid='1' and free!=\"\" " + s + "group by station, day;", MyConnection );
+        OdbcCommand MyCommand = new OdbcCommand( "select station as Station, day as Day, cast(avg(available) * 100 as unsigned) as Valeur,cast(std(available) * 100 as unsigned) as Variance from donnees where valid='1' and free!=\"\" " + s + "group by station, day;", MyConnection );
         OdbcDataReader MyDataReader;
         MyDataReader = MyCommand.ExecuteReader();
 
@@ -802,7 +802,7 @@ namespace Ming.Atf
           result[ station ][ hour ] = new KeyValuePair<double, double>( (valeur / 100.0) / (double) tailles[ station ], (variance / 100.0) / (double) tailles[ station ] );
         }
 
-        //Close all resources
+      
         MyDataReader.Close();
         statsTabJour = result;
       }
